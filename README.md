@@ -6,7 +6,7 @@ A batch script for converting video files to GIF using FFmpeg on Windows.
 
 ## Installation
 * Clone the repo
-* Install [FFmpeg](http://ffmpeg.zeranoe.com/builds/) for Windows.
+* Install [FFmpeg](https://www.ffmpeg.org/download.html#build-windows) for Windows.
 * Make sure that the path to `ffmpeg.exe` is configured in your system environment variables control panel or that you run the `gifenc.bat` file in the same folder as `ffmpeg.exe`.
 
 ## Usage
