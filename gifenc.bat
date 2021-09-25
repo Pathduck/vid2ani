@@ -23,7 +23,7 @@ ECHO ---------------------------------------------------------------------------
 ECHO Video to GIF converter v3.0b ^(C^) 2017-2021, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>
 ECHO You can download this fork from here: https://github.com/MDHEXT/video2gif
 ECHO you can download the original release here: https://github.com/NabiKAZ/video2gif
-ECHO This tool uses ffmpeg, you can download that here: http://ffmpeg.zeranoe.com/builds
+ECHO This tool uses ffmpeg, you can download that here: https://www.ffmpeg.org/download.html#build-windows
 ECHO -------------------------------------------------------------------------------------------------------------
 ECHO Usage:
 ECHO gifenc [input_file] [width_in_pixels] [framerate_in_Hz] [palettegen_mode] [Dithering_Algorithm] [Bayer_Scale]
