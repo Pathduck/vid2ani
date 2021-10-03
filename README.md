@@ -39,7 +39,7 @@ Bayer Scale is optional and can only be enabled when using bayer dithering
 
 ## Examples:
 ```
-  gifenc sample.mp4 300 15 1 1
+  gifenc sample.mp4 300 15 1 1 3
   gifenc sample.mp4 600 10 2 3
   gifenc sample.mp4 350 13 3 1
 
