@@ -90,35 +90,28 @@ IF NOT EXIST "%palette%_00001.png" (
 		)
 )
 ECHO Encoding Gif file...
+IF %mode% == 1 SET decode=paletteuse=diff_mode=rectangle
+IF %mode% == 2 SET decode=paletteuse=new=1:diff_mode=rectangle & SET frames=%palette%_%%05d
+IF %mode% == 3 SET decode=paletteuse=diff_mode=rectangle
+
 IF "%bayerscale%" == "" GOTO :normgifenc
 IF %bayerscale% GTR 5 ECHO This setting only accepts values between 1 and 5 & GOTO :gifcheck
-IF %mode% == 1 SET decode=paletteuse=diff_mode=rectangle
-IF %mode% == 2 SET decode=paletteuse=new=1 & SET frames=%palette%_%%05d
-IF %mode% == 3 SET decode=paletteuse
 SET ditherenc=dither=bayer
 ffmpeg -v warning -i "%vid%" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%:%ditherenc%:bayer_scale=%bayerscale%" -y "%vid%.gif"
 GOTO :gifcheck
 
 :normgifenc
 SET frames=%palette%
-IF %mode% == 1 SET decode=paletteuse=diff_mode=rectangle
-IF %mode% == 2 SET decode=paletteuse=new=1 & SET frames=%palette%_%%05d
-IF %mode% == 3 SET decode=paletteuse
 IF %dither% == 1 SET ditherenc=dither=bayer
 IF %dither% == 2 SET ditherenc=dither=heckbert
 IF %dither% == 3 SET ditherenc=dither=floyd_steinberg
 IF %dither% == 4 SET ditherenc=sierra2
 IF %dither% == 5 SET ditherenc=sierra2_4a
 IF %dither% == 6 GOTO :nodither
-
 ffmpeg -v warning -i "%vid%" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%:%ditherenc%" -y "%vid%.gif"
-
 GOTO :gifcheck
 
 :nodither
-IF %mode% == 1 SET decode=paletteuse=diff_mode=rectangle
-IF %mode% == 2 SET decode=paletteuse=new=1 & SET frames=%palette%_%%05d
-IF %mode% == 3 SET decode=paletteuse
 ffmpeg -v warning -i "%vid%" -thread_queue_size 512 -i "%frames%" -lavfi "%filters% [x]; [x][1:v] %decode%" -y "%vid%.gif"
 
 :gifcheck
