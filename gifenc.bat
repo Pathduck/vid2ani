@@ -1,12 +1,12 @@
 @ECHO OFF
 REM  By: MDHEXT, Nabi KaramAliZadeh <nabikaz@gmail.com>
 REM Description: Video to GIF converter
-REM Version: 3.0b
+REM Version: 3.3b
 REM Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/NabiKAZ/video2gif
 REM License: The MIT License (MIT)
 
 SET input=%~1
-SET vid=%1
+SET vid=%~dpn1
 SET scale=%2
 SET fps=%3
 SET mode=%4
@@ -20,7 +20,7 @@ GOTO :help_check
 
 :help_message
 ECHO -------------------------------------------------------------------------------------------------------------
-ECHO Video to GIF converter v3.0b ^(C^) 2017-2021, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>
+ECHO Video to GIF converter v3.3b ^(C^) 2017-2021, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>
 ECHO You can download this fork from here: https://github.com/MDHEXT/video2gif
 ECHO you can download the original release here: https://github.com/NabiKAZ/video2gif
 ECHO This tool uses ffmpeg, you can download that here: https://www.ffmpeg.org/download.html#build-windows
@@ -77,12 +77,9 @@ ECHO Generating Palette...
 SET frames=%palette%
 
 IF %mode% == 1 SET encode=palettegen=stats_mode=diff
-IF %mode% == 2 (
-	SET encode=palettegen=stats_mode=single
-	SET frames=%palette%_%%05d
-)
+IF %mode% == 2 SET encode=palettegen=stats_mode=single & SET frames=%palette%_%%05d
 IF %mode% == 3 SET encode=palettegen
-ffmpeg -v warning -i "%vid%" -vf "%filters%,%encode%" -y "%frames%.png"
+ffmpeg -v warning -i "%vid%.mp4" -vf "%filters%,%encode%" -y "%frames%.png"
 IF NOT EXIST "%palette%_00001.png" (
 	IF NOT EXIST "%palette%.png" (
 		ECHO Failed to generate palette file
@@ -91,28 +88,27 @@ IF NOT EXIST "%palette%_00001.png" (
 )
 ECHO Encoding Gif file...
 IF %mode% == 1 SET decode=paletteuse=diff_mode=rectangle
-IF %mode% == 2 SET decode=paletteuse=new=1:diff_mode=rectangle & SET frames=%palette%_%%05d
+IF %mode% == 2 SET decode=paletteuse=new=1 & SET frames=%palette%_%%05d
 IF %mode% == 3 SET decode=paletteuse=diff_mode=rectangle
 
 IF "%bayerscale%" == "" GOTO :normgifenc
 IF %bayerscale% GTR 5 ECHO This setting only accepts values between 1 and 5 & GOTO :gifcheck
 SET ditherenc=dither=bayer
-ffmpeg -v warning -i "%vid%" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%:%ditherenc%:bayer_scale=%bayerscale%" -y "%vid%.gif"
+ffmpeg -v warning -i "%vid%.mp4" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%:%ditherenc%:bayer_scale=%bayerscale%" -y "%vid%.gif"
 GOTO :gifcheck
 
 :normgifenc
-SET frames=%palette%
 IF %dither% == 1 SET ditherenc=dither=bayer
 IF %dither% == 2 SET ditherenc=dither=heckbert
 IF %dither% == 3 SET ditherenc=dither=floyd_steinberg
 IF %dither% == 4 SET ditherenc=sierra2
 IF %dither% == 5 SET ditherenc=sierra2_4a
 IF %dither% == 6 GOTO :nodither
-ffmpeg -v warning -i "%vid%" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%:%ditherenc%" -y "%vid%.gif"
+ffmpeg -v warning -i "%vid%.mp4" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%:%ditherenc%" -y "%vid%.gif"
 GOTO :gifcheck
 
 :nodither
-ffmpeg -v warning -i "%vid%" -thread_queue_size 512 -i "%frames%" -lavfi "%filters% [x]; [x][1:v] %decode%" -y "%vid%.gif"
+ffmpeg -v warning -i "%vid%.mp4" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%" -y "%vid%.gif"
 
 :gifcheck
 IF NOT EXIST "%vid%.gif" (
