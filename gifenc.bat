@@ -6,7 +6,8 @@ REM Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/Nab
 REM License: The MIT License (MIT)
 
 SET input=%~1
-SET vid=%~dpn1
+SET vid=%1
+SET otf=%~dpn1
 SET scale=%2
 SET fps=%3
 SET mode=%4
@@ -79,7 +80,7 @@ SET frames=%palette%
 IF %mode% == 1 SET encode=palettegen=stats_mode=diff
 IF %mode% == 2 SET encode=palettegen=stats_mode=single & SET frames=%palette%_%%05d
 IF %mode% == 3 SET encode=palettegen
-ffmpeg -v warning -i "%vid%.mp4" -vf "%filters%,%encode%" -y "%frames%.png"
+ffmpeg -v warning -i "%vid%" -vf "%filters%,%encode%" -y "%frames%.png"
 IF NOT EXIST "%palette%_00001.png" (
 	IF NOT EXIST "%palette%.png" (
 		ECHO Failed to generate palette file
@@ -94,7 +95,7 @@ IF %mode% == 3 SET decode=paletteuse=diff_mode=rectangle
 IF "%bayerscale%" == "" GOTO :normgifenc
 IF %bayerscale% GTR 5 ECHO This setting only accepts values between 1 and 5 & GOTO :gifcheck
 SET ditherenc=dither=bayer
-ffmpeg -v warning -i "%vid%.mp4" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%:%ditherenc%:bayer_scale=%bayerscale%" -y "%vid%.gif"
+ffmpeg -v warning -i "%vid%" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%:%ditherenc%:bayer_scale=%bayerscale%" -y "%otf%.gif"
 GOTO :gifcheck
 
 :normgifenc
@@ -104,14 +105,14 @@ IF %dither% == 3 SET ditherenc=dither=floyd_steinberg
 IF %dither% == 4 SET ditherenc=sierra2
 IF %dither% == 5 SET ditherenc=sierra2_4a
 IF %dither% == 6 GOTO :nodither
-ffmpeg -v warning -i "%vid%.mp4" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%:%ditherenc%" -y "%vid%.gif"
+ffmpeg -v warning -i "%vid%" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%:%ditherenc%" -y "%otf%.gif"
 GOTO :gifcheck
 
 :nodither
-ffmpeg -v warning -i "%vid%.mp4" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%" -y "%vid%.gif"
+ffmpeg -v warning -i "%vid%" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%" -y "%otf%.gif"
 
 :gifcheck
-IF NOT EXIST "%vid%.gif" (
+IF NOT EXIST "%otf%.gif" (
 	ECHO Failed to generate gif file
 	GOTO :cleanup
 )
