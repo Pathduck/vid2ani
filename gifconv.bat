@@ -18,6 +18,7 @@ SET "dither="
 SET "bayerscale="
 SET "start_time="
 SET "duration="
+SET "colormax="
 
 SET WD=%TEMP%\GIFCONV
 SET palette=%WD%\template
@@ -38,13 +39,15 @@ ECHO	-o	: Specifies output filename. (will be outputted to the same directory as
 ECHO		  If left empty, this will default to the same filename as your video. (Usage: -o image.gif)
 ECHO	-r	: Specifies scale or size. The amount of pixels this value is set to will be the width of the gif.
 ECHO		  The default is the same scale as the original video.
-ECHO	-f	: Specifies framerate in Hz. THe default is 15.
+ECHO	-f	: Specifies framerate in Hz. The default is 15.
 ECHO	-m	: Specifies one of the 3 modes listed below. The default is diff.
 ECHO	-d	: Specifies which dithering algorithm to be used. The default is Bayer Dithering.
 ECHO	-b	: Specifies the Bayer Scale. This can only be used when Bayer Dithering is applied.
 ECHO		  See more information below.
 ECHO	-s	: Specifies the start of the gif file in HH:MM:SS.MS format.
 ECHO	-e	: Specifies the duration of the gif file in seconds.
+ECHO	-c	: Sets the maximum amount of colors useable per palette. (Value up to 256) This option is disabled
+ECHO		  by default.
 ECHO -------------------------------------------------------------------------------------------------------------
 ECHO Palettegen Modes:
 ECHO 1: diff - only what moves affects the palette
@@ -72,8 +75,8 @@ IF DEFINED bayerscale (
 		GOTO :EOF
 		)
 	IF "%bayerscale%" LEQ 5 (
-		IF %dither% == 1 GOTO :script_start
-		IF %dither% NEQ 1 (
+		IF "%dither%" == 1 GOTO :script_start
+		IF "%dither%" NEQ 1 (
 			ECHO This setting only works with bayer dithering
 			GOTO :EOF
 		)
@@ -91,6 +94,7 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-o" SET "output=%FILEPATH%%~2" & SHIFT
 	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
 	IF "%~1" =="-e" SET "duration=%~2" & SHIFT
+	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
 	SHIFT
 	GOTO :varin
 )
@@ -127,7 +131,8 @@ SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 IF %mode% == 1 SET encode=palettegen=stats_mode=diff
 IF %mode% == 2 SET encode=palettegen=stats_mode=single & SET frames=%palette%_%%05d
 IF %mode% == 3 SET encode=palettegen
-ffmpeg -v warning %trim% -i "%vid%" -vf "%filters%,%encode%" -y "%frames%.png"
+IF DEFINED colormax SET "mcol=:max_colors=%colormax%"
+ffmpeg -v warning %trim% -i "%vid%" -vf "%filters%,%encode%%mcol%" -y "%frames%.png"
 IF NOT EXIST "%palette%_00001.png" (
 	IF NOT EXIST "%palette%.png" (
 		ECHO Failed to generate palette file
