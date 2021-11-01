@@ -33,7 +33,7 @@ ECHO you can download the original release here: https://github.com/NabiKAZ/vide
 ECHO This tool uses ffmpeg, you can download that here: https://www.ffmpeg.org/download.html#build-windows
 ECHO -------------------------------------------------------------------------------------------------------------
 ECHO Usage:
-ECHO gifenc [input_file] [Arguments]
+ECHO gifconv [input_file] [Arguments]
 ECHO -------------------------------------------------------------------------------------------------------------
 ECHO Arguments:
 ECHO	-o	: Specifies output filename. (will be outputted to the same directory as your input video file.)
