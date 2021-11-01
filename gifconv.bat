@@ -45,7 +45,7 @@ ECHO	-m	: Specifies one of the 3 modes listed below. The default is diff.
 ECHO	-d	: Specifies which dithering algorithm to be used. The default is Bayer Dithering.
 ECHO	-b	: Specifies the Bayer Scale. This can only be used when Bayer Dithering is applied.
 ECHO		  See more information below.
-ECHO	-s	: Specifies the start of the gif file in M:S format.
+ECHO	-s	: Specifies the start of the gif file in HH:MM:SS.MS format.
 ECHO	-e	: Specifies the duration of the gif file in seconds.
 ECHO -------------------------------------------------------------------------------------------------------------
 ECHO Palettegen Modes:
@@ -61,11 +61,10 @@ ECHO 4: Sierra2
 ECHO 5: Sierra2_4a
 ECHO 6: No Dithering
 ECHO -------------------------------------------------------------------------------------------------------------
-ECHO When bayer dithering is selected, the Bayer Scale option defines the scale of the pattern (how much the crosshatch 
-ECHO pattern is visible). A low value means more visible pattern for less banding, and higher value means less 
-ECHO visible pattern at the cost of more banding.The option must be an integer value in the range [0,5]. 
-ECHO The Default is 2.
-ECHO Bayer Scale is optional and can only be enabled when using bayer dithering
+ECHO When bayer dithering is selected, the Bayer Scale option defines the scale of the pattern (how much the 
+ECHO crosshatch pattern is visible). A low value means more visible pattern for less banding, and higher value
+ECHO means less visible pattern at the cost of more banding.The option must be an integer value in the range
+ECHO [0,5]. The Default is 2. Bayer Scale is optional and can only be enabled when using bayer dithering.
 GOTO :EOF
 
 :safchek
@@ -146,6 +145,7 @@ IF "%dither%" == 2 SET ditherenc=:dither=heckbert
 IF "%dither%" == 3 SET ditherenc=:dither=floyd_steinberg
 IF "%dither%" == 4 SET ditherenc=:sierra2
 IF "%dither%" == 5 SET ditherenc=:sierra2_4a
+IF "%dither%" == 6 SET "ditherenc="
 IF NOT DEFINED dither SET "ditherenc="
 IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
