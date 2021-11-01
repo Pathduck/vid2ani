@@ -16,17 +16,19 @@ gifconv [input_file] [Arguments]
 ## Options:
 ```
 Arguments:
- -o	: Specifies output filename. (will be outputted to the same directory as your input video file.)
-	  If left empty, this will default to the same filename as your video. (Usage: -o image.gif)
- -r	: Specifies scale or size. The amount of pixels this value is set to will be the width of the gif.
-	  The default is the same scale as the original video.
- -f	: Specifies framerate in Hz. THe default is 15.
- -m	: Specifies one of the 3 modes listed below. The default is diff.
- -d	: Specifies which dithering algorithm to be used. The default is Bayer Dithering.
- -b	: Specifies the Bayer Scale. This can only be used when Bayer Dithering is applied.
-  	  See more information below.
- -s	: Specifies the start of the gif file in M:S format.
- -e	: Specifies the duration of the gif file in seconds.
+-o      : Specifies output filename. (will be outputted to the same directory as your input video file.)
+          If left empty, this will default to the same filename as your video. (Usage: -o image.gif)
+-r      : Specifies scale or size. The amount of pixels this value is set to will be the width of the gif.
+          The default is the same scale as the original video.
+-f      : Specifies framerate in Hz. The default is 15.
+-m      : Specifies one of the 3 modes listed below. The default is diff.
+-d      : Specifies which dithering algorithm to be used. The default is Bayer Dithering.
+-b      : Specifies the Bayer Scale. This can only be used when Bayer Dithering is applied.
+          See more information below.
+-s      : Specifies the start of the gif file in HH:MM:SS.MS format.
+-e      : Specifies the duration of the gif file in seconds.
+-c      : Sets the maximum amount of colors useable per palette. (Value up to 256) This option is disabled
+          by default.
 -------------------------------------------------------------------------------------------------------------
 Palettegen Modes:
 1: diff - only what moves affects the palette
