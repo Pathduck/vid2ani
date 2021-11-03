@@ -120,7 +120,7 @@ MD "%WD%"
 :palettegen
 ECHO Generating Palette...
 IF DEFINED start_time (
-	IF DEFINED duration SET "trim=-ss %start_time% -t %duration%"
+	IF DEFINED duration SET "trim=-ss !start_time! -t !duration!"
 	IF NOT DEFINED duration (
 		ECHO Please input a duration
 		GOTO :EOF
