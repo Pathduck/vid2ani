@@ -6,10 +6,10 @@ REM Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/Nab
 REM License: The MIT License (MIT)
 
 SETLOCAL ENABLEDELAYEDEXPANSION
-SET input=%~1
-SET vid=%~dpnx1
-SET output=%~dpn1.gif
-SET FILEPATH=%~dp1
+SET input="%~1"
+SET vid="%~dpnx1"
+SET output="%~dpn1.gif"
+SET FILEPATH="%~dp1"
 
 SET "scale="
 SET "fps="
@@ -95,15 +95,14 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
 	IF "%~1" =="-e" SET "duration=%~2" & SHIFT
 	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
-	SHIFT
-	GOTO :varin
+	SHIFT & GOTO :varin
 )
 GOTO :help_check_2
 
 :help_check_1
-IF "%input%" == "" GOTO :help_message
-IF "%input%" == "help" GOTO :help_message
-IF "%input%" == "h" GOTO :help_message
+IF %input% == "" GOTO :help_message
+IF %input% == "help" GOTO :help_message
+IF %input% == "h" GOTO :help_message
 GOTO :varin
 
 :help_check_2
@@ -133,7 +132,7 @@ IF %mode% EQU 1 SET encode=palettegen=stats_mode=diff
 IF %mode% EQU 2 SET encode=palettegen=stats_mode=single & SET frames=%palette%_%%05d
 IF %mode% EQU 3 SET encode=palettegen
 IF DEFINED colormax SET "mcol=:max_colors=%colormax%"
-ffmpeg -v warning %trim% -i "%vid%" -vf "%filters%,%encode%%mcol%" -y "%frames%.png"
+ffmpeg -v warning %trim% -i %vid% -vf "%filters%,%encode%%mcol%" -y "%frames%.png"
 IF NOT EXIST "%palette%_00001.png" (
 	IF NOT EXIST "%palette%.png" (
 		ECHO Failed to generate palette file
@@ -142,7 +141,7 @@ IF NOT EXIST "%palette%_00001.png" (
 )
 ECHO Encoding Gif file...
 IF %mode% EQU 1 SET decode=paletteuse=diff_mode=rectangle
-IF %mode% EQU 2 SET decode=paletteuse=new=1 & SET frames=%palette%_%%05d
+IF %mode% EQU 2 SET decode=paletteuse=new=1:diff_mode=rectangle & SET frames=%palette%_%%05d
 IF %mode% EQU 3 SET decode=paletteuse=diff_mode=rectangle
 IF %dither% EQU 1 SET ditherenc=:dither=bayer
 IF %dither% EQU 2 SET ditherenc=:dither=heckbert
@@ -153,8 +152,8 @@ IF %dither% EQU 6 SET "ditherenc="
 IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
 
-ffmpeg -v warning %trim% -i "%vid%" -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%ditherenc%%bayer%" -y "%output%"
-IF NOT EXIST "%output%" (
+ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%ditherenc%%bayer%" -y %output%
+IF NOT EXIST %output% (
 	ECHO Failed to generate gif file
 	GOTO :cleanup
 )
