@@ -75,8 +75,8 @@ IF DEFINED bayerscale (
 		GOTO :EOF
 		)
 	IF "%bayerscale%" LEQ 5 (
-		IF "%dither%" == 1 GOTO :script_start
-		IF "%dither%" NEQ 1 (
+		IF %dither% EQU 1 GOTO :script_start
+		IF %dither% NEQ 1 (
 			ECHO This setting only works with bayer dithering
 			GOTO :EOF
 		)
@@ -107,9 +107,10 @@ IF "%input%" == "h" GOTO :help_message
 GOTO :varin
 
 :help_check_2
-IF NOT DEFINED scale SET scale="-1"
-IF NOT DEFINED fps set fps=15
-IF NOT DEFINED mode set mode=1
+IF NOT DEFINED scale SET "scale=-1"
+IF NOT DEFINED fps SET fps=15
+IF NOT DEFINED mode SET mode=1
+IF NOT DEFINED dither SET dither=1
 GOTO :safchek
 
 :script_start
@@ -128,9 +129,9 @@ IF DEFINED start_time (
 SET frames=%palette%
 SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 
-IF %mode% == 1 SET encode=palettegen=stats_mode=diff
-IF %mode% == 2 SET encode=palettegen=stats_mode=single & SET frames=%palette%_%%05d
-IF %mode% == 3 SET encode=palettegen
+IF %mode% EQU 1 SET encode=palettegen=stats_mode=diff
+IF %mode% EQU 2 SET encode=palettegen=stats_mode=single & SET frames=%palette%_%%05d
+IF %mode% EQU 3 SET encode=palettegen
 IF DEFINED colormax SET "mcol=:max_colors=%colormax%"
 ffmpeg -v warning %trim% -i "%vid%" -vf "%filters%,%encode%%mcol%" -y "%frames%.png"
 IF NOT EXIST "%palette%_00001.png" (
@@ -140,16 +141,15 @@ IF NOT EXIST "%palette%_00001.png" (
 		)
 )
 ECHO Encoding Gif file...
-IF %mode% == 1 SET decode=paletteuse=diff_mode=rectangle
-IF %mode% == 2 SET decode=paletteuse=new=1 & SET frames=%palette%_%%05d
-IF %mode% == 3 SET decode=paletteuse=diff_mode=rectangle
-IF "%dither%" == 1 SET ditherenc=:dither=bayer
-IF "%dither%" == 2 SET ditherenc=:dither=heckbert
-IF "%dither%" == 3 SET ditherenc=:dither=floyd_steinberg
-IF "%dither%" == 4 SET ditherenc=:sierra2
-IF "%dither%" == 5 SET ditherenc=:sierra2_4a
-IF "%dither%" == 6 SET "ditherenc="
-IF NOT DEFINED dither SET "ditherenc="
+IF %mode% EQU 1 SET decode=paletteuse=diff_mode=rectangle
+IF %mode% EQU 2 SET decode=paletteuse=new=1 & SET frames=%palette%_%%05d
+IF %mode% EQU 3 SET decode=paletteuse=diff_mode=rectangle
+IF %dither% EQU 1 SET ditherenc=:dither=bayer
+IF %dither% EQU 2 SET ditherenc=:dither=heckbert
+IF %dither% EQU 3 SET ditherenc=:dither=floyd_steinberg
+IF %dither% EQU 4 SET ditherenc=:sierra2
+IF %dither% EQU 5 SET ditherenc=:sierra2_4a
+IF %dither% EQU 6 SET "ditherenc="
 IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
 
