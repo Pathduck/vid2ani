@@ -5,7 +5,7 @@ REM Version: 4.0b
 REM Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/NabiKAZ/video2gif
 REM License: The MIT License (MIT)
 
-SETLOCAL
+SETLOCAL ENABLEDELAYEDEXPANSION
 SET input=%~1
 SET vid=%~dpnx1
 SET output=%~dpn1.gif
@@ -70,11 +70,11 @@ GOTO :EOF
 
 :safchek
 IF DEFINED bayerscale (
-	IF "%bayerscale%" GTR 5 (
+	IF !bayerscale! GTR 5 (
 		ECHO Not a valid bayerscale value
 		GOTO :EOF
 		)
-	IF "%bayerscale%" LEQ 5 (
+	IF !bayerscale! LEQ 5 (
 		IF %dither% EQU 1 GOTO :script_start
 		IF %dither% NEQ 1 (
 			ECHO This setting only works with bayer dithering
