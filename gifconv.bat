@@ -160,6 +160,5 @@ IF NOT EXIST "%output%" (
 )
 :cleanup
 ECHO Deleting Temporary files...
-DEL /Q "%WD%"
-RMDIR "%WD%"
+RMDIR /S /Q "%WD%"
 ECHO Done!
