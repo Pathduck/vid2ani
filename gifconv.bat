@@ -1,4 +1,4 @@
-@ECHO OFF
+
 REM  By: MDHEXT, Nabi KaramAliZadeh <nabikaz@gmail.com>
 REM Description: Video to GIF converter
 REM Version: 4.4
@@ -166,8 +166,10 @@ IF %dither% EQU 5 SET ditheralg=sierra2_4a
 IF %dither% EQU 6 SET "ditherenc="
 
 IF %dither% LEQ 5 (
-	IF DEFINED errorswitch SET ditherenc=:dither=!ditheralg!
-	IF NOT DEFINED errorswitch SET ditherenc==dither=!ditheralg!
+	IF NOT %mode% EQU 2 (
+		IF DEFINED errorswitch SET ditherenc=:dither=!ditheralg!
+		IF NOT DEFINED errorswitch SET ditherenc==dither=!ditheralg!
+	)else SET ditherenc=:dither=!ditheralg!
 )
 
 IF NOT DEFINED bayerscale SET "bayer="
