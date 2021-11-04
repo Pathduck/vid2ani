@@ -17,18 +17,19 @@ gifconv [input_file] [Arguments]
 ```
 Arguments:
 -o      : Specifies output filename. (will be outputted to the same directory as your input video file.)
-          If left empty, this will default to the same filename as your video. (Usage: -o image.gif)
+          If left empty, this will default to the same filename as your video. (Optional)
 -r      : Specifies scale or size. The amount of pixels this value is set to will be the width of the gif.
           The default is the same scale as the original video.
 -f      : Specifies framerate in Hz. The default is 15.
 -m      : Specifies one of the 3 modes listed below. The default is diff.
--d      : Specifies which dithering algorithm to be used. The default is Bayer Dithering.
--b      : Specifies the Bayer Scale. This can only be used when Bayer Dithering is applied.
-          See more information below.
--s      : Specifies the start of the gif file in HH:MM:SS.MS format.
--e      : Specifies the duration of the gif file in seconds.
+-d      : Specifies which dithering algorithm to be used. The default is Bayer.
+-b      : Specifies the Bayer Scale. This can only be used when Bayer Dithering is applied. See more
+          information below. (Optional)
+-s      : Specifies the start of the gif file in HH:MM:SS.MS format. (Optional)
+-e      : Specifies the duration of the gif file in seconds. (Optional)
 -c      : Sets the maximum amount of colors useable per palette. (Value up to 256) This option is disabled
           by default.
+-k      : Enables error diffusion. (Optional)
 -------------------------------------------------------------------------------------------------------------
 Palettegen Modes:
 1: diff - only what moves affects the palette
@@ -43,19 +44,18 @@ Dithering Options:
 5: Sierra2_4a
 6: No Dithering
 -------------------------------------------------------------------------------------------------------------
-When bayer dithering is selected, the Bayer Scale option defines the scale of the pattern (how much the crosshatch 
-pattern is visible). A low value means more visible pattern for less banding, and higher value means less 
-visible pattern at the cost of more banding.The option must be an integer value in the range [0,5]. 
-The Default is 2.
-Bayer Scale is optional and can only be enabled when using bayer dithering
+When bayer dithering is selected, the Bayer Scale option defines the scale of the pattern (how much the
+crosshatch pattern is visible). A low value means more visible pattern for less banding, and higher value
+means less visible pattern at the cost of more banding.The option must be an integer value in the range
+[0,5]. The Default is 2. Bayer Scale is optional and can only be enabled when using bayer dithering.
 ```
 
 ## Examples:
 ```
-  gifenc sample.mp4
-  gifenc sample.mp4 -f 20 -r 450
-  gifenc sample.mp4 -s 5:40 -e 5
-
+  gifconv sample.mp4
+  gifconv sample.mp4 -f 20 -r 450
+  gifconv sample.mp4 -s 5:40 -e 5
+  gifconv sample.mp4 -o babydance.gif -m 2 -k -b 3
 ```
 
 ## Tips
