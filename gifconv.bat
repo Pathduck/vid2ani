@@ -1,7 +1,7 @@
-
-REM  By: MDHEXT, Nabi KaramAliZadeh <nabikaz@gmail.com>
+@ECHO OFF
+REM By: MDHEXT, Nabi KaramAliZadeh <nabikaz@gmail.com>
 REM Description: Video to GIF converter
-REM Version: 4.4
+REM Version: 4.6
 REM Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/NabiKAZ/video2gif
 REM License: The MIT License (MIT)
 
@@ -26,36 +26,36 @@ GOTO :help_check_1
 
 :help_message
 ECHO -------------------------------------------------------------------------------------------------------------
-ECHO Video to GIF converter v4.4 ^(C^) 2017-2021, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>
-ECHO You can download this fork from here: https://github.com/MDHEXT/video2gif
-ECHO you can download the original release here: https://github.com/NabiKAZ/video2gif
-ECHO This tool uses ffmpeg, you can download that here: https://www.ffmpeg.org/download.html#build-windows
+ECHO [96mVideo to GIF converter v4.6 ^(C^) 2017-2021, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
+ECHO [96mYou can download this fork from here: https://github.com/MDHEXT/video2gif[0m
+ECHO [96myou can download the original release here: https://github.com/NabiKAZ/video2gif[0m
+ECHO [96mThis tool uses ffmpeg, you can download that here: https://www.ffmpeg.org/download.html#build-windows[0m
 ECHO -------------------------------------------------------------------------------------------------------------
-ECHO Usage:
+ECHO [32mUsage:[0m
 ECHO gifconv [input_file] [Arguments]
 ECHO -------------------------------------------------------------------------------------------------------------
-ECHO Arguments:
-ECHO	-o	: Specifies output filename. (will be outputted to the same directory as your input video file.)
-ECHO		  If left empty, this will default to the same filename as your video. (Optional)
+ECHO [32mArguments:[0m
+ECHO	-o	: Specifies output filename. [96m(will be outputted to the same directory as your input video file.)[0m
+ECHO		  If left empty, [33mthis will default to the same filename as your video.[0m [96m(Optional)[0m
 ECHO	-r	: Specifies scale or size. The amount of pixels this value is set to will be the width of the gif.
-ECHO		  The default is the same scale as the original video.
-ECHO	-f	: Specifies framerate in Hz. The default is 15.
-ECHO	-m	: Specifies one of the 3 modes listed below. The default is diff.
-ECHO	-d	: Specifies which dithering algorithm to be used. The default is Bayer.
-ECHO	-b	: Specifies the Bayer Scale. This can only be used when Bayer Dithering is applied. See more 
-ECHO		  information below. (Optional)
-ECHO	-s	: Specifies the start of the gif file in HH:MM:SS.MS format. (Optional)
-ECHO	-e	: Specifies the duration of the gif file in seconds. (Optional)
-ECHO	-c	: Sets the maximum amount of colors useable per palette. (Value up to 256) This option is disabled
-ECHO		  by default.
-ECHO 	-k	: Enables error diffusion. (Optional)
+ECHO		  [33mThe default is the same scale as the original video.[0m
+ECHO	-f	: Specifies framerate in Hz. [33mThe default is 15.[0m
+ECHO	-m	: Specifies one of the 3 modes listed below. [33mThe default is diff.[0m
+ECHO	-d	: Specifies which dithering algorithm to be used. [33mThe default is Bayer.[0m
+ECHO	-b	: Specifies the Bayer Scale. [31mThis can only be used when Bayer Dithering is applied.[0m See more 
+ECHO		  information below. [96m(Optional)[0m
+ECHO	-s	: Specifies the start of the gif file in HH:MM:SS.MS format. [96m(Optional)[0m
+ECHO	-e	: Specifies the duration of the gif file in seconds. [96m(Optional)[0m
+ECHO	-c	: Sets the maximum amount of colors useable per palette. [96m(Value up to 256)[0m [33mThis option is disabled
+ECHO		  by default.[0m
+ECHO 	-k	: Enables error diffusion. [96m(Optional)[0m
 ECHO -------------------------------------------------------------------------------------------------------------
-ECHO Palettegen Modes:
+ECHO [32mPalettegen Modes:[0m
 ECHO 1: diff - only what moves affects the palette
 ECHO 2: single - one palette per frame
 ECHO 3: full - one palette for the whole gif
 ECHO -------------------------------------------------------------------------------------------------------------
-ECHO Dithering Options:
+ECHO [32mDithering Options:[0m
 ECHO 1: Bayer
 ECHO 2: Heckbert
 ECHO 3: Floyd Steinberg
@@ -63,22 +63,23 @@ ECHO 4: Sierra2
 ECHO 5: Sierra2_4a
 ECHO 6: No Dithering
 ECHO -------------------------------------------------------------------------------------------------------------
+ECHO [32mAbout Bayerscale:[0m
 ECHO When bayer dithering is selected, the Bayer Scale option defines the scale of the pattern (how much the 
 ECHO crosshatch pattern is visible). A low value means more visible pattern for less banding, and higher value
 ECHO means less visible pattern at the cost of more banding.The option must be an integer value in the range
-ECHO [0,5]. The Default is 2. Bayer Scale is optional and can only be enabled when using bayer dithering.
+ECHO [0,5]. [33mThe Default is 2.[0m [96mBayer Scale is optional[0m and can [31monly be enabled when using bayer dithering.[0m
 GOTO :EOF
 
 :safchek
 IF DEFINED bayerscale (
 	IF !bayerscale! GTR 5 (
-		ECHO Not a valid bayerscale value
+		ECHO [31mNot a valid bayerscale value[0m
 		GOTO :EOF
-		)
+	)
 	IF !bayerscale! LEQ 5 (
 		IF %dither% EQU 1 GOTO :script_start
 		IF %dither% NEQ 1 (
-			ECHO This setting only works with bayer dithering
+			ECHO [31mThis setting only works with bayer dithering[0m
 			GOTO :EOF
 		)
 	)
@@ -115,17 +116,21 @@ IF NOT DEFINED dither SET dither=1
 GOTO :safchek
 
 :script_start
-ECHO Creating Working Directory...
+ECHO [32mCreating Working Directory...[0m
 MD "%WD%"
 
 :palettegen
-ECHO Generating Palette...
+ECHO [32mGenerating Palette...[0m
 IF DEFINED start_time (
 	IF DEFINED duration SET "trim=-ss !start_time! -t !duration!"
 	IF NOT DEFINED duration (
-		ECHO Please input a duration
+		ECHO [35mPlease input a duration[0m
 		GOTO :EOF
 	)
+)
+
+IF NOT DEFINED start_time (
+	IF DEFINED duration ECHO [35mPlease input a start time[0m
 )
 
 SET frames=%palette%
@@ -141,13 +146,15 @@ IF DEFINED colormax (
 )
 
 ffmpeg -v warning %trim% -i %vid% -vf "%filters%,%encode%%mcol%" -y "%frames%.png"
+
 IF NOT EXIST "%palette%_00001.png" (
 	IF NOT EXIST "%palette%.png" (
-		ECHO Failed to generate palette file
+		ECHO [31mFailed to generate palette file[0m
 		GOTO :cleanup
-		)
+	)
 )
-ECHO Encoding Gif file...
+
+ECHO [32mEncoding Gif file...[0m
 IF %mode% EQU 1 SET decode=paletteuse
 IF %mode% EQU 2 SET "decode=paletteuse=new=1" & SET frames=%palette%_%%05d
 IF %mode% EQU 3 SET decode=paletteuse
@@ -176,12 +183,14 @@ IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
 
 ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -y %output%
+
 IF NOT EXIST %output% (
-	ECHO Failed to generate gif file
+	ECHO [31mFailed to generate gif file[0m
 	GOTO :cleanup
 )
+
 :cleanup
-ECHO Deleting Temporary files...
+ECHO [32mDeleting Temporary files...[0m
 RMDIR /S /Q "%WD%"
 ENDLOCAL
-ECHO Done!
+ECHO [93mDone![0m
