@@ -1,7 +1,7 @@
 @ECHO OFF
 REM  By: MDHEXT, Nabi KaramAliZadeh <nabikaz@gmail.com>
 REM Description: Video to GIF converter
-REM Version: 4.2
+REM Version: 4.4
 REM Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/NabiKAZ/video2gif
 REM License: The MIT License (MIT)
 
@@ -26,7 +26,7 @@ GOTO :help_check_1
 
 :help_message
 ECHO -------------------------------------------------------------------------------------------------------------
-ECHO Video to GIF converter v4.2 ^(C^) 2017-2021, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>
+ECHO Video to GIF converter v4.4 ^(C^) 2017-2021, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>
 ECHO You can download this fork from here: https://github.com/MDHEXT/video2gif
 ECHO you can download the original release here: https://github.com/NabiKAZ/video2gif
 ECHO This tool uses ffmpeg, you can download that here: https://www.ffmpeg.org/download.html#build-windows
@@ -36,18 +36,19 @@ ECHO gifconv [input_file] [Arguments]
 ECHO -------------------------------------------------------------------------------------------------------------
 ECHO Arguments:
 ECHO	-o	: Specifies output filename. (will be outputted to the same directory as your input video file.)
-ECHO		  If left empty, this will default to the same filename as your video. (Usage: -o image.gif)
+ECHO		  If left empty, this will default to the same filename as your video. (Optional)
 ECHO	-r	: Specifies scale or size. The amount of pixels this value is set to will be the width of the gif.
 ECHO		  The default is the same scale as the original video.
 ECHO	-f	: Specifies framerate in Hz. The default is 15.
 ECHO	-m	: Specifies one of the 3 modes listed below. The default is diff.
-ECHO	-d	: Specifies which dithering algorithm to be used. The default is Bayer Dithering.
-ECHO	-b	: Specifies the Bayer Scale. This can only be used when Bayer Dithering is applied.
-ECHO		  See more information below.
-ECHO	-s	: Specifies the start of the gif file in HH:MM:SS.MS format.
-ECHO	-e	: Specifies the duration of the gif file in seconds.
+ECHO	-d	: Specifies which dithering algorithm to be used. The default is Bayer.
+ECHO	-b	: Specifies the Bayer Scale. This can only be used when Bayer Dithering is applied. See more 
+ECHO		  information below. (Optional)
+ECHO	-s	: Specifies the start of the gif file in HH:MM:SS.MS format. (Optional)
+ECHO	-e	: Specifies the duration of the gif file in seconds. (Optional)
 ECHO	-c	: Sets the maximum amount of colors useable per palette. (Value up to 256) This option is disabled
 ECHO		  by default.
+ECHO 	-k	: Enables error diffusion. (Optional)
 ECHO -------------------------------------------------------------------------------------------------------------
 ECHO Palettegen Modes:
 ECHO 1: diff - only what moves affects the palette
@@ -95,6 +96,7 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
 	IF "%~1" =="-e" SET "duration=%~2" & SHIFT
 	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
+	IF "%~1" =="-k" SET "errorswitch=0"
 	SHIFT & GOTO :varin
 )
 GOTO :help_check_2
@@ -125,13 +127,19 @@ IF DEFINED start_time (
 		GOTO :EOF
 	)
 )
+
 SET frames=%palette%
 SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 
 IF %mode% EQU 1 SET encode=palettegen=stats_mode=diff
-IF %mode% EQU 2 SET encode=palettegen=stats_mode=single & SET frames=%palette%_%%05d
+IF %mode% EQU 2 SET encode="palettegen=stats_mode=single" & SET frames=%palette%_%%05d
 IF %mode% EQU 3 SET encode=palettegen
-IF DEFINED colormax SET "mcol=:max_colors=%colormax%"
+
+IF DEFINED colormax (
+	IF %mode% LEQ 2 SET "mcol=:max_colors=%colormax%"
+	IF %mode% EQU 3 SET "mcol==max_colors=%colormax%"
+)
+
 ffmpeg -v warning %trim% -i %vid% -vf "%filters%,%encode%%mcol%" -y "%frames%.png"
 IF NOT EXIST "%palette%_00001.png" (
 	IF NOT EXIST "%palette%.png" (
@@ -140,19 +148,32 @@ IF NOT EXIST "%palette%_00001.png" (
 		)
 )
 ECHO Encoding Gif file...
-IF %mode% EQU 1 SET decode=paletteuse=diff_mode=rectangle
-IF %mode% EQU 2 SET decode=paletteuse=new=1:diff_mode=rectangle & SET frames=%palette%_%%05d
-IF %mode% EQU 3 SET decode=paletteuse=diff_mode=rectangle
-IF %dither% EQU 1 SET ditherenc=:dither=bayer
-IF %dither% EQU 2 SET ditherenc=:dither=heckbert
-IF %dither% EQU 3 SET ditherenc=:dither=floyd_steinberg
-IF %dither% EQU 4 SET ditherenc=:sierra2
-IF %dither% EQU 5 SET ditherenc=:sierra2_4a
+IF %mode% EQU 1 SET decode=paletteuse
+IF %mode% EQU 2 SET "decode=paletteuse=new=1" & SET frames=%palette%_%%05d
+IF %mode% EQU 3 SET decode=paletteuse
+
+IF DEFINED errorswitch (
+	IF %mode% EQU 1 SET "errordiff==diff_mode=rectangle"
+	IF %mode% EQU 2 SET "errordiff=:diff_mode=rectangle"
+	IF %mode% EQU 3 SET "errordiff==diff_mode=rectangle"
+)
+
+IF %dither% EQU 1 SET ditheralg=bayer
+IF %dither% EQU 2 SET ditheralg=heckbert
+IF %dither% EQU 3 SET ditheralg=floyd_steinberg
+IF %dither% EQU 4 SET ditheralg=sierra2
+IF %dither% EQU 5 SET ditheralg=sierra2_4a
 IF %dither% EQU 6 SET "ditherenc="
+
+IF %dither% LEQ 5 (
+	IF DEFINED errorswitch SET ditherenc=:dither=!ditheralg!
+	IF NOT DEFINED errorswitch SET ditherenc==dither=!ditheralg!
+)
+
 IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
 
-ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%ditherenc%%bayer%" -y %output%
+ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -y %output%
 IF NOT EXIST %output% (
 	ECHO Failed to generate gif file
 	GOTO :cleanup
@@ -160,4 +181,5 @@ IF NOT EXIST %output% (
 :cleanup
 ECHO Deleting Temporary files...
 RMDIR /S /Q "%WD%"
+ENDLOCAL
 ECHO Done!
