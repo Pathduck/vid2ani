@@ -48,7 +48,7 @@ ECHO	-s	: Specifies the start of the gif file in HH:MM:SS.MS format. [96m(Optio
 ECHO	-e	: Specifies the duration of the gif file in seconds. [96m(Optional)[0m
 ECHO	-c	: Sets the maximum amount of colors useable per palette. [96m(Value up to 256)[0m [33mThis option is disabled
 ECHO		  by default.[0m
-ECHO 	-k	: Enables error diffusion. [96m(Optional)[0m
+ECHO	-k	: Enables error diffusion. [96m(Optional)[0m
 ECHO -------------------------------------------------------------------------------------------------------------
 ECHO [32mPalettegen Modes:[0m
 ECHO 1: diff - only what moves affects the palette
