@@ -71,8 +71,25 @@ ECHO [0,5]. [33mThe Default is 2.[0m [96mBayer Scale is optional[0m and can 
 GOTO :EOF
 
 :safchek
+IF %mode% GTR 3 (
+	ECHO [31mNot a valid mode[0m
+	GOTO :EOF
+)ELSE IF %mode% LSS 1 (
+	ECHO [31mNot a valid mode[0m
+	GOTO :EOF
+)
+IF %dither% GTR 6 (
+	ECHO [31mNot a valid dither algorithm[0m
+	GOTO :EOF
+)ELSE IF %dither% LSS 1 (
+	ECHO [31mNot a valid dither algorithm[0m
+	GOTO :EOF
+)
 IF DEFINED bayerscale (
 	IF !bayerscale! GTR 5 (
+		ECHO [31mNot a valid bayerscale value[0m
+		GOTO :EOF
+	)ELSE IF !bayerscale! LSS 1 (
 		ECHO [31mNot a valid bayerscale value[0m
 		GOTO :EOF
 	)
