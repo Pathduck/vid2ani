@@ -150,11 +150,11 @@ IF NOT DEFINED start_time (
 	IF DEFINED duration ECHO [35mPlease input a start time[0m
 )
 
-SET frames=%palette%
+SET frames=%palette%_%%05d
 SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 
 IF %mode% EQU 1 SET encode=palettegen=stats_mode=diff
-IF %mode% EQU 2 SET encode="palettegen=stats_mode=single" & SET frames=%palette%_%%05d
+IF %mode% EQU 2 SET encode="palettegen=stats_mode=single"
 IF %mode% EQU 3 SET encode=palettegen
 
 IF DEFINED colormax (
@@ -173,7 +173,7 @@ IF NOT EXIST "%palette%_00001.png" (
 
 ECHO [32mEncoding Gif file...[0m
 IF %mode% EQU 1 SET decode=paletteuse
-IF %mode% EQU 2 SET "decode=paletteuse=new=1" & SET frames=%palette%_%%05d
+IF %mode% EQU 2 SET "decode=paletteuse=new=1"
 IF %mode% EQU 3 SET decode=paletteuse
 
 IF DEFINED errorswitch (
