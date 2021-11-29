@@ -206,6 +206,8 @@ IF NOT EXIST %output% (
 	GOTO :cleanup
 )
 
+START "" %output%
+
 :cleanup
 ECHO [32mDeleting Temporary files...[0m
 RMDIR /S /Q "%WD%"
