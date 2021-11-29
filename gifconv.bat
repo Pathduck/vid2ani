@@ -36,7 +36,7 @@ ECHO gifconv [input_file] [Arguments]
 ECHO -------------------------------------------------------------------------------------------------------------
 ECHO [32mArguments:[0m
 ECHO	-o	: Specifies output filename. [96m(will be outputted to the same directory as your input video file.)[0m
-ECHO		  If left empty, [33mthis will default to the same filename as your video.[0m [96m(Optional)[0m
+ECHO		  If left empty, [33mthis will default to the same filename as your video.[0m
 ECHO	-r	: Specifies scale or size. The amount of pixels this value is set to will be the width of the gif.
 ECHO		  [33mThe default is the same scale as the original video.[0m
 ECHO	-f	: Specifies framerate in Hz. [33mThe default is 15.[0m
@@ -46,7 +46,7 @@ ECHO	-b	: Specifies the Bayer Scale. [31mThis can only be used when Bayer Dithe
 ECHO		  information below. [96m(Optional)[0m
 ECHO	-s	: Specifies the start of the gif file in HH:MM:SS.MS format. [96m(Optional)[0m
 ECHO	-e	: Specifies the duration of the gif file in seconds. [96m(Optional)[0m
-ECHO	-c	: Sets the maximum amount of colors useable per palette. [96m(Value up to 256)[0m [33mThis option is disabled
+ECHO	-c	: Sets the maximum amount of colors useable per palette. [96m(Value up to 256)[0m [33mThis option isn't used
 ECHO		  by default.[0m
 ECHO	-k	: Enables error diffusion. [96m(Optional)[0m
 ECHO -------------------------------------------------------------------------------------------------------------
@@ -64,10 +64,10 @@ ECHO 5: Sierra2_4a
 ECHO 6: No Dithering
 ECHO -------------------------------------------------------------------------------------------------------------
 ECHO [32mAbout Bayerscale:[0m
-ECHO When bayer dithering is selected, the Bayer Scale option defines the scale of the pattern (how much the 
+ECHO [31mWhen bayer dithering is selected[0m, the Bayer Scale option defines the scale of the pattern (how much the 
 ECHO crosshatch pattern is visible). A low value means more visible pattern for less banding, and higher value
-ECHO means less visible pattern at the cost of more banding.The option must be an integer value in the range
-ECHO [0,5]. [33mThe Default is 2.[0m [96mBayer Scale is optional[0m and can [31monly be enabled when using bayer dithering.[0m
+ECHO means less visible pattern at the cost of more banding. The option must be an integer value in the range
+ECHO [0,5]. [33mThe Default is 2.[0m [96mBayer Scale is optional.[0m
 GOTO :EOF
 
 :safchek
