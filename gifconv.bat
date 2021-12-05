@@ -19,9 +19,18 @@ SET "bayerscale="
 SET "start_time="
 SET "duration="
 SET "colormax="
+SET "version="
+SET "build="
 
 SET WD=%TEMP%\GIFCONV
 SET palette=%WD%\template
+FOR /F "delims=" %%a in ('ffmpeg -version') DO (
+	IF NOT DEFINED version (
+		SET "version=%%a"
+	) ELSE IF NOT DEFINED build (
+		SET "build=%%a"
+	)
+)
 GOTO :help_check_1
 
 :help_message
@@ -74,14 +83,14 @@ GOTO :EOF
 IF %mode% GTR 3 (
 	ECHO [31mNot a valid mode[0m
 	GOTO :EOF
-)ELSE IF %mode% LSS 1 (
+) ELSE IF %mode% LSS 1 (
 	ECHO [31mNot a valid mode[0m
 	GOTO :EOF
 )
 IF %dither% GTR 6 (
 	ECHO [31mNot a valid dither algorithm[0m
 	GOTO :EOF
-)ELSE IF %dither% LSS 1 (
+) ELSE IF %dither% LSS 1 (
 	ECHO [31mNot a valid dither algorithm[0m
 	GOTO :EOF
 )
@@ -89,7 +98,7 @@ IF DEFINED bayerscale (
 	IF !bayerscale! GTR 5 (
 		ECHO [31mNot a valid bayerscale value[0m
 		GOTO :EOF
-	)ELSE IF !bayerscale! LSS 1 (
+	) ELSE IF !bayerscale! LSS 1 (
 		ECHO [31mNot a valid bayerscale value[0m
 		GOTO :EOF
 	)
@@ -123,6 +132,7 @@ GOTO :help_check_2
 IF %input% == "" GOTO :help_message
 IF %input% == "help" GOTO :help_message
 IF %input% == "h" GOTO :help_message
+IF %input% == "-h" GOTO :help_message
 GOTO :varin
 
 :help_check_2
@@ -133,6 +143,8 @@ IF NOT DEFINED dither SET dither=1
 GOTO :safchek
 
 :script_start
+ECHO [33m%version%[0m
+ECHO [33m%build%[0m
 ECHO [32mCreating Working Directory...[0m
 MD "%WD%"
 
