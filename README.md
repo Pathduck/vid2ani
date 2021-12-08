@@ -55,7 +55,7 @@ means less visible pattern at the cost of more banding.The option must be an int
   gifconv sample.mp4
   gifconv sample.mp4 -f 20 -r 450
   gifconv sample.mp4 -s 5:40 -e 5
-  gifconv sample.mp4 -o babydance.gif -m 2 -k -b 3
+  gifconv sample.mp4 -o babydance -m 2 -k -b 3
 ```
 
 ## Tips
