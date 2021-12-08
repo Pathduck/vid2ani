@@ -1,7 +1,7 @@
 @ECHO OFF
 REM By: MDHEXT, Nabi KaramAliZadeh <nabikaz@gmail.com>
 REM Description: Video to GIF converter
-REM Version: 5.0
+REM Version: 4.7
 REM Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/NabiKAZ/video2gif
 REM License: The MIT License (MIT)
 
@@ -35,7 +35,7 @@ GOTO :help_check_1
 
 :help_message
 ECHO -------------------------------------------------------------------------------------------------------------
-ECHO [96mVideo to GIF converter v5.0 ^(C^) 2017-2021, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
+ECHO [96mVideo to GIF converter v4.7 ^(C^) 2017-2021, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
 ECHO [96mYou can download this fork from here: https://github.com/MDHEXT/video2gif[0m
 ECHO [96myou can download the original release here: https://github.com/NabiKAZ/video2gif[0m
 ECHO [96mThis tool uses ffmpeg, you can download that here: https://www.ffmpeg.org/download.html#build-windows[0m
@@ -119,7 +119,7 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-m" SET "mode=%~2" & SHIFT
 	IF "%~1" =="-d" SET "dither=%~2" & SHIFT
 	IF "%~1" =="-b" SET "bayerscale=%~2" & SHIFT
-	IF "%~1" =="-o" SET "output=%FILEPATH%%~nx2" & SHIFT
+	IF "%~1" =="-o" SET "output="%FILEPATH%%~nx2.gif"" & SHIFT
 	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
 	IF "%~1" =="-e" SET "duration=%~2" & SHIFT
 	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
@@ -154,12 +154,15 @@ IF DEFINED start_time (
 	IF DEFINED duration SET "trim=-ss !start_time! -t !duration!"
 	IF NOT DEFINED duration (
 		ECHO [35mPlease input a duration[0m
-		GOTO :EOF
+		GOTO :cleanup
 	)
 )
 
 IF NOT DEFINED start_time (
-	IF DEFINED duration ECHO [35mPlease input a start time[0m
+	IF DEFINED duration (
+		ECHO [35mPlease input a start time[0m
+		GOTO :cleanup
+	)
 )
 
 SET frames=%palette%_%%05d
