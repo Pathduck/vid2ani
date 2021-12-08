@@ -1,7 +1,7 @@
 @ECHO OFF
 REM By: MDHEXT, Nabi KaramAliZadeh <nabikaz@gmail.com>
 REM Description: Video to GIF converter
-REM Version: 4.7
+REM Version: 5.1
 REM Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/NabiKAZ/video2gif
 REM License: The MIT License (MIT)
 
@@ -35,7 +35,7 @@ GOTO :help_check_1
 
 :help_message
 ECHO -------------------------------------------------------------------------------------------------------------
-ECHO [96mVideo to GIF converter v4.7 ^(C^) 2017-2021, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
+ECHO [96mVideo to GIF converter v5.1 ^(C^) 2017-2021, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
 ECHO [96mYou can download this fork from here: https://github.com/MDHEXT/video2gif[0m
 ECHO [96myou can download the original release here: https://github.com/NabiKAZ/video2gif[0m
 ECHO [96mThis tool uses ffmpeg, you can download that here: https://www.ffmpeg.org/download.html#build-windows[0m
