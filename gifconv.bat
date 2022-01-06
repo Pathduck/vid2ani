@@ -8,7 +8,7 @@ REM License: The MIT License (MIT)
 SETLOCAL ENABLEDELAYEDEXPANSION
 SET input="%~1"
 SET vid="%~dpnx1"
-SET output="%~dpn1.gif"
+SET output=~dpn1.gif
 SET FILEPATH=%~dp1
 
 SET "scale="
@@ -58,6 +58,7 @@ ECHO	-e	: Specifies the duration of the gif file in seconds. [96m(Optional)[0m
 ECHO	-c	: Sets the maximum amount of colors useable per palette. [96m(Value up to 256)[0m [33mThis option isn't used
 ECHO		  by default.[0m
 ECHO	-k	: Enables error diffusion. [96m(Optional)[0m
+ECHO	-p	: Opens the resulting GIF file in the default Photo Viewer. [96m(Optional)[0m
 ECHO -------------------------------------------------------------------------------------------------------------
 ECHO [32mPalettegen Modes:[0m
 ECHO 1: diff - only what moves affects the palette
@@ -119,11 +120,12 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-m" SET "mode=%~2" & SHIFT
 	IF "%~1" =="-d" SET "dither=%~2" & SHIFT
 	IF "%~1" =="-b" SET "bayerscale=%~2" & SHIFT
-	IF "%~1" =="-o" SET "output="%FILEPATH%%~nx2.gif"" & SHIFT
+	IF "%~1" =="-o" SET "output=%FILEPATH%%~nx2.gif" & SHIFT
 	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
 	IF "%~1" =="-e" SET "duration=%~2" & SHIFT
 	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
 	IF "%~1" =="-k" SET "errorswitch=0"
+	IF "%~1" =="-p" SET "picswitch=0"
 	SHIFT & GOTO :varin
 )
 GOTO :help_check_2
@@ -214,14 +216,14 @@ IF %dither% LEQ 5 (
 IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
 
-ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -y %output%
+ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -y "%output%"
 
-IF NOT EXIST %output% (
+IF NOT EXIST "%output%" (
 	ECHO [31mFailed to generate gif file[0m
 	GOTO :cleanup
 )
 
-START "" %output%
+IF DEFINED picswitch START "" "%output%"
 
 :cleanup
 ECHO [32mDeleting Temporary files...[0m
