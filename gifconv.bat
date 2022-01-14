@@ -8,7 +8,7 @@ REM License: The MIT License (MIT)
 SETLOCAL ENABLEDELAYEDEXPANSION
 SET input="%~1"
 SET vid="%~dpnx1"
-SET output=~dpn1.gif
+SET output=%~dpn1.gif
 SET FILEPATH=%~dp1
 
 SET "scale="
