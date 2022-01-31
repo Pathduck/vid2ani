@@ -220,14 +220,12 @@ IF %dither% EQU 2 SET ditheralg=heckbert
 IF %dither% EQU 3 SET ditheralg=floyd_steinberg
 IF %dither% EQU 4 SET ditheralg=sierra2
 IF %dither% EQU 5 SET ditheralg=sierra2_4a
-IF %dither% EQU 6 SET "ditherenc="
+IF %dither% EQU 6 SET "ditheralg=none"
 
-IF %dither% LEQ 5 (
-	IF NOT %mode% EQU 2 (
-		IF DEFINED errorswitch SET ditherenc=:dither=!ditheralg!
-		IF NOT DEFINED errorswitch SET ditherenc==dither=!ditheralg!
-	)else SET ditherenc=:dither=!ditheralg!
-)
+IF NOT %mode% EQU 2 (
+	IF DEFINED errorswitch SET ditherenc=:dither=!ditheralg!
+	IF NOT DEFINED errorswitch SET ditherenc==dither=!ditheralg!
+)else SET ditherenc=:dither=!ditheralg!
 :: Setting variables to put the command together; checking for Error Diffusion if using Bayer Scale and adjusting the command accordingly
 
 IF NOT DEFINED bayerscale SET "bayer="
