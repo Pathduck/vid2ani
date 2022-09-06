@@ -4,7 +4,7 @@
 :: Version: 5.5
 :: Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/NabiKAZ/video2gif
 :: What this script is based on: http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
-:: License: The MIT License (MIT)
+:: License: GNU General Public License v3.0 (GPLv3)
 
 SETLOCAL ENABLEDELAYEDEXPANSION
 SET input="%~1"
