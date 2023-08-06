@@ -2,7 +2,7 @@
 
 ![sample gif file generated](sample.gif)
 
-A batch script for converting video files to GIF using FFmpeg on Windows.
+A batch script for converting video files to GIF/APNG using FFmpeg on Windows.
 
 ## Installation:
 * Clone the repo
@@ -26,6 +26,7 @@ Usage:
 gifconv [input_file] [Arguments]
 -------------------------------------------------------------------------------------------------------------
 Arguments:
+-t		: Specifies output filetype - 'gif' or 'apng'. The default is 'gif'.
 -o      : Specifies output filename. (will be outputted to the same directory as your input video file.)
           If left empty, this will default to the same filename as your video.
 -r      : Specifies scale or size. The amount of pixels this value is set to will be the width of the gif.

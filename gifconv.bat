@@ -1,6 +1,6 @@
 @ECHO OFF
 :: By: MDHEXT, Nabi KaramAliZadeh <nabikaz@gmail.com>
-:: Description: Video to GIF converter
+:: Description: Video to GIF/APNG converter
 :: Version: 5.5
 :: Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/NabiKAZ/video2gif
 :: What this script is based on: http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
@@ -9,10 +9,11 @@
 SETLOCAL ENABLEDELAYEDEXPANSION
 SET input="%~1"
 SET vid="%~dpnx1"
-SET output=%~dpn1.gif
+SET output=%~dpn1
 SET FILEPATH=%~dp1
 :: Storing Paths
 
+SET "filetype="
 SET "scale="
 SET "fps="
 SET "mode="
@@ -39,7 +40,7 @@ GOTO :help_check_1
 
 :help_message
 ECHO ------------------------------------------------------------------------------------------------------------------------------------
-ECHO [96mVideo to GIF converter v5.5 ^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
+ECHO [96mVideo to GIF/APNG converter v5.5 ^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
 ECHO [96mYou can download this fork from here: https://github.com/MDHEXT/video2gif[0m
 ECHO [96myou can download the original release here: https://github.com/NabiKAZ/video2gif[0m
 ECHO [96mThis tool uses ffmpeg, you can download that here: https://www.ffmpeg.org/download.html#build-windows[0m
@@ -49,6 +50,7 @@ ECHO [32mUsage:[0m
 ECHO gifconv [input_file] [Arguments]
 ECHO ------------------------------------------------------------------------------------------------------------------------------------
 ECHO [32mArguments:[0m
+ECHO	-t	: Specifies output filetype - 'gif' or 'apng'. [33mThe default is 'gif'.[0m
 ECHO	-o	: Specifies output filename. [96m(will be outputted to the same directory as your input video file.)[0m
 ECHO		  If left empty, [33mthis will default to the same filename as your video.[0m
 ECHO	-r	: Specifies scale or size. The amount of pixels this value is set to will be the width of the gif.
@@ -90,6 +92,12 @@ ECHO Without these people's contributions, This script would not be possible. Th
 GOTO :EOF
 
 :safchek
+echo %filetype% | findstr /r "\<gif\> \<apng\>" >nul
+IF %errorlevel% NEQ 0 (
+	ECHO  [31mNot a valid file type[0m
+	GOTO :EOF
+)
+
 IF %mode% GTR 3 (
 	ECHO [31mNot a valid mode[0m
 	GOTO :EOF
@@ -130,7 +138,8 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-m" SET "mode=%~2" & SHIFT
 	IF "%~1" =="-d" SET "dither=%~2" & SHIFT
 	IF "%~1" =="-b" SET "bayerscale=%~2" & SHIFT
-	IF "%~1" =="-o" SET "output=%FILEPATH%%~nx2.gif" & SHIFT
+	IF "%~1" =="-t" SET "filetype=%~2" & SHIFT
+	IF "%~1" =="-o" SET "output=%~dpnx2" & SHIFT
 	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
 	IF "%~1" =="-e" SET "duration=%~2" & SHIFT
 	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
@@ -150,6 +159,7 @@ GOTO :varin
 :: Checking for blank input or help commands
 
 :help_check_2
+IF NOT DEFINED filetype SET "filetype=gif"
 IF NOT DEFINED scale SET "scale=-1"
 IF NOT DEFINED fps SET fps=15
 IF NOT DEFINED mode SET mode=1
@@ -158,8 +168,13 @@ GOTO :safchek
 :: Noob proofing the script to prevent it from breaking should critical settings not be defined
 
 :script_start
+IF "%filetype%"=="apng" SET output=%output%.png
+IF "%filetype%"=="gif" SET output=%output%.gif
+:: Set output file name
+
 ECHO [33m%version%[0m
 ECHO [33m%build%[0m
+ECHO [32mOutput file: %output%[0m
 ECHO [32mCreating Working Directory...[0m
 MD "%WD%"
 :: Displaying FFmpeg Version String and Creating the Working Directory
@@ -232,7 +247,7 @@ IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
 :: Checking for Bayer Scale and adjusting command
 
-ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -y "%output%"
+ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% -plays 0 -y "%output%"
 
 IF NOT EXIST "%output%" (
 	ECHO [31mFailed to generate gif file[0m
