@@ -1,6 +1,6 @@
 @ECHO OFF
 :: By: MDHEXT, Nabi KaramAliZadeh <nabikaz@gmail.com>
-:: Description: Video to GIF/APNG converter
+:: Description: Video to GIF/APNG/WEBP converter
 :: Version: 5.5
 :: Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/NabiKAZ/video2gif
 :: What this script is based on: http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
@@ -40,7 +40,7 @@ GOTO :help_check_1
 
 :help_message
 ECHO ------------------------------------------------------------------------------------------------------------------------------------
-ECHO [96mVideo to GIF/APNG converter v5.5 ^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
+ECHO [96mVideo to GIF/APNG/WEBP converter v5.5 ^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
 ECHO [96mYou can download this fork from here: https://github.com/MDHEXT/video2gif[0m
 ECHO [96myou can download the original release here: https://github.com/NabiKAZ/video2gif[0m
 ECHO [96mThis tool uses ffmpeg, you can download that here: https://www.ffmpeg.org/download.html#build-windows[0m
@@ -50,27 +50,28 @@ ECHO [32mUsage:[0m
 ECHO gifconv [input_file] [Arguments]
 ECHO ------------------------------------------------------------------------------------------------------------------------------------
 ECHO [32mArguments:[0m
-ECHO	-t	: Specifies output filetype - 'gif' or 'apng'. [33mThe default is 'gif'.[0m
+ECHO	-t	: Specifies output filetype - supported types: gif, png, webp.
+ECHO		  [33mThe default is 'gif'.[0m
 ECHO	-o	: Specifies output filename. [96m(will be outputted to the same directory as your input video file.)[0m
 ECHO		  If left empty, [33mthis will default to the same filename as your video.[0m
-ECHO	-r	: Specifies scale or size. The amount of pixels this value is set to will be the width of the gif.
+ECHO	-r	: Specifies scale or size. The amount of pixels this value is set to will be the width of the animation.
 ECHO		  [33mThe default is the same scale as the original video.[0m
-ECHO	-f	: Specifies framerate in Hz. [33mThe default is 15.[0m
+ECHO	-f	: Specifies framerate in frames per second. [33mThe default is 15.[0m
 ECHO	-m	: Specifies one of the 3 modes listed below. [33mThe default is diff.[0m
 ECHO	-d	: Specifies which dithering algorithm to be used. [33mThe default is Bayer.[0m
 ECHO	-b	: Specifies the Bayer Scale. [31mThis can only be used when Bayer Dithering is applied.[0m See more 
 ECHO		  information below. [96m(Optional)[0m
-ECHO	-s	: Specifies the start of the gif file in HH:MM:SS.MS format. [96m(Optional)[0m
-ECHO	-e	: Specifies the duration of the gif file in seconds. [96m(Optional)[0m
+ECHO	-s	: Specifies the start of the animation in HH:MM:SS.MS format. [96m(Optional)[0m
+ECHO	-e	: Specifies the duration of the animation in seconds. [96m(Optional)[0m
 ECHO	-c	: Sets the maximum amount of colors useable per palette. [96m(Value up to 256)[0m [33mThis option isn't used
 ECHO		  by default.[0m
 ECHO	-k	: Enables error diffusion. [96m(Optional)[0m
-ECHO	-p	: Opens the resulting GIF file in your default Photo Viewer. [96m(Optional)[0m
+ECHO	-p	: Opens the resulting animation in your default Photo Viewer. [96m(Optional)[0m
 ECHO ------------------------------------------------------------------------------------------------------------------------------------
 ECHO [32mPalettegen Modes:[0m
 ECHO 1: diff - only what moves affects the palette
 ECHO 2: single - one palette per frame
-ECHO 3: full - one palette for the whole gif
+ECHO 3: full - one palette for the whole animation
 ECHO ------------------------------------------------------------------------------------------------------------------------------------
 ECHO [32mDithering Options:[0m
 ECHO 1: Bayer
@@ -92,7 +93,7 @@ ECHO Without these people's contributions, This script would not be possible. Th
 GOTO :EOF
 
 :safchek
-echo %filetype% | findstr /r "\<gif\> \<apng\>" >nul
+echo %filetype% | findstr /r "\<gif\> \<png\> \<apng\> \<webp\>" >nul
 IF %errorlevel% NEQ 0 (
 	ECHO  [31mNot a valid file type[0m
 	GOTO :EOF
@@ -168,7 +169,9 @@ GOTO :safchek
 :: Noob proofing the script to prevent it from breaking should critical settings not be defined
 
 :script_start
+IF "%filetype%"=="png" SET filetype=apng
 IF "%filetype%"=="apng" SET output=%output%.png
+IF "%filetype%"=="webp" SET output=%output%.webp
 IF "%filetype%"=="gif" SET output=%output%.gif
 :: Set output file name
 
@@ -219,7 +222,7 @@ IF NOT EXIST "%palette%_00001.png" (
 )
 :: Putting together command to generate palette, executing it, and then checking if the file is in the Working Directory, if not, cleaning up working files
 
-ECHO [32mEncoding Gif file...[0m
+ECHO [32mEncoding animation...[0m
 IF %mode% EQU 1 SET decode=paletteuse
 IF %mode% EQU 2 SET "decode=paletteuse=new=1"
 IF %mode% EQU 3 SET decode=paletteuse
@@ -250,10 +253,10 @@ IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
 ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% -plays 0 -y "%output%"
 
 IF NOT EXIST "%output%" (
-	ECHO [31mFailed to generate gif file[0m
+	ECHO [31mFailed to generate animation[0m
 	GOTO :cleanup
 )
-:: Checking if gif was created and cleaning up if not
+:: Checking if file was created and cleaning up if not
 
 IF DEFINED picswitch START "" "%output%"
 
