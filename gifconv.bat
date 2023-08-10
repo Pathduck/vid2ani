@@ -39,40 +39,48 @@ GOTO :help_check_1
 :: Setting the path to the Working Directory and storing FFmpeg Version String
 
 :help_message
-ECHO ------------------------------------------------------------------------------------------------------------------------------------
-ECHO [96mVideo to GIF/APNG/WEBP converter v5.5 ^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
-ECHO [96mYou can download this fork from here: https://github.com/MDHEXT/video2gif[0m
-ECHO [96myou can download the original release here: https://github.com/NabiKAZ/video2gif[0m
-ECHO [96mThis tool uses ffmpeg, you can download that here: https://www.ffmpeg.org/download.html#build-windows[0m
-ECHO [95mThis tool wouldn't be possible without the research listed here: http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html[0m
-ECHO ------------------------------------------------------------------------------------------------------------------------------------
+ECHO ------------------------------------------------------------------------
+ECHO [32mVideo to GIF/APNG/WEBP converter v5.5[0m
+ECHO [96m^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
+ECHO ------------------------------------------------------------------------
 ECHO [32mUsage:[0m
 ECHO gifconv [input_file] [Arguments]
-ECHO ------------------------------------------------------------------------------------------------------------------------------------
+ECHO ------------------------------------------------------------------------
 ECHO [32mArguments:[0m
-ECHO	-t	: Specifies output filetype - supported types: gif, png, webp.
-ECHO		  [33mThe default is 'gif'.[0m
-ECHO	-o	: Specifies output filename. [96m(will be outputted to the same directory as your input video file.)[0m
-ECHO		  If left empty, [33mthis will default to the same filename as your video.[0m
-ECHO	-r	: Specifies scale or size. The amount of pixels this value is set to will be the width of the animation.
-ECHO		  [33mThe default is the same scale as the original video.[0m
-ECHO	-f	: Specifies framerate in frames per second. [33mThe default is 15.[0m
-ECHO	-m	: Specifies one of the 3 modes listed below. [33mThe default is diff.[0m
-ECHO	-d	: Specifies which dithering algorithm to be used. [33mThe default is Bayer.[0m
-ECHO	-b	: Specifies the Bayer Scale. [31mThis can only be used when Bayer Dithering is applied.[0m See more 
-ECHO		  information below. [96m(Optional)[0m
-ECHO	-s	: Specifies the start of the animation in HH:MM:SS.MS format. [96m(Optional)[0m
-ECHO	-e	: Specifies the duration of the animation in seconds. [96m(Optional)[0m
-ECHO	-c	: Sets the maximum amount of colors useable per palette. [96m(Value up to 256)[0m [33mThis option isn't used
-ECHO		  by default.[0m
-ECHO	-k	: Enables error diffusion. [96m(Optional)[0m
-ECHO	-p	: Opens the resulting animation in your default Photo Viewer. [96m(Optional)[0m
-ECHO ------------------------------------------------------------------------------------------------------------------------------------
+ECHO	-t	Specifies output filetype - supported types: gif, png, webp.
+ECHO		[33mThe default is 'gif'.[0m
+ECHO	-o	Specifies output filename. 
+ECHO		[96mWill be output to the same directory as your input video.[0m
+ECHO		[33mThe default is the same as the input video.[0m
+ECHO	-r	Specifies scale or size. 
+ECHO		[96mWidth of the animation in pixels.[0m
+ECHO		[33mThe default is the same scale as the original video.[0m
+ECHO	-f	Specifies framerate in frames per second.
+ECHO		[33mThe default is 15.[0m
+ECHO	-m	Specifies one of the 3 modes listed below.
+ECHO		[33mThe default is diff.[0m
+ECHO	-d	Specifies which dithering algorithm to be used.
+ECHO		[33mThe default is 1 (Bayer).[0m
+ECHO	-b	Specifies the Bayer Scale. [96m(Optional)[0m
+ECHO		[96mThis can only be used when Bayer dithering is applied.
+ECHO		See more information below.[0m
+ECHO	-s	Specifies the start of the animation in HH:MM:SS.MS format.
+ECHO		[96m(Optional)[0m
+ECHO	-e	Specifies the duration of the animation in seconds.
+ECHO		[96m(Optional)[0m
+ECHO	-c	Sets the maximum amount of colors useable per palette.
+ECHO		[96m(Optional value up to 256)[0m
+ECHO		[33mThis option isn't used by default.[0m
+ECHO	-k	Enables error diffusion.
+ECHO		[96m(Optional)[0m
+ECHO	-p	Opens the resulting animation in your default Photo Viewer.
+ECHO		[96m(Optional)[0m
+ECHO ------------------------------------------------------------------------
 ECHO [32mPalettegen Modes:[0m
 ECHO 1: diff - only what moves affects the palette
 ECHO 2: single - one palette per frame
 ECHO 3: full - one palette for the whole animation
-ECHO ------------------------------------------------------------------------------------------------------------------------------------
+ECHO ------------------------------------------------------------------------
 ECHO [32mDithering Options:[0m
 ECHO 1: Bayer
 ECHO 2: Heckbert
@@ -80,16 +88,29 @@ ECHO 3: Floyd Steinberg
 ECHO 4: Sierra2
 ECHO 5: Sierra2_4a
 ECHO 6: No Dithering
-ECHO ------------------------------------------------------------------------------------------------------------------------------------
+ECHO ------------------------------------------------------------------------
 ECHO [32mAbout Bayerscale:[0m
-ECHO [31mWhen bayer dithering is selected[0m, the Bayer Scale option defines the scale of the pattern (how much the 
-ECHO crosshatch pattern is visible). A low value means more visible pattern for less banding, and higher value
-ECHO means less visible pattern at the cost of more banding. The option must be an integer value in the range
-ECHO [0,5]. [33mThe Default is 2.[0m [96mBayer Scale is optional.[0m
-ECHO ------------------------------------------------------------------------------------------------------------------------------------
+ECHO When bayer dithering is selected, the Bayer Scale option defines the
+ECHO scale of the pattern (how much the crosshatch pattern is visible).
+ECHO A low value means more visible pattern for less banding, a higher value
+ECHO means less visible pattern at the cost of more banding. 
+ECHO [96mThe option must be an integer value in the range [0,5].[0m
+ECHO [33mThe Default is 2.[0m [96mBayer Scale is optional.[0m
+ECHO ------------------------------------------------------------------------
+ECHO You can download this fork from here:[0m
+ECHO [96mhttps://github.com/MDHEXT/video2gif[0m
+ECHO You can download the original release here:
+ECHO [96mhttps://github.com/NabiKAZ/video2gif[0m
+ECHO This tool uses ffmpeg, you can download that here:
+ECHO [96mhttps://www.ffmpeg.org/download.html#build-windows[0m
+ECHO This tool wouldn't be possible without the research listed here:
+ECHO [96mhttp://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html[0m
+ECHO ------------------------------------------------------------------------
 ECHO [95mPeople who made this project come to fruition:[0m
-ECHO ubitux, Nabi KaramAliZadeh, and the very kind and patient people in the Batch Discord Server.
-ECHO Without these people's contributions, This script would not be possible. Thank you all for your contributions and assistence^^!
+ECHO ubitux, Nabi KaramAliZadeh, and the very kind and patient people in the 
+ECHO Batch Discord Server. Without these people's contributions, this script
+ECHO would not be possible. Thank you all for your contributions and 
+ECHO assistance^^!
 GOTO :EOF
 
 :safchek
