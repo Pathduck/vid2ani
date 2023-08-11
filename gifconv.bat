@@ -91,12 +91,12 @@ ECHO 2: single - one palette per frame
 ECHO 3: full - one palette for the whole animation
 ECHO:
 ECHO [32mDithering Options:[0m
+ECHO 0: No Dithering
 ECHO 1: Bayer
 ECHO 2: Heckbert
 ECHO 3: Floyd Steinberg
 ECHO 4: Sierra2
 ECHO 5: Sierra2_4a
-ECHO 6: No Dithering
 ECHO:
 ECHO [32mAbout Bayerscale:[0m
 ECHO When bayer dithering is selected, the Bayer Scale option defines the
@@ -127,10 +127,10 @@ IF %mode% GTR 3 (
 	ECHO [31mNot a valid mode[0m
 	GOTO :EOF
 )
-IF %dither% GTR 6 (
+IF %dither% GTR 5 (
 	ECHO [31mNot a valid dither algorithm[0m
 	GOTO :EOF
-) ELSE IF %dither% LSS 1 (
+) ELSE IF %dither% LSS 0 (
 	ECHO [31mNot a valid dither algorithm[0m
 	GOTO :EOF
 )
@@ -254,12 +254,13 @@ IF DEFINED errorswitch (
 	IF %mode% EQU 3 SET "errordiff==diff_mode=rectangle"
 )
 
+IF %dither% EQU 0 SET ditheralg=none
 IF %dither% EQU 1 SET ditheralg=bayer
 IF %dither% EQU 2 SET ditheralg=heckbert
 IF %dither% EQU 3 SET ditheralg=floyd_steinberg
 IF %dither% EQU 4 SET ditheralg=sierra2
 IF %dither% EQU 5 SET ditheralg=sierra2_4a
-IF %dither% EQU 6 SET "ditheralg=none"
+
 
 IF NOT %mode% EQU 2 (
 	IF DEFINED errorswitch SET ditherenc=:dither=!ditheralg!
