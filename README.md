@@ -79,12 +79,7 @@ The Default is 2. Bayer Scale is optional.
 ```
 
 ## Tips
-You can download this fork from here:
-[MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)
-You can download the original release here:
-[NabiKAZ/video2gif](https://github.com/NabiKAZ/video2gif)
-This tool uses ffmpeg, you can download that here: 
-[FFmpeg Windows builds](https://www.ffmpeg.org/download.html#build-windows)
-This tool wouldn't be possible without the research listed here:
-[High quality GIF with FFmpeg](https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html)
-
+You can download this fork from here: [MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)<br>
+You can download the original release here: [NabiKAZ/video2gif](https://github.com/NabiKAZ/video2gif)<br>
+This tool uses ffmpeg, you can download that here: [FFmpeg Windows builds](https://www.ffmpeg.org/download.html#build-windows)<br>
+This tool wouldn't be possible without the research listed here: [High quality GIF with FFmpeg](https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html)<br>
