@@ -39,13 +39,22 @@ GOTO :help_check_1
 :: Setting the path to the Working Directory and storing FFmpeg Version String
 
 :help_message
-ECHO ------------------------------------------------------------------------
+ECHO:
 ECHO [32mVideo to GIF/APNG/WEBP converter v5.5[0m
 ECHO [96m^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
-ECHO ------------------------------------------------------------------------
+ECHO:
+ECHO You can download this fork from here:[0m
+ECHO [96mhttps://github.com/MDHEXT/video2gif[0m
+ECHO You can download the original release here:
+ECHO [96mhttps://github.com/NabiKAZ/video2gif[0m
+ECHO This tool uses ffmpeg, you can download that here:
+ECHO [96mhttps://www.ffmpeg.org/download.html#build-windows[0m
+ECHO This tool wouldn't be possible without the research listed here:
+ECHO [96mhttp://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html[0m
+ECHO:
 ECHO [32mUsage:[0m
 ECHO gifconv [input_file] [Arguments]
-ECHO ------------------------------------------------------------------------
+ECHO:
 ECHO [32mArguments:[0m
 ECHO	-t	Specifies output filetype - supported types: gif, png, webp.
 ECHO		[33mThe default is 'gif'.[0m
@@ -75,12 +84,12 @@ ECHO	-k	Enables error diffusion.
 ECHO		[96m(Optional)[0m
 ECHO	-p	Opens the resulting animation in your default Photo Viewer.
 ECHO		[96m(Optional)[0m
-ECHO ------------------------------------------------------------------------
+ECHO:
 ECHO [32mPalettegen Modes:[0m
 ECHO 1: diff - only what moves affects the palette
 ECHO 2: single - one palette per frame
 ECHO 3: full - one palette for the whole animation
-ECHO ------------------------------------------------------------------------
+ECHO:
 ECHO [32mDithering Options:[0m
 ECHO 1: Bayer
 ECHO 2: Heckbert
@@ -88,7 +97,7 @@ ECHO 3: Floyd Steinberg
 ECHO 4: Sierra2
 ECHO 5: Sierra2_4a
 ECHO 6: No Dithering
-ECHO ------------------------------------------------------------------------
+ECHO:
 ECHO [32mAbout Bayerscale:[0m
 ECHO When bayer dithering is selected, the Bayer Scale option defines the
 ECHO scale of the pattern (how much the crosshatch pattern is visible).
@@ -96,16 +105,7 @@ ECHO A low value means more visible pattern for less banding, a higher value
 ECHO means less visible pattern at the cost of more banding. 
 ECHO [96mThe option must be an integer value in the range [0,5].[0m
 ECHO [33mThe Default is 2.[0m [96mBayer Scale is optional.[0m
-ECHO ------------------------------------------------------------------------
-ECHO You can download this fork from here:[0m
-ECHO [96mhttps://github.com/MDHEXT/video2gif[0m
-ECHO You can download the original release here:
-ECHO [96mhttps://github.com/NabiKAZ/video2gif[0m
-ECHO This tool uses ffmpeg, you can download that here:
-ECHO [96mhttps://www.ffmpeg.org/download.html#build-windows[0m
-ECHO This tool wouldn't be possible without the research listed here:
-ECHO [96mhttp://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html[0m
-ECHO ------------------------------------------------------------------------
+ECHO:
 ECHO [95mPeople who made this project come to fruition:[0m
 ECHO ubitux, Nabi KaramAliZadeh, and the very kind and patient people in the 
 ECHO Batch Discord Server. Without these people's contributions, this script
