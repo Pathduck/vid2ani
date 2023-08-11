@@ -54,12 +54,12 @@ Palettegen Modes:
 3: full - one palette for the whole animation
 
 Dithering Options:
+0: No Dithering
 1: Bayer
 2: Heckbert
 3: Floyd Steinberg
 4: Sierra2
 5: Sierra2_4a
-6: No Dithering
 
 About Bayerscale:
 When bayer dithering is selected, the Bayer Scale option defines the
