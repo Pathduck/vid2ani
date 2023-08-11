@@ -50,13 +50,13 @@ ECHO [96mhttps://github.com/NabiKAZ/video2gif[0m
 ECHO This tool uses ffmpeg, you can download that here:
 ECHO [96mhttps://www.ffmpeg.org/download.html#build-windows[0m
 ECHO This tool wouldn't be possible without the research listed here:
-ECHO [96mhttp://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html[0m
+ECHO [96mhttps://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html[0m
 ECHO:
 ECHO [32mUsage:[0m
 ECHO gifconv [input_file] [Arguments]
 ECHO:
 ECHO [32mArguments:[0m
-ECHO	-t	Specifies output filetype - supported types: gif, png, webp.
+ECHO	-t	Specifies output filetype - supported types: 'gif', 'png', 'webp'.
 ECHO		[33mThe default is 'gif'.[0m
 ECHO	-o	Specifies output filename. 
 ECHO		[96mWill be output to the same directory as your input video.[0m
