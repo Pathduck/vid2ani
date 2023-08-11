@@ -97,6 +97,9 @@ ECHO 2: Heckbert
 ECHO 3: Floyd Steinberg
 ECHO 4: Sierra2
 ECHO 5: Sierra2_4a
+ECHO 6: sierra3
+ECHO 7: burkes
+ECHO 8: atkinson
 ECHO:
 ECHO [32mAbout Bayerscale:[0m
 ECHO When bayer dithering is selected, the Bayer Scale option defines the
@@ -127,7 +130,7 @@ IF %mode% GTR 3 (
 	ECHO [31mNot a valid mode[0m
 	GOTO :EOF
 )
-IF %dither% GTR 5 (
+IF %dither% GTR 8 (
 	ECHO [31mNot a valid dither algorithm[0m
 	GOTO :EOF
 ) ELSE IF %dither% LSS 0 (
@@ -260,7 +263,9 @@ IF %dither% EQU 2 SET ditheralg=heckbert
 IF %dither% EQU 3 SET ditheralg=floyd_steinberg
 IF %dither% EQU 4 SET ditheralg=sierra2
 IF %dither% EQU 5 SET ditheralg=sierra2_4a
-
+IF %dither% EQU 6 SET ditheralg=sierra3
+IF %dither% EQU 7 SET ditheralg=burkes
+IF %dither% EQU 8 SET ditheralg=atkinson
 
 IF NOT %mode% EQU 2 (
 	IF DEFINED errorswitch SET ditherenc=:dither=!ditheralg!
