@@ -1,7 +1,7 @@
 # video2gif
 
-Video to GIF/APNG/WEBP converter v5.5
-A batch script for converting video files to GIF/APNG/WEBP using FFmpeg on Windows.
+Video to GIF/APNG/WEBP converter v5.5<br>
+A batch script for converting video files to GIF/APNG/WEBP using FFmpeg on Windows.<br>
 (C) 2017-2022, MDHEXT & Nabi KaramAliZadeh <nabikaz@gmail.com>
 
 ![sample gif file generated](sample.gif)
