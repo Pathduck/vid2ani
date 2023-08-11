@@ -138,7 +138,7 @@ IF DEFINED bayerscale (
 	IF !bayerscale! GTR 5 (
 		ECHO [31mNot a valid bayerscale value[0m
 		GOTO :EOF
-	) ELSE IF !bayerscale! LSS 1 (
+	) ELSE IF !bayerscale! LSS 0 (
 		ECHO [31mNot a valid bayerscale value[0m
 		GOTO :EOF
 	)
