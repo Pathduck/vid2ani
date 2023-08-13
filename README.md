@@ -1,10 +1,12 @@
 # video2gif
 
-Video to GIF/APNG/WEBP converter v5.5<br>
+*Video to GIF/APNG/WEBP converter v5.5*
+
+![sample gif file generated](sample.gif)
+
 A batch script for converting video files to GIF/APNG/WEBP using FFmpeg on Windows.<br>
 (C) 2017-2022, MDHEXT & Nabi KaramAliZadeh <nabikaz@gmail.com>
 
-![sample gif file generated](sample.gif)
 
 ## Installation
 * Clone the repo
@@ -19,8 +21,8 @@ gifconv [input_file] [arguments]
 ```
 ## Arguments
 ```
--t      Specifies output filetype - supported types: 'gif', 'png', 'webp'.
-        The default is 'gif'.
+-t      Specifies output filetype - supported types: gif, png, webp.
+        The default is gif.
 -o      Specifies output filename.
         Will be output to the same directory as your input video.
         The default is the same as the input video.
@@ -60,6 +62,9 @@ Dithering Options:
 3: Floyd Steinberg
 4: Sierra2
 5: Sierra2_4a
+6: sierra3
+7: burkes
+8: atkinson
 
 About Bayerscale:
 When bayer dithering is selected, the Bayer Scale option defines the
