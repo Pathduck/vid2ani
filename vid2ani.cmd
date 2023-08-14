@@ -26,7 +26,7 @@ SET "version="
 SET "build="
 :: Clearing all variables
 
-SET WD=%TEMP%\GIFCONV
+SET WD=%TEMP%\VID2ANI
 SET palette=%WD%\template
 FOR /F "delims=" %%a in ('ffmpeg -version') DO (
 	IF NOT DEFINED version (
@@ -53,7 +53,7 @@ ECHO This tool wouldn't be possible without the research listed here:
 ECHO [96mhttps://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html[0m
 ECHO:
 ECHO [32mUsage:[0m
-ECHO gifconv [input_file] [Arguments]
+ECHO vid2ani [input_file] [Arguments]
 ECHO:
 ECHO [32mArguments:[0m
 ECHO	-t	Specifies output filetype - supported types: 'gif', 'png', 'webp'.
