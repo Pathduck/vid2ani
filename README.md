@@ -1,4 +1,4 @@
-# video2gif
+# vid2ani
 
 *Video to GIF/APNG/WEBP converter v5.5*
 
@@ -13,16 +13,16 @@ A batch script for converting video files to GIF/APNG/WEBP using FFmpeg on Windo
 * Install [FFmpeg](https://www.ffmpeg.org/download.html#build-windows) for Windows.
 * Make sure that the path to `ffmpeg.exe` is 
   [configured in your system environment variables control panel](https://www.wikihow.com/Install-FFmpeg-on-Windows) 
-  or that you run the `gifconv.bat` file in the same folder as `ffmpeg.exe`.
+  or that you run the `vid2ani.cmd` file in the same folder as `ffmpeg.exe`.
 
 ## Usage
 ```
-gifconv [input_file] [arguments]
+vid2ani [input_file] [arguments]
 ```
 ## Arguments
 ```
--t      Specifies output filetype - supported types: gif, png, webp.
-        The default is gif.
+-t      Specifies output filetype - supported types: 'gif', 'png', 'webp'.
+        The default is 'gif'.
 -o      Specifies output filename.
         Will be output to the same directory as your input video.
         The default is the same as the input video.
@@ -77,10 +77,11 @@ The Default is 2. Bayer Scale is optional.
 
 ## Examples
 ```
-  gifconv sample.mp4
-  gifconv sample.mp4 -f 20 -r 450
-  gifconv sample.mp4 -s 5:40 -e 5
-  gifconv sample.mp4 -o babydance -m 2 -k -b 3
+  vid2ani sample.mp4
+  vid2ani sample.mp4 -t png
+  vid2ani sample.mp4 -f 20 -r 450
+  vid2ani sample.mp4 -s 5:40 -e 5
+  vid2ani sample.mp4 -o babydance -m 2 -k -b 3
 ```
 
 ## Tips
