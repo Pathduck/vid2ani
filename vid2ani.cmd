@@ -56,8 +56,8 @@ ECHO [32mUsage:[0m
 ECHO vid2ani [input_file] [Arguments]
 ECHO:
 ECHO [32mArguments:[0m
-ECHO	-t	Specifies output filetype - supported types: 'gif', 'png', 'webp'.
-ECHO		[33mThe default is 'gif'.[0m
+ECHO	-t	Specifies output filetype: gif, png, webp.
+ECHO		[33mThe default is gif.[0m
 ECHO	-o	Specifies output filename. 
 ECHO		[96mWill be output to the same directory as your input video.[0m
 ECHO		[33mThe default is the same as the input video.[0m
