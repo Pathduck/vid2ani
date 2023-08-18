@@ -119,36 +119,36 @@ GOTO :EOF
 :safchek
 echo %filetype% | findstr /r "\<gif\> \<png\> \<apng\> \<webp\>" >nul
 IF %errorlevel% NEQ 0 (
-	ECHO  [31mNot a valid file type[0m
+	ECHO  [91mNot a valid file type[0m
 	GOTO :EOF
 )
 
 IF %mode% GTR 3 (
-	ECHO [31mNot a valid mode[0m
+	ECHO [91mNot a valid mode[0m
 	GOTO :EOF
 ) ELSE IF %mode% LSS 1 (
-	ECHO [31mNot a valid mode[0m
+	ECHO [91mNot a valid mode[0m
 	GOTO :EOF
 )
 IF %dither% GTR 8 (
-	ECHO [31mNot a valid dither algorithm[0m
+	ECHO [91mNot a valid dither algorithm[0m
 	GOTO :EOF
 ) ELSE IF %dither% LSS 0 (
-	ECHO [31mNot a valid dither algorithm[0m
+	ECHO [91mNot a valid dither algorithm[0m
 	GOTO :EOF
 )
 IF DEFINED bayerscale (
 	IF !bayerscale! GTR 5 (
-		ECHO [31mNot a valid bayerscale value[0m
+		ECHO [91mNot a valid bayerscale value[0m
 		GOTO :EOF
 	) ELSE IF !bayerscale! LSS 0 (
-		ECHO [31mNot a valid bayerscale value[0m
+		ECHO [91mNot a valid bayerscale value[0m
 		GOTO :EOF
 	)
 	IF !bayerscale! LEQ 5 (
 		IF %dither% EQU 1 GOTO :script_start
 		IF %dither% NEQ 1 (
-			ECHO [31mThis setting only works with bayer dithering[0m
+			ECHO [91mThis setting only works with bayer dithering[0m
 			GOTO :EOF
 		)
 	)
@@ -240,7 +240,7 @@ ffmpeg -v warning %trim% -i %vid% -vf "%filters%,%encode%%mcol%" -y "%frames%.pn
 
 IF NOT EXIST "%palette%_00001.png" (
 	IF NOT EXIST "%palette%.png" (
-		ECHO [31mFailed to generate palette file[0m
+		ECHO [91mFailed to generate palette file[0m
 		GOTO :cleanup
 	)
 )
@@ -280,7 +280,7 @@ IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
 ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% -plays 0 -y "%output%"
 
 IF NOT EXIST "%output%" (
-	ECHO [31mFailed to generate animation[0m
+	ECHO [91mFailed to generate animation[0m
 	GOTO :cleanup
 )
 :: Checking if file was created and cleaning up if not
