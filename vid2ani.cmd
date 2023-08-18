@@ -20,6 +20,7 @@ SET "mode="
 SET "dither="
 SET "bayerscale="
 SET "start_time="
+SET "webp_lossy="
 SET "duration="
 SET "colormax="
 SET "version="
@@ -56,28 +57,31 @@ ECHO [32mUsage:[0m
 ECHO vid2ani [input_file] [Arguments]
 ECHO:
 ECHO [32mArguments:[0m
-ECHO	-t	Specifies output filetype: gif, png, webp.
+ECHO	-t	Output filetype: gif, png, webp.
 ECHO		[33mThe default is gif.[0m
-ECHO	-o	Specifies output filename. 
+ECHO	-o	Output filename. 
 ECHO		[96mWill be output to the same directory as your input video.[0m
 ECHO		[33mThe default is the same as the input video.[0m
-ECHO	-r	Specifies scale or size. 
+ECHO	-r	Scale or size. 
 ECHO		[96mWidth of the animation in pixels.[0m
 ECHO		[33mThe default is the same scale as the original video.[0m
-ECHO	-f	Specifies framerate in frames per second.
+ECHO	-f	Framerate in frames per second.
 ECHO		[33mThe default is 15.[0m
-ECHO	-m	Specifies one of the 3 modes listed below.
+ECHO	-m	Palettegen mode - one of 3 modes listed below.
 ECHO		[33mThe default is diff.[0m
-ECHO	-d	Specifies which dithering algorithm to be used.
+ECHO	-d	Dithering algorithm to be used.
 ECHO		[33mThe default is 1 (Bayer).[0m
-ECHO	-b	Specifies the Bayer Scale. [96m(Optional)[0m
+ECHO	-b	Bayer Scale setting. [96m(Optional)[0m
 ECHO		[96mThis can only be used when Bayer dithering is applied.
 ECHO		See more information below.[0m
-ECHO	-s	Specifies the start of the animation in HH:MM:SS.MS format.
+ECHO	-l	Set lossy WebP compression and quality
+ECHO		[33mValue 0-100, default 75.[0m
+ECHO		[96m(Webp default is lossless)[0m
+ECHO	-s	Start of the animation in HH:MM:SS.MS format.
 ECHO		[96m(Optional)[0m
-ECHO	-e	Specifies the duration of the animation in seconds.
+ECHO	-e	Duration of the animation in seconds.
 ECHO		[96m(Optional)[0m
-ECHO	-c	Sets the maximum amount of colors useable per palette.
+ECHO	-c	The maximum amount of colors useable per palette.
 ECHO		[96m(Optional value up to 256)[0m
 ECHO		[33mThis option isn't used by default.[0m
 ECHO	-k	Enables error diffusion.
@@ -116,6 +120,45 @@ ECHO would not be possible. Thank you all for your contributions and
 ECHO assistance^^!
 GOTO :EOF
 
+:help_check_1
+IF %input% == "" GOTO :help_message
+IF %input% == "help" GOTO :help_message
+IF %input% == "-?" GOTO :help_message
+IF %input% == "--help" GOTO :help_message
+
+GOTO :varin
+:: Checking for blank input or help commands
+
+:varin
+IF NOT "%~1" =="" (
+	IF "%~1" =="-r" SET "scale=%~2" & SHIFT
+	IF "%~1" =="-f" SET "fps=%~2" & SHIFT
+	IF "%~1" =="-m" SET "mode=%~2" & SHIFT
+	IF "%~1" =="-d" SET "dither=%~2" & SHIFT
+	IF "%~1" =="-b" SET "bayerscale=%~2" & SHIFT
+	IF "%~1" =="-t" SET "filetype=%~2" & SHIFT
+	IF "%~1" =="-o" SET "output=%~dpnx2" & SHIFT
+	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
+	IF "%~1" =="-e" SET "duration=%~2" & SHIFT
+	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
+	IF "%~1" =="-l" SET "webp_lossy=%~2" & SHIFT
+	IF "%~1" =="-k" SET "errorswitch=0"
+	IF "%~1" =="-p" SET "picswitch=0"
+	SHIFT & GOTO :varin
+)
+
+GOTO :help_check_2
+:: Using SHIFT command to go through the input and storing each setting into its own variable
+
+:help_check_2
+IF NOT DEFINED filetype SET "filetype=gif"
+IF NOT DEFINED scale SET "scale=-1"
+IF NOT DEFINED fps SET fps=15
+IF NOT DEFINED mode SET mode=1
+IF NOT DEFINED dither SET dither=1
+GOTO :safchek
+:: Noob proofing the script to prevent it from breaking should critical settings not be defined
+
 :safchek
 echo %filetype% | findstr /r "\<gif\> \<png\> \<apng\> \<webp\>" >nul
 IF %errorlevel% NEQ 0 (
@@ -130,6 +173,7 @@ IF %mode% GTR 3 (
 	ECHO [91mNot a valid mode[0m
 	GOTO :EOF
 )
+
 IF %dither% GTR 8 (
 	ECHO [91mNot a valid dither algorithm[0m
 	GOTO :EOF
@@ -137,6 +181,20 @@ IF %dither% GTR 8 (
 	ECHO [91mNot a valid dither algorithm[0m
 	GOTO :EOF
 )
+
+IF DEFINED webp_lossy (
+	IF NOT "%filetype%" == "webp" (
+		ECHO [91mLossy is only valid for filetype webp[0m
+		GOTO :EOF
+	) ELSE IF !webp_lossy! GTR 100 (
+		ECHO [91mNot a valid lossy quality value[0m
+		GOTO :EOF
+	) ELSE IF !webp_lossy! LSS 0 (
+		ECHO [91mNot a valid lossy quality value[0m
+		GOTO :EOF
+	)
+)
+
 IF DEFINED bayerscale (
 	IF !bayerscale! GTR 5 (
 		ECHO [91mNot a valid bayerscale value[0m
@@ -155,42 +213,6 @@ IF DEFINED bayerscale (
 )
 GOTO :script_start
 :: Setting a clear range of acceptable setting values and noob proofing bayerscale
-
-:varin
-IF NOT "%~1" =="" (
-	IF "%~1" =="-r" SET "scale=%~2" & SHIFT
-	IF "%~1" =="-f" SET "fps=%~2" & SHIFT
-	IF "%~1" =="-m" SET "mode=%~2" & SHIFT
-	IF "%~1" =="-d" SET "dither=%~2" & SHIFT
-	IF "%~1" =="-b" SET "bayerscale=%~2" & SHIFT
-	IF "%~1" =="-t" SET "filetype=%~2" & SHIFT
-	IF "%~1" =="-o" SET "output=%~dpnx2" & SHIFT
-	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
-	IF "%~1" =="-e" SET "duration=%~2" & SHIFT
-	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
-	IF "%~1" =="-k" SET "errorswitch=0"
-	IF "%~1" =="-p" SET "picswitch=0"
-	SHIFT & GOTO :varin
-)
-GOTO :help_check_2
-:: Using SHIFT command to go through the input and storing each setting into its own variable
-
-:help_check_1
-IF %input% == "" GOTO :help_message
-IF %input% == "help" GOTO :help_message
-IF %input% == "h" GOTO :help_message
-IF %input% == "-h" GOTO :help_message
-GOTO :varin
-:: Checking for blank input or help commands
-
-:help_check_2
-IF NOT DEFINED filetype SET "filetype=gif"
-IF NOT DEFINED scale SET "scale=-1"
-IF NOT DEFINED fps SET fps=15
-IF NOT DEFINED mode SET mode=1
-IF NOT DEFINED dither SET dither=1
-GOTO :safchek
-:: Noob proofing the script to prevent it from breaking should critical settings not be defined
 
 :script_start
 IF "%filetype%"=="png" SET filetype=apng
@@ -257,6 +279,12 @@ IF DEFINED errorswitch (
 	IF %mode% EQU 3 SET "errordiff==diff_mode=rectangle"
 )
 
+IF "%filetype%" == "webp" (
+	IF DEFINED webp_lossy (
+		SET "webp_lossy=-lossless 0 -quality %webp_lossy%"
+	) ELSE SET "webp_lossy=-lossless 1"
+)
+
 IF %dither% EQU 0 SET ditheralg=none
 IF %dither% EQU 1 SET ditheralg=bayer
 IF %dither% EQU 2 SET ditheralg=heckbert
@@ -270,7 +298,7 @@ IF %dither% EQU 8 SET ditheralg=atkinson
 IF NOT %mode% EQU 2 (
 	IF DEFINED errorswitch SET ditherenc=:dither=!ditheralg!
 	IF NOT DEFINED errorswitch SET ditherenc==dither=!ditheralg!
-)else SET ditherenc=:dither=!ditheralg!
+) ELSE SET ditherenc=:dither=!ditheralg!
 :: Setting variables to put the command together; checking for Error Diffusion if using Bayer Scale and adjusting the command accordingly
 
 IF NOT DEFINED bayerscale SET "bayer="
