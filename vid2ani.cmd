@@ -59,16 +59,15 @@ ECHO:
 ECHO [32mArguments:[0m
 ECHO	-t	Output filetype: gif, png, webp.
 ECHO		[33mThe default is gif.[0m
-ECHO	-o	Output filename. 
-ECHO		[96mWill be output to the same directory as your input video.[0m
-ECHO		[33mThe default is the same as the input video.[0m
+ECHO	-o	Output file. 
+ECHO		[33mThe default is the same name as the input video.[0m
 ECHO	-r	Scale or size. 
 ECHO		[96mWidth of the animation in pixels.[0m
 ECHO		[33mThe default is the same scale as the original video.[0m
 ECHO	-f	Framerate in frames per second.
 ECHO		[33mThe default is 15.[0m
 ECHO	-m	Palettegen mode - one of 3 modes listed below.
-ECHO		[33mThe default is diff.[0m
+ECHO		[33mThe default is 1 (diff).[0m
 ECHO	-d	Dithering algorithm to be used.
 ECHO		[33mThe default is 1 (Bayer).[0m
 ECHO	-b	Bayer Scale setting. [96m(Optional)[0m
@@ -76,14 +75,14 @@ ECHO		[96mThis can only be used when Bayer dithering is applied.
 ECHO		See more information below.[0m
 ECHO	-l	Set lossy WebP compression and quality
 ECHO		[33mValue 0-100, default 75.[0m
-ECHO		[96m(Webp default is lossless)[0m
+ECHO		[96m(Default for WebP is lossless)[0m
+ECHO	-c	The maximum amount of colors useable per palette.
+ECHO		[96m(Optional value up to 256)[0m
+ECHO		[33mThis option isn't used by default.[0m
 ECHO	-s	Start of the animation in HH:MM:SS.MS format.
 ECHO		[96m(Optional)[0m
 ECHO	-e	Duration of the animation in seconds.
 ECHO		[96m(Optional)[0m
-ECHO	-c	The maximum amount of colors useable per palette.
-ECHO		[96m(Optional value up to 256)[0m
-ECHO		[33mThis option isn't used by default.[0m
 ECHO	-k	Enables error diffusion.
 ECHO		[96m(Optional)[0m
 ECHO	-p	Opens the resulting animation in your default Photo Viewer.
@@ -305,7 +304,7 @@ IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
 :: Checking for Bayer Scale and adjusting command
 
-ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% -plays 0 -y "%output%"
+ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% %webp_lossy% -plays 0 -y "%output%"
 
 IF NOT EXIST "%output%" (
 	ECHO [91mFailed to generate animation[0m
