@@ -21,7 +21,6 @@ vid2ani [input_file] [arguments]
 ```
 ## Arguments
 ```
-
 -t      Output filetype: gif, png, webp.
         The default is gif.
 -o      Output file.
@@ -76,7 +75,6 @@ A low value means more visible pattern for less banding, a higher value
 means less visible pattern at the cost of more banding.
 The option must be an integer value in the range [0,5].
 The Default is 2. Bayer Scale is optional.
-
 ```
 
 ## Examples
