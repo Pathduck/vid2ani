@@ -21,30 +21,33 @@ vid2ani [input_file] [arguments]
 ```
 ## Arguments
 ```
--t      Specifies output filetype - supported types: 'gif', 'png', 'webp'.
-        The default is 'gif'.
--o      Specifies output filename.
-        Will be output to the same directory as your input video.
-        The default is the same as the input video.
--r      Specifies scale or size.
+
+-t      Output filetype: gif, png, webp.
+        The default is gif.
+-o      Output file.
+        The default is the same name as the input video.
+-r      Scale or size.
         Width of the animation in pixels.
         The default is the same scale as the original video.
--f      Specifies framerate in frames per second.
+-f      Framerate in frames per second.
         The default is 15.
--m      Specifies one of the 3 modes listed below.
-        The default is diff.
--d      Specifies which dithering algorithm to be used.
-        The default is 1 (Bayer).
--b      Specifies the Bayer Scale. (Optional)
+-m      Palettegen mode - one of 3 modes listed below.
+        The default is 1 (diff).
+-d      Dithering algorithm to be used.
+        The default is 0 (None).
+-b      Bayer Scale setting. (Optional)
         This can only be used when Bayer dithering is applied.
         See more information below.
--s      Specifies the start of the animation in HH:MM:SS.MS format.
-        (Optional)
--e      Specifies the duration of the animation in seconds.
-        (Optional)
--c      Sets the maximum amount of colors useable per palette.
+-l      Set lossy WebP compression and quality
+        Value 0-100, default 75.
+        (Default for WebP is lossless)
+-c      The maximum amount of colors useable per palette.
         (Optional value up to 256)
         This option isn't used by default.
+-s      Start of the animation in HH:MM:SS.MS format.
+        (Optional)
+-e      Duration of the animation in seconds.
+        (Optional)
 -k      Enables error diffusion.
         (Optional)
 -p      Opens the resulting animation in your default Photo Viewer.
@@ -56,7 +59,7 @@ Palettegen Modes:
 3: full - one palette for the whole animation
 
 Dithering Options:
-0: No Dithering
+0: None
 1: Bayer
 2: Heckbert
 3: Floyd Steinberg
@@ -73,6 +76,7 @@ A low value means more visible pattern for less banding, a higher value
 means less visible pattern at the cost of more banding.
 The option must be an integer value in the range [0,5].
 The Default is 2. Bayer Scale is optional.
+
 ```
 
 ## Examples
