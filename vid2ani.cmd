@@ -69,7 +69,7 @@ ECHO		[33mThe default is 15.[0m
 ECHO	-m	Palettegen mode - one of 3 modes listed below.
 ECHO		[33mThe default is 1 (diff).[0m
 ECHO	-d	Dithering algorithm to be used.
-ECHO		[33mThe default is 1 (Bayer).[0m
+ECHO		[33mThe default is 0 (None).[0m
 ECHO	-b	Bayer Scale setting. [96m(Optional)[0m
 ECHO		[96mThis can only be used when Bayer dithering is applied.
 ECHO		See more information below.[0m
@@ -94,7 +94,7 @@ ECHO 2: single - one palette per frame
 ECHO 3: full - one palette for the whole animation
 ECHO:
 ECHO [32mDithering Options:[0m
-ECHO 0: No Dithering
+ECHO 0: None
 ECHO 1: Bayer
 ECHO 2: Heckbert
 ECHO 3: Floyd Steinberg
@@ -154,7 +154,7 @@ IF NOT DEFINED filetype SET "filetype=gif"
 IF NOT DEFINED scale SET "scale=-1"
 IF NOT DEFINED fps SET fps=15
 IF NOT DEFINED mode SET mode=1
-IF NOT DEFINED dither SET dither=1
+IF NOT DEFINED dither SET dither=0
 GOTO :safchek
 :: Noob proofing the script to prevent it from breaking should critical settings not be defined
 
