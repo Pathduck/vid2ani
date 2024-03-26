@@ -280,7 +280,7 @@ IF DEFINED errorswitch (
 
 IF "%filetype%" == "webp" (
 	IF DEFINED webp_lossy (
-		SET "webp_lossy=-lossless 0 -quality %webp_lossy%"
+		SET "webp_lossy=-lossless 0 -pix_fmt yuv420p -quality %webp_lossy%"
 	) ELSE SET "webp_lossy=-lossless 1"
 )
 
@@ -304,7 +304,7 @@ IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
 :: Checking for Bayer Scale and adjusting command
 
-ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% %webp_lossy% -plays 0 -y "%output%"
+ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% %webp_lossy% -loop 0 -plays 0 -y "%output%"
 
 IF NOT EXIST "%output%" (
 	ECHO [91mFailed to generate animation[0m
