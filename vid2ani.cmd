@@ -6,13 +6,16 @@
 :: What this script is based on: http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
 :: License: GNU General Public License v3.0 (GPLv3)
 
+:: Enable delayed variable expension
 SETLOCAL ENABLEDELAYEDEXPANSION
+
+:: Storing Paths
 SET input="%~1"
 SET vid="%~dpnx1"
 SET output=%~dpn1
 SET FILEPATH=%~dp1
-:: Storing Paths
 
+:: Clearing all variables
 SET "filetype="
 SET "scale="
 SET "fps="
@@ -25,8 +28,8 @@ SET "duration="
 SET "colormax="
 SET "version="
 SET "build="
-:: Clearing all variables
 
+:: Setting the path to the Working Directory and storing FFmpeg Version String
 SET WD=%TEMP%\VID2ANI
 SET palette=%WD%\template
 FOR /F "delims=" %%a in ('ffmpeg -version') DO (
@@ -37,9 +40,9 @@ FOR /F "delims=" %%a in ('ffmpeg -version') DO (
 	)
 )
 GOTO :help_check_1
-:: Setting the path to the Working Directory and storing FFmpeg Version String
 
 :help_message
+:: Print usage message
 ECHO:
 ECHO [32mVideo to GIF/APNG/WEBP converter v5.5[0m
 ECHO [96m^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
@@ -120,15 +123,15 @@ ECHO assistance^^!
 GOTO :EOF
 
 :help_check_1
+:: Checking for blank input or help commands
 IF %input% == "" GOTO :help_message
 IF %input% == "help" GOTO :help_message
 IF %input% == "-?" GOTO :help_message
 IF %input% == "--help" GOTO :help_message
-
 GOTO :varin
-:: Checking for blank input or help commands
 
 :varin
+:: Using SHIFT command to go through the input and storing each setting into its own variable
 IF NOT "%~1" =="" (
 	IF "%~1" =="-r" SET "scale=%~2" & SHIFT
 	IF "%~1" =="-f" SET "fps=%~2" & SHIFT
@@ -145,20 +148,19 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-p" SET "picswitch=0"
 	SHIFT & GOTO :varin
 )
-
 GOTO :help_check_2
-:: Using SHIFT command to go through the input and storing each setting into its own variable
 
 :help_check_2
+:: Noob proofing the script to prevent it from breaking should critical settings not be defined
 IF NOT DEFINED filetype SET "filetype=gif"
 IF NOT DEFINED scale SET "scale=-1"
 IF NOT DEFINED fps SET fps=15
 IF NOT DEFINED mode SET mode=1
 IF NOT DEFINED dither SET dither=0
 GOTO :safchek
-:: Noob proofing the script to prevent it from breaking should critical settings not be defined
 
 :safchek
+:: Setting a clear range of acceptable setting values and noob proofing bayerscale
 echo %filetype% | findstr /r "\<gif\> \<png\> \<apng\> \<webp\>" >nul
 IF %errorlevel% NEQ 0 (
 	ECHO  [91mNot a valid file type[0m
@@ -211,24 +213,23 @@ IF DEFINED bayerscale (
 	)
 )
 GOTO :script_start
-:: Setting a clear range of acceptable setting values and noob proofing bayerscale
 
 :script_start
+:: Set output file name
 IF "%filetype%"=="png" SET filetype=apng
 IF "%filetype%"=="apng" SET output=%output%.png
 IF "%filetype%"=="webp" SET output=%output%.webp
 IF "%filetype%"=="gif" SET output=%output%.gif
-:: Set output file name
 
+:: Displaying FFmpeg Version String and Creating the Working Directory
 ECHO [33m%version%[0m
 ECHO [33m%build%[0m
 ECHO [32mOutput file: %output%[0m
 ECHO [32mCreating Working Directory...[0m
 MD "%WD%"
-:: Displaying FFmpeg Version String and Creating the Working Directory
 
 :palettegen
-ECHO [32mGenerating Palette...[0m
+:: Noob Proofing clipping
 IF DEFINED start_time (
 	IF DEFINED duration SET "trim=-ss !start_time! -t !duration!"
 	IF NOT DEFINED duration (
@@ -243,8 +244,8 @@ IF NOT DEFINED start_time (
 		GOTO :cleanup
 	)
 )
-:: Noob Proofing clipping
 
+:: Putting together command to generate palette
 SET frames=%palette%_%%05d
 SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 
@@ -257,17 +258,20 @@ IF DEFINED colormax (
 	IF %mode% EQU 3 SET "mcol==max_colors=%colormax%"
 )
 
+:: Executing command to generate palette
+ECHO [32mGenerating Palette...[0m
 ffmpeg -v warning %trim% -i %vid% -vf "%filters%,%encode%%mcol%" -y "%frames%.png"
 
+:: Checking if the palette file is in the Working Directory, if not cleaning up
 IF NOT EXIST "%palette%_00001.png" (
 	IF NOT EXIST "%palette%.png" (
 		ECHO [91mFailed to generate palette file[0m
 		GOTO :cleanup
 	)
 )
-:: Putting together command to generate palette, executing it, and then checking if the file is in the Working Directory, if not, cleaning up working files
 
-ECHO [32mEncoding animation...[0m
+:: Setting variables to put the command together
+:: Checking for Error Diffusion if using Bayer Scale and adjusting the command accordingly
 IF %mode% EQU 1 SET decode=paletteuse
 IF %mode% EQU 2 SET "decode=paletteuse=new=1"
 IF %mode% EQU 3 SET decode=paletteuse
@@ -278,12 +282,14 @@ IF DEFINED errorswitch (
 	IF %mode% EQU 3 SET "errordiff==diff_mode=rectangle"
 )
 
+:: Setting WEBP lossy arguments
 IF "%filetype%" == "webp" (
 	IF DEFINED webp_lossy (
 		SET "webp_lossy=-lossless 0 -pix_fmt yuv420p -quality %webp_lossy%"
 	) ELSE SET "webp_lossy=-lossless 1"
 )
 
+:: Setting dither algorithm
 IF %dither% EQU 0 SET ditheralg=none
 IF %dither% EQU 1 SET ditheralg=bayer
 IF %dither% EQU 2 SET ditheralg=heckbert
@@ -298,23 +304,26 @@ IF NOT %mode% EQU 2 (
 	IF DEFINED errorswitch SET ditherenc=:dither=!ditheralg!
 	IF NOT DEFINED errorswitch SET ditherenc==dither=!ditheralg!
 ) ELSE SET ditherenc=:dither=!ditheralg!
-:: Setting variables to put the command together; checking for Error Diffusion if using Bayer Scale and adjusting the command accordingly
 
+:: Checking for Bayer Scale and adjusting command
 IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
-:: Checking for Bayer Scale and adjusting command
 
+:: Executing the encoding command
+ECHO [32mEncoding animation...[0m
 ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% %webp_lossy% -loop 0 -plays 0 -y "%output%"
 
+:: Checking if file was created and cleaning up if not
 IF NOT EXIST "%output%" (
 	ECHO [91mFailed to generate animation[0m
 	GOTO :cleanup
 )
-:: Checking if file was created and cleaning up if not
 
+:: Starting default Photo Viewer
 IF DEFINED picswitch START "" "%output%"
 
 :cleanup
+:: Cleaning up
 ECHO [32mDeleting Temporary files...[0m
 RMDIR /S /Q "%WD%"
 ENDLOCAL
