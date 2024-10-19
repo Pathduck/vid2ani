@@ -23,8 +23,8 @@ SET "mode="
 SET "dither="
 SET "bayerscale="
 SET "start_time="
+SET "end_time="
 SET "webp_lossy="
-SET "duration="
 SET "colormax="
 SET "version="
 SET "build="
@@ -82,9 +82,9 @@ ECHO		[96m(Default for WebP is lossless)[0m
 ECHO	-c	The maximum amount of colors useable per palette.
 ECHO		[96m(Optional value up to 256)[0m
 ECHO		[33mThis option isn't used by default.[0m
-ECHO	-s	Start of the animation (HH:MM:SS.MS)
+ECHO	-s	Start time of the animation (HH:MM:SS.MS)
 ECHO		[96m(Optional)[0m
-ECHO	-e	Duration of the animation (HH:MM:SS.MS)
+ECHO	-e	End time of the animation (HH:MM:SS.MS)
 ECHO		[96m(Optional)[0m
 ECHO	-k	Enables error diffusion.
 ECHO		[96m(Optional)[0m
@@ -141,7 +141,7 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-t" SET "filetype=%~2" & SHIFT
 	IF "%~1" =="-o" SET "output=%~dpnx2" & SHIFT
 	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
-	IF "%~1" =="-e" SET "duration=%~2" & SHIFT
+	IF "%~1" =="-e" SET "end_time=%~2" & SHIFT
 	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
 	IF "%~1" =="-l" SET "webp_lossy=%~2" & SHIFT
 	IF "%~1" =="-k" SET "errorswitch=0"
@@ -231,17 +231,17 @@ MD "%WD%"
 :palettegen
 :: Noob Proofing clipping
 IF DEFINED start_time (
-	IF DEFINED duration SET "trim=-ss !start_time! -t !duration!"
-	IF NOT DEFINED duration (
-		ECHO [35mPlease input a duration[0m
-		GOTO :cleanup
+	IF DEFINED end_time SET "trim=-ss !start_time! -to !end_time!"
+	IF NOT DEFINED end_time (
+		ECHO [91mPlease input the end time[0m
+		GOTO :EOF
 	)
 )
 
 IF NOT DEFINED start_time (
-	IF DEFINED duration (
-		ECHO [35mPlease input a start time[0m
-		GOTO :cleanup
+	IF DEFINED end_time (
+		ECHO [91mPlease input the start time[0m
+		GOTO :EOF
 	)
 )
 
