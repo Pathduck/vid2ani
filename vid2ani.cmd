@@ -29,9 +29,13 @@ SET "colormax="
 SET "version="
 SET "build="
 
-:: Setting the path to the Working Directory and storing FFmpeg Version String
+:: Setting the path to the Working Directory
 SET WD=%TEMP%\VID2ANI
-SET palette=%WD%\template
+
+:: Palette filename
+SET palette=%WD%\palette
+
+:: Storing FFmpeg version string
 FOR /F "delims=" %%a in ('ffmpeg -version') DO (
 	IF NOT DEFINED version (
 		SET "version=%%a"
@@ -161,20 +165,27 @@ GOTO :safchek
 
 :safchek
 :: Setting a clear range of acceptable setting values and noob proofing bayerscale
+
+:: Output file type
 echo %filetype% | findstr /r "\<gif\> \<png\> \<apng\> \<webp\>" >nul
 IF %errorlevel% NEQ 0 (
 	ECHO  [91mNot a valid file type[0m
 	GOTO :EOF
 )
+IF "%filetype%"=="png" SET filetype=apng
+IF "%filetype%"=="apng" SET output=%output%.png
+IF "%filetype%"=="webp" SET output=%output%.webp
+IF "%filetype%"=="gif" SET output=%output%.gif
 
+:: Palettegen
 IF %mode% GTR 3 (
-	ECHO [91mNot a valid mode[0m
+	ECHO [91mNot a valid palettegen mode[0m
 	GOTO :EOF
 ) ELSE IF %mode% LSS 1 (
-	ECHO [91mNot a valid mode[0m
+	ECHO [91mNot a valid palettegen mode[0m
 	GOTO :EOF
 )
-
+:: Dithering
 IF %dither% GTR 8 (
 	ECHO [91mNot a valid dither algorithm[0m
 	GOTO :EOF
@@ -183,6 +194,24 @@ IF %dither% GTR 8 (
 	GOTO :EOF
 )
 
+::  Bayerscale
+IF DEFINED bayerscale (
+	IF !bayerscale! GTR 5 (
+		ECHO [91mNot a valid bayerscale value[0m
+		GOTO :EOF
+	) ELSE IF !bayerscale! LSS 0 (
+		ECHO [91mNot a valid bayerscale value[0m
+		GOTO :EOF
+	)
+	IF !bayerscale! LEQ 5 (
+		IF %dither% NEQ 1 (
+			ECHO [91mThis setting only works with bayer dithering[0m
+			GOTO :EOF
+		)
+	)
+)
+
+:: Lossy WEBP
 IF DEFINED webp_lossy (
 	IF NOT "%filetype%" == "webp" (
 		ECHO [91mLossy is only valid for filetype webp[0m
@@ -196,39 +225,6 @@ IF DEFINED webp_lossy (
 	)
 )
 
-IF DEFINED bayerscale (
-	IF !bayerscale! GTR 5 (
-		ECHO [91mNot a valid bayerscale value[0m
-		GOTO :EOF
-	) ELSE IF !bayerscale! LSS 0 (
-		ECHO [91mNot a valid bayerscale value[0m
-		GOTO :EOF
-	)
-	IF !bayerscale! LEQ 5 (
-		IF %dither% EQU 1 GOTO :script_start
-		IF %dither% NEQ 1 (
-			ECHO [91mThis setting only works with bayer dithering[0m
-			GOTO :EOF
-		)
-	)
-)
-GOTO :script_start
-
-:script_start
-:: Set output file name
-IF "%filetype%"=="png" SET filetype=apng
-IF "%filetype%"=="apng" SET output=%output%.png
-IF "%filetype%"=="webp" SET output=%output%.webp
-IF "%filetype%"=="gif" SET output=%output%.gif
-
-:: Displaying FFmpeg Version String and Creating the Working Directory
-ECHO [33m%version%[0m
-ECHO [33m%build%[0m
-ECHO [32mOutput file: %output%[0m
-ECHO [32mCreating Working Directory...[0m
-MD "%WD%"
-
-:palettegen
 :: Noob Proofing clipping
 IF DEFINED start_time (
 	IF DEFINED end_time SET "trim=-ss !start_time! -to !end_time!"
@@ -244,22 +240,34 @@ IF NOT DEFINED start_time (
 		GOTO :EOF
 	)
 )
+GOTO :script_start
 
+:script_start
+:: Displaying FFmpeg version string and creating the working directory
+ECHO [33m%version%[0m
+ECHO [33m%build%[0m
+ECHO [32mOutput file: %output%[0m
+ECHO [32mCreating working directory...[0m
+MD "%WD%"
+
+:palettegen
 :: Putting together command to generate palette
 SET frames=%palette%_%%05d
 SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 
+:: Palettegen mode
 IF %mode% EQU 1 SET encode=palettegen=stats_mode=diff
 IF %mode% EQU 2 SET encode="palettegen=stats_mode=single"
 IF %mode% EQU 3 SET encode=palettegen
 
+:: Max colors
 IF DEFINED colormax (
 	IF %mode% LEQ 2 SET "mcol=:max_colors=%colormax%"
 	IF %mode% EQU 3 SET "mcol==max_colors=%colormax%"
 )
 
 :: Executing command to generate palette
-ECHO [32mGenerating Palette...[0m
+ECHO [32mGenerating palette...[0m
 ffmpeg -v warning %trim% -i %vid% -vf "%filters%,%encode%%mcol%" -y "%frames%.png"
 
 :: Checking if the palette file is in the Working Directory, if not cleaning up
@@ -270,26 +278,27 @@ IF NOT EXIST "%palette%_00001.png" (
 	)
 )
 
-:: Setting variables to put the command together
+:: Setting variables to put the encode command together
 :: Checking for Error Diffusion if using Bayer Scale and adjusting the command accordingly
 IF %mode% EQU 1 SET decode=paletteuse
 IF %mode% EQU 2 SET "decode=paletteuse=new=1"
 IF %mode% EQU 3 SET decode=paletteuse
 
+:: Error diffusion
 IF DEFINED errorswitch (
 	IF %mode% EQU 1 SET "errordiff==diff_mode=rectangle"
 	IF %mode% EQU 2 SET "errordiff=:diff_mode=rectangle"
 	IF %mode% EQU 3 SET "errordiff==diff_mode=rectangle"
 )
 
-:: Setting WEBP lossy arguments
+:: WEBP pixel format and lossy quality
 IF "%filetype%" == "webp" (
 	IF DEFINED webp_lossy (
 		SET "webp_lossy=-lossless 0 -pix_fmt yuv420p -quality %webp_lossy%"
 	) ELSE SET "webp_lossy=-lossless 1"
 )
 
-:: Setting dither algorithm
+:: Dither algorithm
 IF %dither% EQU 0 SET ditheralg=none
 IF %dither% EQU 1 SET ditheralg=bayer
 IF %dither% EQU 2 SET ditheralg=heckbert
@@ -324,7 +333,7 @@ IF DEFINED picswitch START "" "%output%"
 
 :cleanup
 :: Cleaning up
-ECHO [32mDeleting Temporary files...[0m
+ECHO [32mDeleting temporary files...[0m
 RMDIR /S /Q "%WD%"
 ENDLOCAL
 ECHO [93mDone![0m
