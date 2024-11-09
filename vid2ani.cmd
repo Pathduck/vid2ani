@@ -49,7 +49,7 @@ GOTO :help_check_1
 :help_message
 :: Print usage message
 ECHO:
-ECHO [32mVideo to GIF/APNG/WEBP converter v5.5[0m
+ECHO [92mVideo to GIF/APNG/WEBP converter v5.5[0m
 ECHO [96m^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
 ECHO:
 ECHO You can download this fork from here:[0m
@@ -61,10 +61,10 @@ ECHO [96mhttps://www.ffmpeg.org/download.html#build-windows[0m
 ECHO This tool wouldn't be possible without the research listed here:
 ECHO [96mhttps://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html[0m
 ECHO:
-ECHO [32mUsage:[0m
+ECHO [92mUsage:[0m
 ECHO vid2ani [input_file] [Arguments]
 ECHO:
-ECHO [32mArguments:[0m
+ECHO [92mArguments:[0m
 ECHO	-t	Output filetype: gif, png, webp.
 ECHO		[33mThe default is gif.[0m
 ECHO	-o	Output file.
@@ -85,7 +85,7 @@ ECHO	-l	Set lossy WebP compression and quality
 ECHO		[96m(The default for WebP is lossless)[0m
 ECHO		[33mValue 0-100, default 75.[0m
 ECHO	-c	The maximum amount of colors useable per palette.
-ECHO		[33m(Valid range 2 to 256)[0m
+ECHO		[33m(Valid range 3 to 256)[0m
 ECHO	-s	Start time of the animation (HH:MM:SS.MS)
 ECHO		[96m(Optional)[0m
 ECHO	-e	End time of the animation (HH:MM:SS.MS)
@@ -98,12 +98,12 @@ ECHO		[96m(Optional)[0m
 ECHO	-p	Opens the resulting animation in your default Photo Viewer.
 ECHO		[96m(Optional)[0m
 ECHO:
-ECHO [32mPalettegen Modes:[0m
+ECHO [92mPalettegen Modes:[0m
 ECHO 1: diff - only what moves affects the palette
 ECHO 2: single - one palette per frame
 ECHO 3: full - one palette for the whole animation
 ECHO:
-ECHO [32mDithering Options:[0m
+ECHO [92mDithering Options:[0m
 ECHO 0: None
 ECHO 1: Bayer
 ECHO 2: Heckbert
@@ -114,7 +114,7 @@ ECHO 6: sierra3
 ECHO 7: burkes
 ECHO 8: atkinson
 ECHO:
-ECHO [32mAbout Bayerscale:[0m
+ECHO [92mAbout Bayerscale:[0m
 ECHO When bayer dithering is selected, the Bayer Scale option defines the
 ECHO scale of the pattern (how much the crosshatch pattern is visible).
 ECHO A low value means more visible pattern for less banding, a higher value
@@ -122,7 +122,7 @@ ECHO means less visible pattern at the cost of more banding.
 ECHO [96mThe option must be an integer value in the range [0,5].[0m
 ECHO [33mThe Default is 2.[0m [96mBayer Scale is optional.[0m
 ECHO:
-ECHO [95mPeople who made this project come to fruition:[0m
+ECHO [92mPeople who made this project come to fruition:[0m
 ECHO ubitux, Nabi KaramAliZadeh, and the very kind and patient people in the
 ECHO Batch Discord Server. Without these people's contributions, this script
 ECHO would not be possible. Thank you all for your contributions and
@@ -251,7 +251,7 @@ GOTO :script_start
 :: Displaying FFmpeg version string and creating the working directory
 ECHO [33m%version%[0m
 ECHO [33m%build%[0m
-ECHO [32mOutput file: %output%[0m
+ECHO [92mOutput file: %output%[0m
 ECHO [32mCreating working directory...[0m
 MD "%WD%"
 
