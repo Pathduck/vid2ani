@@ -27,6 +27,7 @@ SET "end_time="
 SET "webp_lossy="
 SET "colormax="
 SET "version="
+SET "loglevel="
 SET "build="
 
 :: Setting the path to the Working Directory
@@ -81,14 +82,16 @@ ECHO	-b	Bayer Scale setting. [96m(Optional)[0m
 ECHO		[96mThis can only be used when Bayer dithering is applied.
 ECHO		See more information below.[0m
 ECHO	-l	Set lossy WebP compression and quality
+ECHO		[96m(The default for WebP is lossless)[0m
 ECHO		[33mValue 0-100, default 75.[0m
-ECHO		[96m(Default for WebP is lossless)[0m
 ECHO	-c	The maximum amount of colors useable per palette.
-ECHO		[96m(Optional value up to 256)[0m
-ECHO		[33mThis option isn't used by default.[0m
+ECHO		[33m(Valid range 2 to 256)[0m
 ECHO	-s	Start time of the animation (HH:MM:SS.MS)
 ECHO		[96m(Optional)[0m
 ECHO	-e	End time of the animation (HH:MM:SS.MS)
+ECHO		[96m(Optional)[0m
+ECHO	-v	Set FFmpeg log level, for troubleshooting.
+ECHO		[33mThe default level is 'error'.[0m
 ECHO		[96m(Optional)[0m
 ECHO	-k	Enables error diffusion.
 ECHO		[96m(Optional)[0m
@@ -148,6 +151,7 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-e" SET "end_time=%~2" & SHIFT
 	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
 	IF "%~1" =="-l" SET "webp_lossy=%~2" & SHIFT
+	IF "%~1" =="-v" SET "loglevel=%~2" & SHIFT
 	IF "%~1" =="-k" SET "errorswitch=0"
 	IF "%~1" =="-p" SET "picswitch=0"
 	SHIFT & GOTO :varin
@@ -158,6 +162,7 @@ GOTO :help_check_2
 :: Noob proofing the script to prevent it from breaking should critical settings not be defined
 IF NOT DEFINED filetype SET "filetype=gif"
 IF NOT DEFINED scale SET "scale=-1"
+IF NOT DEFINED loglevel SET "loglevel=error"
 IF NOT DEFINED fps SET fps=15
 IF NOT DEFINED mode SET mode=1
 IF NOT DEFINED dither SET dither=0
@@ -268,7 +273,7 @@ IF DEFINED colormax (
 
 :: Executing command to generate palette
 ECHO [32mGenerating palette...[0m
-ffmpeg -v warning %trim% -i %vid% -vf "%filters%,%encode%%mcol%" -y "%frames%.png"
+ffmpeg -v %loglevel% %trim% -i %vid% -vf "%filters%,%encode%%mcol%" -y "%frames%.png"
 
 :: Checking if the palette file is in the Working Directory, if not cleaning up
 IF NOT EXIST "%palette%_00001.png" (
@@ -320,7 +325,7 @@ IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
 
 :: Executing the encoding command
 ECHO [32mEncoding animation...[0m
-ffmpeg -v warning %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% %webp_lossy% -loop 0 -plays 0 -y "%output%"
+ffmpeg -v %loglevel% %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% %webp_lossy% -loop 0 -plays 0 -y "%output%"
 
 :: Checking if file was created and cleaning up if not
 IF NOT EXIST "%output%" (
