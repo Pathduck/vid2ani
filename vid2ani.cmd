@@ -65,45 +65,49 @@ ECHO [92mUsage:[0m
 ECHO vid2ani [input_file] [Arguments]
 ECHO:
 ECHO [92mArguments:[0m
-ECHO	-t	Output filetype: gif, png, webp.
-ECHO		[33mThe default is gif.[0m
+ECHO:
+ECHO	-t	Output file type.
+ECHO		[33mValid: 'gif' (default), 'png', 'webp'.[0m
+ECHO:
 ECHO	-o	Output file.
 ECHO		[33mThe default is the same name as the input video.[0m
+ECHO:
 ECHO	-r	Scale or size.
 ECHO		[96mWidth of the animation in pixels.[0m
 ECHO		[33mThe default is the same scale as the original video.[0m
+ECHO:
+ECHO	-s	Start time of the animation [96m(HH:MM:SS.MS)[0m
+ECHO:
+ECHO	-e	End time of the animation [96m(HH:MM:SS.MS)[0m
+ECHO:
 ECHO	-f	Framerate in frames per second.
 ECHO		[33mThe default is 15.[0m
-ECHO	-m	Palettegen mode - one of 3 modes listed below.
-ECHO		[33mThe default is 1 (diff).[0m
+ECHO:
 ECHO	-d	Dithering algorithm to be used.
 ECHO		[33mThe default is 0 (None).[0m
-ECHO	-b	Bayer Scale setting. [96m(Optional)[0m
+ECHO:
+ECHO	-b	Bayer Scale setting.
 ECHO		[96mThis can only be used when Bayer dithering is applied.
-ECHO		See more information below.[0m
-ECHO	-l	Set lossy WebP compression and quality
-ECHO		[96m(The default for WebP is lossless)[0m
-ECHO		[33mValue 0-100, default 75.[0m
+ECHO		[33mRange 0 - 5, default is 2.[0m
+ECHO:
+ECHO	-m	Palettegen mode - one of 3 modes listed below.
+ECHO		[33mThe default is 1 (diff).[0m
+ECHO:
 ECHO	-c	The maximum amount of colors useable per palette.
-ECHO		[33m(Valid range 3 to 256)[0m
-ECHO	-s	Start time of the animation (HH:MM:SS.MS)
-ECHO		[96m(Optional)[0m
-ECHO	-e	End time of the animation (HH:MM:SS.MS)
-ECHO		[96m(Optional)[0m
+ECHO		[33mRange 3 - 256 (default)[0m
+ECHO:
+ECHO	-k	Enables paletteuse error diffusion.
+ECHO:
+ECHO	-l	Enable lossy WebP compression and quality.
+ECHO		[96mThe default for WebP is lossless.[0m
+ECHO		[33mRange 0 - 100, default 75.[0m
+ECHO:
 ECHO	-v	Set FFmpeg log level, for troubleshooting.
-ECHO		[33mThe default level is 'error'.[0m
-ECHO		[96m(Optional)[0m
-ECHO	-k	Enables error diffusion.
-ECHO		[96m(Optional)[0m
+ECHO		[33mThe default log level is 'error'[0m
+ECHO:
 ECHO	-p	Opens the resulting animation in your default Photo Viewer.
-ECHO		[96m(Optional)[0m
 ECHO:
-ECHO [92mPalettegen Modes:[0m
-ECHO 1: diff - only what moves affects the palette
-ECHO 2: single - one palette per frame
-ECHO 3: full - one palette for the whole animation
-ECHO:
-ECHO [92mDithering Options:[0m
+ECHO [92mDithering Modes:[0m
 ECHO 0: None
 ECHO 1: Bayer
 ECHO 2: Heckbert
@@ -114,13 +118,16 @@ ECHO 6: sierra3
 ECHO 7: burkes
 ECHO 8: atkinson
 ECHO:
+ECHO [92mPalettegen Modes:[0m
+ECHO 1: diff - only what moves affects the palette
+ECHO 2: single - one palette per frame
+ECHO 3: full - one palette for the whole animation
+ECHO:
 ECHO [92mAbout Bayerscale:[0m
 ECHO When bayer dithering is selected, the Bayer Scale option defines the
 ECHO scale of the pattern (how much the crosshatch pattern is visible).
 ECHO A low value means more visible pattern for less banding, a higher value
 ECHO means less visible pattern at the cost of more banding.
-ECHO [96mThe option must be an integer value in the range [0,5].[0m
-ECHO [33mThe Default is 2.[0m [96mBayer Scale is optional.[0m
 ECHO:
 ECHO [92mPeople who made this project come to fruition:[0m
 ECHO ubitux, Nabi KaramAliZadeh, and the very kind and patient people in the
