@@ -76,8 +76,9 @@ means less visible pattern at the cost of more banding.
 ```
   vid2ani sample.mp4
   vid2ani sample.mp4 -t png
+  vid2ani sample.mp4 -t webp -l 50
   vid2ani sample.mp4 -f 20 -r 450
-  vid2ani sample.mp4 -s 5:40 -e 5
+  vid2ani sample.mp4 -s 5:40 -e 5:45
   vid2ani sample.mp4 -o babydance -m 2 -k -b 3
 ```
 
