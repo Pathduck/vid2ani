@@ -21,43 +21,35 @@ vid2ani [input_file] [arguments]
 ```
 ## Arguments
 ```
--t      Output filetype: gif, png, webp.
-        The default is gif.
+-t      Output file type.
+        Valid: 'gif' (default), 'png', 'webp'.
 -o      Output file.
         The default is the same name as the input video.
 -r      Scale or size.
         Width of the animation in pixels.
         The default is the same scale as the original video.
+-s      Start time of the animation (HH:MM:SS.MS)
+-e      End time of the animation (HH:MM:SS.MS)
 -f      Framerate in frames per second.
         The default is 15.
--m      Palettegen mode - one of 3 modes listed below.
-        The default is 1 (diff).
 -d      Dithering algorithm to be used.
         The default is 0 (None).
--b      Bayer Scale setting. (Optional)
+-b      Bayer Scale setting.
         This can only be used when Bayer dithering is applied.
-        See more information below.
--l      Set lossy WebP compression and quality
-        Value 0-100, default 75.
-        (Default for WebP is lossless)
+        Range 0 - 5, default is 2.
+-m      Palettegen mode - one of 3 modes listed below.
+        The default is 1 (diff).
 -c      The maximum amount of colors useable per palette.
-        (Optional value up to 256)
-        This option isn't used by default.
--s      Start of the animation in HH:MM:SS.MS format.
-        (Optional)
--e      Duration of the animation in seconds.
-        (Optional)
--k      Enables error diffusion.
-        (Optional)
+        Range 3 - 256 (default)
+-k      Enables paletteuse error diffusion.
+-l      Enable lossy WebP compression and quality.
+        The default for WebP is lossless.
+        Range 0 - 100, default 75.
+-v      Set FFmpeg log level, for troubleshooting.
+        The default log level is 'error'
 -p      Opens the resulting animation in your default Photo Viewer.
-        (Optional)
 
-Palettegen Modes:
-1: diff - only what moves affects the palette
-2: single - one palette per frame
-3: full - one palette for the whole animation
-
-Dithering Options:
+Dithering Modes:
 0: None
 1: Bayer
 2: Heckbert
@@ -68,13 +60,16 @@ Dithering Options:
 7: burkes
 8: atkinson
 
+Palettegen Modes:
+1: diff - only what moves affects the palette
+2: single - one palette per frame
+3: full - one palette for the whole animation
+
 About Bayerscale:
 When bayer dithering is selected, the Bayer Scale option defines the
 scale of the pattern (how much the crosshatch pattern is visible).
 A low value means more visible pattern for less banding, a higher value
 means less visible pattern at the cost of more banding.
-The option must be an integer value in the range [0,5].
-The Default is 2. Bayer Scale is optional.
 ```
 
 ## Examples
