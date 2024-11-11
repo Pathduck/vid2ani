@@ -27,23 +27,12 @@ SET "end_time="
 SET "webp_lossy="
 SET "colormax="
 SET "version="
-SET "loglevel="
 SET "build="
+SET "loglevel="
 
 :: Setting the path to the Working Directory
 SET WD=%TEMP%\VID2ANI
 
-:: Palette filename
-SET palette=%WD%\palette
-
-:: Storing FFmpeg version string
-FOR /F "delims=" %%a in ('ffmpeg -version') DO (
-	IF NOT DEFINED version (
-		SET "version=%%a"
-	) ELSE IF NOT DEFINED build (
-		SET "build=%%a"
-	)
-)
 GOTO :help_check_1
 
 :help_message
@@ -181,7 +170,7 @@ GOTO :safchek
 :: Output file type
 echo %filetype% | findstr /r "\<gif\> \<png\> \<apng\> \<webp\>" >nul
 IF %errorlevel% NEQ 0 (
-	ECHO  [91mNot a valid file type[0m
+	ECHO [91mNot a valid file type[0m
 	GOTO :EOF
 )
 IF "%filetype%"=="png" SET filetype=apng
@@ -255,6 +244,15 @@ IF NOT DEFINED start_time (
 GOTO :script_start
 
 :script_start
+:: Storing FFmpeg version string
+FOR /F "delims=" %%a in ('ffmpeg -version') DO (
+	IF NOT DEFINED version (
+		SET "version=%%a"
+	) ELSE IF NOT DEFINED build (
+		SET "build=%%a"
+	)
+)
+
 :: Displaying FFmpeg version string and creating the working directory
 ECHO [33m%version%[0m
 ECHO [33m%build%[0m
@@ -264,6 +262,7 @@ MD "%WD%"
 
 :palettegen
 :: Putting together command to generate palette
+SET palette=%WD%\palette
 SET frames=%palette%_%%05d
 SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 
