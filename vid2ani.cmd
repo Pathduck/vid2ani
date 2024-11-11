@@ -35,96 +35,6 @@ SET "loglevel="
 
 GOTO :varin
 
-:help_message
-:: Print usage message
-ECHO:
-ECHO [92mVideo to GIF/APNG/WEBP converter v5.5[0m
-ECHO [96m^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
-ECHO:
-ECHO You can download this fork from here:[0m
-ECHO [96mhttps://github.com/MDHEXT/video2gif[0m
-ECHO You can download the original release here:
-ECHO [96mhttps://github.com/NabiKAZ/video2gif[0m
-ECHO This tool uses ffmpeg, you can download that here:
-ECHO [96mhttps://www.ffmpeg.org/download.html#build-windows[0m
-ECHO This tool wouldn't be possible without the research listed here:
-ECHO [96mhttps://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html[0m
-ECHO:
-ECHO [92mUsage:[0m
-ECHO vid2ani [input_file] [Arguments]
-ECHO:
-ECHO [92mArguments:[0m
-ECHO:
-ECHO	-t	Output file type.
-ECHO		[33mValid: 'gif' (default), 'png', 'webp'.[0m
-ECHO:
-ECHO	-o	Output file.
-ECHO		[33mThe default is the same name as the input video.[0m
-ECHO:
-ECHO	-r	Scale or size.
-ECHO		[96mWidth of the animation in pixels.[0m
-ECHO		[33mThe default is the same scale as the original video.[0m
-ECHO:
-ECHO	-s	Start time of the animation [96m(HH:MM:SS.MS)[0m
-ECHO:
-ECHO	-e	End time of the animation [96m(HH:MM:SS.MS)[0m
-ECHO:
-ECHO	-f	Framerate in frames per second.
-ECHO		[33mThe default is 15.[0m
-ECHO:
-ECHO	-d	Dithering algorithm to be used.
-ECHO		[33mThe default is 0 (None).[0m
-ECHO:
-ECHO	-b	Bayer Scale setting.
-ECHO		[96mThis can only be used when Bayer dithering is applied.
-ECHO		[33mRange 0 - 5, default is 2.[0m
-ECHO:
-ECHO	-m	Palettegen mode - one of 3 modes listed below.
-ECHO		[33mThe default is 1 (diff).[0m
-ECHO:
-ECHO	-c	The maximum amount of colors useable per palette.
-ECHO		[33mRange 3 - 256 (default)[0m
-ECHO:
-ECHO	-k	Enables paletteuse error diffusion.
-ECHO:
-ECHO	-l	Enable lossy WebP compression and quality.
-ECHO		[96mThe default for WebP is lossless.[0m
-ECHO		[33mRange 0 - 100, default 75.[0m
-ECHO:
-ECHO	-v	Set FFmpeg log level, for troubleshooting.
-ECHO		[33mThe default log level is 'error'[0m
-ECHO:
-ECHO	-p	Opens the resulting animation in your default Photo Viewer.
-ECHO:
-ECHO [92mDithering Modes:[0m
-ECHO 0: None
-ECHO 1: Bayer
-ECHO 2: Heckbert
-ECHO 3: Floyd Steinberg
-ECHO 4: Sierra2
-ECHO 5: Sierra2_4a
-ECHO 6: sierra3
-ECHO 7: burkes
-ECHO 8: atkinson
-ECHO:
-ECHO [92mPalettegen Modes:[0m
-ECHO 1: diff - only what moves affects the palette
-ECHO 2: single - one palette per frame
-ECHO 3: full - one palette for the whole animation
-ECHO:
-ECHO [92mAbout Bayerscale:[0m
-ECHO When bayer dithering is selected, the Bayer Scale option defines the
-ECHO scale of the pattern (how much the crosshatch pattern is visible).
-ECHO A low value means more visible pattern for less banding, a higher value
-ECHO means less visible pattern at the cost of more banding.
-ECHO:
-ECHO [92mPeople who made this project come to fruition:[0m
-ECHO ubitux, Nabi KaramAliZadeh, and the very kind and patient people in the
-ECHO Batch Discord Server. Without these people's contributions, this script
-ECHO would not be possible. Thank you all for your contributions and
-ECHO assistance^^!
-GOTO :EOF
-
 :varin
 :: Checking for blank input or help commands
 IF %input% == "" GOTO :help_message
@@ -347,4 +257,94 @@ ECHO [32mDeleting temporary files...[0m
 RMDIR /S /Q "%WD%"
 ENDLOCAL
 ECHO [93mDone![0m
+GOTO :EOF
+
+:help_message
+:: Print usage message
+ECHO:
+ECHO [92mVideo to GIF/APNG/WEBP converter v5.5[0m
+ECHO [96m^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
+ECHO:
+ECHO You can download this fork from here:[0m
+ECHO [96mhttps://github.com/MDHEXT/video2gif[0m
+ECHO You can download the original release here:
+ECHO [96mhttps://github.com/NabiKAZ/video2gif[0m
+ECHO This tool uses ffmpeg, you can download that here:
+ECHO [96mhttps://www.ffmpeg.org/download.html#build-windows[0m
+ECHO This tool wouldn't be possible without the research listed here:
+ECHO [96mhttps://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html[0m
+ECHO:
+ECHO [92mUsage:[0m
+ECHO vid2ani [input_file] [Arguments]
+ECHO:
+ECHO [92mArguments:[0m
+ECHO:
+ECHO	-t	Output file type.
+ECHO		[33mValid: 'gif' (default), 'png', 'webp'.[0m
+ECHO:
+ECHO	-o	Output file.
+ECHO		[33mThe default is the same name as the input video.[0m
+ECHO:
+ECHO	-r	Scale or size.
+ECHO		[96mWidth of the animation in pixels.[0m
+ECHO		[33mThe default is the same scale as the original video.[0m
+ECHO:
+ECHO	-s	Start time of the animation [96m(HH:MM:SS.MS)[0m
+ECHO:
+ECHO	-e	End time of the animation [96m(HH:MM:SS.MS)[0m
+ECHO:
+ECHO	-f	Framerate in frames per second.
+ECHO		[33mThe default is 15.[0m
+ECHO:
+ECHO	-d	Dithering algorithm to be used.
+ECHO		[33mThe default is 0 (None).[0m
+ECHO:
+ECHO	-b	Bayer Scale setting.
+ECHO		[96mThis can only be used when Bayer dithering is applied.
+ECHO		[33mRange 0 - 5, default is 2.[0m
+ECHO:
+ECHO	-m	Palettegen mode - one of 3 modes listed below.
+ECHO		[33mThe default is 1 (diff).[0m
+ECHO:
+ECHO	-c	The maximum amount of colors useable per palette.
+ECHO		[33mRange 3 - 256 (default)[0m
+ECHO:
+ECHO	-k	Enables paletteuse error diffusion.
+ECHO:
+ECHO	-l	Enable lossy WebP compression and quality.
+ECHO		[96mThe default for WebP is lossless.[0m
+ECHO		[33mRange 0 - 100, default 75.[0m
+ECHO:
+ECHO	-v	Set FFmpeg log level, for troubleshooting.
+ECHO		[33mThe default log level is 'error'[0m
+ECHO:
+ECHO	-p	Opens the resulting animation in your default Photo Viewer.
+ECHO:
+ECHO [92mDithering Modes:[0m
+ECHO 0: None
+ECHO 1: Bayer
+ECHO 2: Heckbert
+ECHO 3: Floyd Steinberg
+ECHO 4: Sierra2
+ECHO 5: Sierra2_4a
+ECHO 6: sierra3
+ECHO 7: burkes
+ECHO 8: atkinson
+ECHO:
+ECHO [92mPalettegen Modes:[0m
+ECHO 1: diff - only what moves affects the palette
+ECHO 2: single - one palette per frame
+ECHO 3: full - one palette for the whole animation
+ECHO:
+ECHO [92mAbout Bayerscale:[0m
+ECHO When bayer dithering is selected, the Bayer Scale option defines the
+ECHO scale of the pattern (how much the crosshatch pattern is visible).
+ECHO A low value means more visible pattern for less banding, a higher value
+ECHO means less visible pattern at the cost of more banding.
+ECHO:
+ECHO [92mPeople who made this project come to fruition:[0m
+ECHO ubitux, Nabi KaramAliZadeh, and the very kind and patient people in the
+ECHO Batch Discord Server. Without these people's contributions, this script
+ECHO would not be possible. Thank you all for your contributions and
+ECHO assistance^^!
 GOTO :EOF
