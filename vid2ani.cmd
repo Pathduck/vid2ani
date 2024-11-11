@@ -18,6 +18,13 @@ SET FILEPATH=%~dp1
 :: Setting the path to the Working Directory
 SET WD=%TEMP%\VID2ANI
 
+:: Checking for blank input or help commands
+IF %input% == "" GOTO :help_message
+IF %input% == "-?" GOTO :help_message
+IF %input% == "/?" GOTO :help_message
+IF %input% == "help" GOTO :help_message
+IF %input% == "--help" GOTO :help_message
+
 :: Clearing all variables
 SET "filetype="
 SET "scale="
@@ -36,13 +43,6 @@ SET "loglevel="
 GOTO :varin
 
 :varin
-:: Checking for blank input or help commands
-IF %input% == "" GOTO :help_message
-IF %input% == "-?" GOTO :help_message
-IF %input% == "/?" GOTO :help_message
-IF %input% == "help" GOTO :help_message
-IF %input% == "--help" GOTO :help_message
-
 :: Using SHIFT command to go through the input and storing each setting into its own variable
 IF NOT "%~1" =="" (
 	IF "%~1" =="-r" SET "scale=%~2" & SHIFT
