@@ -15,6 +15,9 @@ SET vid="%~dpnx1"
 SET output=%~dpn1
 SET FILEPATH=%~dp1
 
+:: Setting the path to the Working Directory
+SET WD=%TEMP%\VID2ANI
+
 :: Clearing all variables
 SET "filetype="
 SET "scale="
@@ -30,10 +33,7 @@ SET "version="
 SET "build="
 SET "loglevel="
 
-:: Setting the path to the Working Directory
-SET WD=%TEMP%\VID2ANI
-
-GOTO :help_check_1
+GOTO :varin
 
 :help_message
 :: Print usage message
@@ -125,15 +125,14 @@ ECHO would not be possible. Thank you all for your contributions and
 ECHO assistance^^!
 GOTO :EOF
 
-:help_check_1
+:varin
 :: Checking for blank input or help commands
 IF %input% == "" GOTO :help_message
-IF %input% == "help" GOTO :help_message
 IF %input% == "-?" GOTO :help_message
+IF %input% == "/?" GOTO :help_message
+IF %input% == "help" GOTO :help_message
 IF %input% == "--help" GOTO :help_message
-GOTO :varin
 
-:varin
 :: Using SHIFT command to go through the input and storing each setting into its own variable
 IF NOT "%~1" =="" (
 	IF "%~1" =="-r" SET "scale=%~2" & SHIFT
@@ -348,3 +347,4 @@ ECHO [32mDeleting temporary files...[0m
 RMDIR /S /Q "%WD%"
 ENDLOCAL
 ECHO [93mDone![0m
+GOTO :EOF
