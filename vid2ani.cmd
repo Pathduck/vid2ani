@@ -26,12 +26,12 @@ IF %input% == "help" GOTO :help_message
 IF %input% == "--help" GOTO :help_message
 
 :: Clearing all variables
-SET "filetype="
 SET "scale="
 SET "fps="
 SET "mode="
 SET "dither="
 SET "bayerscale="
+SET "filetype="
 SET "start_time="
 SET "end_time="
 SET "webp_lossy="
@@ -57,20 +57,21 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
 	IF "%~1" =="-l" SET "webp_lossy=%~2" & SHIFT
 	IF "%~1" =="-v" SET "loglevel=%~2" & SHIFT
-	IF "%~1" =="-k" SET "errorswitch=0"
-	IF "%~1" =="-p" SET "picswitch=0"
+	IF "%~1" =="-k" SET "errorswitch=1"
+	IF "%~1" =="-p" SET "picswitch=1"
 	SHIFT & GOTO :varin
 )
 GOTO :help_check_2
 
 :help_check_2
 :: Noob proofing the script to prevent it from breaking should critical settings not be defined
-IF NOT DEFINED filetype SET "filetype=gif"
 IF NOT DEFINED scale SET "scale=-1"
-IF NOT DEFINED loglevel SET "loglevel=error"
 IF NOT DEFINED fps SET fps=15
 IF NOT DEFINED mode SET mode=1
 IF NOT DEFINED dither SET dither=0
+IF NOT DEFINED filetype SET "filetype=gif"
+IF NOT DEFINED loglevel SET "loglevel=error"
+
 GOTO :safchek
 
 :safchek
