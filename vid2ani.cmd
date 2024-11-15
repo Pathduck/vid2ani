@@ -1,8 +1,8 @@
 @ECHO OFF
-:: By: MDHEXT, Nabi KaramAliZadeh <nabikaz@gmail.com>
+:: By: MDHEXT/Nabi KaramAliZadeh/Pathduck
 :: Description: Video to GIF/APNG/WEBP converter
-:: Version: 5.5
-:: Url: https://github.com/MDHEXT/video2gif, forked from https://github.com/NabiKAZ/video2gif
+:: Version: 6.0
+:: Url: https://github.com/Pathduck/vid2ani/,forked from https://github.com/MDHEXT/video2gif
 :: What this script is based on: http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
 :: License: GNU General Public License v3.0 (GPLv3)
 
