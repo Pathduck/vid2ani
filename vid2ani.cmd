@@ -1,8 +1,8 @@
 @ECHO OFF
-:: By: MDHEXT/Nabi KaramAliZadeh/Pathduck
 :: Description: Video to GIF/APNG/WEBP converter
+:: By: MDHEXT, Nabi KaramAliZadeh, Pathduck
 :: Version: 6.0
-:: Url: https://github.com/Pathduck/vid2ani/,forked from https://github.com/MDHEXT/video2gif
+:: Url: https://github.com/Pathduck/vid2ani/ forked from https://github.com/MDHEXT/video2gif
 :: What this script is based on: http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
 :: License: GNU General Public License v3.0 (GPLv3)
 
@@ -263,11 +263,11 @@ GOTO :EOF
 :help_message
 :: Print usage message
 ECHO:
-ECHO [92mVideo to GIF/APNG/WEBP converter v5.5[0m
-ECHO [96m^(C^) 2017-2022, MDHEXT ^&^ Nabi KaramAliZadeh ^<nabikaz@gmail.com^>[0m
+ECHO [92mVideo to GIF/APNG/WEBP converter v6.0[0m
+ECHO [96mBy MDHEXT, Nabi KaramAliZadeh, Pathduck[0m
 ECHO:
 ECHO You can download this fork from here:[0m
-ECHO [96mhttps://github.com/MDHEXT/video2gif[0m
+ECHO [96mhttps://github.com/Pathduck/vid2ani/[0m
 ECHO You can download the original release here:
 ECHO [96mhttps://github.com/NabiKAZ/video2gif[0m
 ECHO This tool uses ffmpeg, you can download that here:
@@ -328,9 +328,9 @@ ECHO 2: Heckbert
 ECHO 3: Floyd Steinberg
 ECHO 4: Sierra2
 ECHO 5: Sierra2_4a
-ECHO 6: sierra3
-ECHO 7: burkes
-ECHO 8: atkinson
+ECHO 6: Sierra3
+ECHO 7: Burkes
+ECHO 8: Atkinson
 ECHO:
 ECHO [92mPalettegen Modes:[0m
 ECHO 1: diff - only what moves affects the palette
