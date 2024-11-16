@@ -1,6 +1,6 @@
 # vid2ani
 
-*Video to GIF/APNG/WEBP converter v6.0*
+*Video to GIF/APNG/WEBP converter*
 
 ![sample gif file generated](sample.gif)
 
