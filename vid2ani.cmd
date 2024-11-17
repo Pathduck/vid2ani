@@ -51,7 +51,7 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-d" SET "dither=%~2" & SHIFT
 	IF "%~1" =="-b" SET "bayerscale=%~2" & SHIFT
 	IF "%~1" =="-t" SET "filetype=%~2" & SHIFT
-	IF "%~1" =="-o" SET "output=%~dpnx2" & SHIFT
+	IF "%~1" =="-o" SET "output=%~dpn2" & SHIFT
 	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
 	IF "%~1" =="-e" SET "end_time=%~2" & SHIFT
 	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
