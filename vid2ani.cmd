@@ -12,8 +12,7 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 :: Storing Paths
 SET input="%~1"
 SET vid="%~dpnx1"
-SET output=%~dpn1
-SET FILEPATH=%~dp1
+SET output="%~dpn1"
 
 :: Setting the path to the Working Directory
 SET WD=%TEMP%\VID2ANI
