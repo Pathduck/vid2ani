@@ -214,7 +214,7 @@ IF DEFINED errorswitch (
 :: WEBP pixel format and lossy quality
 IF "%filetype%" == "webp" (
 	IF DEFINED webp_lossy (
-		SET "webp_lossy=-lossless 0 -pix_fmt yuv420p -quality %webp_lossy%"
+		SET "webp_lossy=-lossless 0 -pix_fmt yuva420p -quality %webp_lossy%"
 	) ELSE SET "webp_lossy=-lossless 1"
 )
 
