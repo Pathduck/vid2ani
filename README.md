@@ -11,8 +11,8 @@ By MDHEXT, Nabi KaramAliZadeh, Pathduck
 ## Installation
 * Clone the repo
 * Install [FFmpeg](https://www.ffmpeg.org/download.html#build-windows) for Windows.
-* Make sure that the path to `ffmpeg.exe` is 
-  [configured in your system environment variables control panel](https://www.wikihow.com/Install-FFmpeg-on-Windows) 
+* Make sure that the path to `ffmpeg.exe` is
+  [configured in your system environment variables control panel](https://www.wikihow.com/Install-FFmpeg-on-Windows)
   or that you run the `vid2ani.cmd` file in the same folder as `ffmpeg.exe`.
 
 ## Usage
