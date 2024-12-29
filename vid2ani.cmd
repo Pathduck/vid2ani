@@ -96,33 +96,34 @@ IF "%filetype%"=="gif" SET output=%output%.gif
 
 :: Palettegen
 IF %mode% GTR 3 (
-	ECHO %RED%Not a valid palettegen mode%OFF%
+	ECHO %RED%Not a valid palettegen ^(-m^) mode%OFF%
 	GOTO :EOF
 ) ELSE IF %mode% LSS 1 (
-	ECHO %RED%Not a valid palettegen mode%OFF%
-	GOTO :EOF
-)
-:: Dithering
-IF %dither% GTR 8 (
-	ECHO %RED%Not a valid dither algorithm%OFF%
-	GOTO :EOF
-) ELSE IF %dither% LSS 0 (
-	ECHO %RED%Not a valid dither algorithm%OFF%
+	ECHO %RED%Not a valid palettegen ^(-m^) mode%OFF%
 	GOTO :EOF
 )
 
-::  Bayerscale
+:: Dithering
+IF %dither% GTR 8 (
+	ECHO %RED%Not a valid dither ^(-d^) algorithm %OFF%
+	GOTO :EOF
+) ELSE IF %dither% LSS 0 (
+	ECHO %RED%Not a valid dither ^(-d^) algorithm%OFF%
+	GOTO :EOF
+)
+
+:: Bayerscale
 IF DEFINED bayerscale (
 	IF !bayerscale! GTR 5 (
-		ECHO %RED%Not a valid bayerscale value%OFF%
+		ECHO %RED%Not a valid bayerscale ^(-b^) value %OFF%
 		GOTO :EOF
 	) ELSE IF !bayerscale! LSS 0 (
-		ECHO %RED%Not a valid bayerscale value%OFF%
+		ECHO %RED%Not a valid bayerscale ^(-b^) value%OFF%
 		GOTO :EOF
 	)
-	IF !bayerscale! LEQ 5 (
-		IF %dither% NEQ 1 (
-			ECHO %RED%This setting only works with bayer dithering%OFF%
+	IF %dither% NEQ 1 (
+		IF !bayerscale! LEQ 5 (
+			ECHO %RED%Bayerscale ^(-b^) only works with Bayer dithering%OFF%
 			GOTO :EOF
 		)
 	)
@@ -131,13 +132,13 @@ IF DEFINED bayerscale (
 :: Lossy WEBP
 IF DEFINED webp_lossy (
 	IF NOT "%filetype%" == "webp" (
-		ECHO %RED%Lossy is only valid for filetype webp%OFF%
+		ECHO %RED%Lossy ^(-l^) is only valid for filetype webp%OFF%
 		GOTO :EOF
 	) ELSE IF !webp_lossy! GTR 100 (
-		ECHO %RED%Not a valid lossy quality value%OFF%
+		ECHO %RED%Not a valid lossy ^(-l^) quality value%OFF%
 		GOTO :EOF
 	) ELSE IF !webp_lossy! LSS 0 (
-		ECHO %RED%Not a valid lossy quality value%OFF%
+		ECHO %RED%Not a valid lossy ^(-l^) quality value%OFF%
 		GOTO :EOF
 	)
 )
@@ -146,14 +147,14 @@ IF DEFINED webp_lossy (
 IF DEFINED start_time (
 	IF DEFINED end_time SET "trim=-ss !start_time! -to !end_time!"
 	IF NOT DEFINED end_time (
-		ECHO %RED%Please input the end time%OFF%
+		ECHO %RED%Please input the end time ^(-e^)%OFF%
 		GOTO :EOF
 	)
 )
 
 IF NOT DEFINED start_time (
 	IF DEFINED end_time (
-		ECHO %RED%Please input the start time%OFF%
+		ECHO %RED%Please input the start time ^(-s^)%OFF%
 		GOTO :EOF
 	)
 )
@@ -218,13 +219,6 @@ IF DEFINED errorswitch (
 	IF %mode% EQU 3 SET "errordiff==diff_mode=rectangle"
 )
 
-:: WEBP pixel format and lossy quality
-IF "%filetype%" == "webp" (
-	IF DEFINED webp_lossy (
-		SET "webp_lossy=-lossless 0 -pix_fmt yuva420p -quality %webp_lossy%"
-	) ELSE SET "webp_lossy=-lossless 1"
-)
-
 :: Dither algorithm
 IF %dither% EQU 0 SET ditheralg=none
 IF %dither% EQU 1 SET ditheralg=bayer
@@ -244,6 +238,13 @@ IF NOT %mode% EQU 2 (
 :: Checking for Bayer Scale and adjusting command
 IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
+
+:: WEBP pixel format and lossy quality
+IF "%filetype%" == "webp" (
+	IF DEFINED webp_lossy (
+		SET "webp_lossy=-lossless 0 -pix_fmt yuva420p -quality %webp_lossy%"
+	) ELSE SET "webp_lossy=-lossless 1"
+)
 
 :: Executing the encoding command
 ECHO %GREEN%Encoding animation...%OFF%
