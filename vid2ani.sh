@@ -265,7 +265,7 @@ ${GREEN}Video to GIF/APNG/WEBP converter v6.0${OFF}
 ${BLUE}By MDHEXT, Nabi KaramAliZadeh, Pathduck${OFF}
 
 ${YELLOW}Usage:${OFF}
-$(basename $0) [input] [Arguments]
+$(basename $0) [input_file] [arguments]
 
 ${GREEN}Arguments:${OFF}
   -t	Output file type. Valid: 'gif' (default), 'png', 'webp'.

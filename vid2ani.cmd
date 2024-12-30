@@ -303,68 +303,68 @@ GOTO :EOF
 ECHO:
 ECHO %GREEN%Video to GIF/APNG/WEBP converter v6.0%OFF%
 ECHO %CYAN%By MDHEXT, Nabi KaramAliZadeh, Pathduck%OFF%
-
+ECHO:
 ECHO %GREEN%Usage:%OFF%
-ECHO vid2ani [input_file] [Arguments]
+ECHO %~nx0 [input_file] [arguments]
 ECHO:
 ECHO %GREEN%Arguments:%OFF%
 ECHO:
-ECHO	-t	Output file type.
+ECHO  -t	Output file type.
 ECHO		%YELLOW%Valid: 'gif' (default), 'png', 'webp'.%OFF%
 ECHO:
-ECHO	-o	Output file.
+ECHO  -o	Output file.
 ECHO		%YELLOW%The default is the same name as the input video.%OFF%
 ECHO:
-ECHO	-r	Scale or size.
+ECHO  -r	Scale or size.
 ECHO		%CYAN%Width of the animation in pixels.%OFF%
 ECHO		%YELLOW%The default is the same scale as the original video.%OFF%
 ECHO:
-ECHO	-s	Start time of the animation %CYAN%(HH:MM:SS.MS)%OFF%
+ECHO  -s	Start time of the animation %CYAN%(HH:MM:SS.MS)%OFF%
 ECHO:
-ECHO	-e	End time of the animation %CYAN%(HH:MM:SS.MS)%OFF%
+ECHO  -e	End time of the animation %CYAN%(HH:MM:SS.MS)%OFF%
 ECHO:
-ECHO	-f	Framerate in frames per second.
+ECHO  -f	Framerate in frames per second.
 ECHO		%YELLOW%The default is 15.%OFF%
 ECHO:
-ECHO	-d	Dithering algorithm to be used.
+ECHO  -d	Dithering algorithm to be used.
 ECHO		%YELLOW%The default is 0 (None).%OFF%
 ECHO:
-ECHO	-b	Bayer Scale setting.
+ECHO  -b	Bayer Scale setting.
 ECHO		%CYAN%This can only be used when Bayer dithering is applied.
 ECHO		%YELLOW%Range 0 - 5, default is 2.%OFF%
 ECHO:
-ECHO	-m	Palettegen mode - one of 3 modes listed below.
+ECHO  -m	Palettegen mode - one of 3 modes listed below.
 ECHO		%YELLOW%The default is 1 (diff).%OFF%
 ECHO:
-ECHO	-c	The maximum amount of colors useable per palette.
+ECHO  -c	The maximum amount of colors useable per palette.
 ECHO		%YELLOW%Range 3 - 256 (default)%OFF%
 ECHO:
-ECHO	-k	Enables paletteuse error diffusion.
+ECHO  -k	Enables paletteuse error diffusion.
 ECHO:
-ECHO	-l	Enable lossy WebP compression and quality.
+ECHO  -l	Enable lossy WebP compression and quality.
 ECHO		%CYAN%The default for WebP is lossless.%OFF%
 ECHO		%YELLOW%Range 0 - 100, default 75.%OFF%
 ECHO:
-ECHO	-v	Set FFmpeg log level, for troubleshooting.
+ECHO  -v	Set FFmpeg log level, for troubleshooting.
 ECHO		%YELLOW%The default log level is 'error'%OFF%
 ECHO:
-ECHO	-p	Opens the resulting animation in your default Photo Viewer.
+ECHO  -p	Opens the resulting animation in your default Photo Viewer.
 ECHO:
 ECHO %GREEN%Dithering Mode%OFF%
-ECHO 0: None
-ECHO 1: Bayer
-ECHO 2: Heckbert
-ECHO 3: Floyd Steinberg
-ECHO 4: Sierra2
-ECHO 5: Sierra2_4a
-ECHO 6: Sierra3
-ECHO 7: Burkes
-ECHO 8: Atkinson
+ECHO  0: None
+ECHO  1: Bayer
+ECHO  2: Heckbert
+ECHO  3: Floyd Steinberg
+ECHO  4: Sierra2
+ECHO  5: Sierra2_4a
+ECHO  6: Sierra3
+ECHO  7: Burkes
+ECHO  8: Atkinson
 ECHO:
 ECHO %GREEN%Palettegen Modes%OFF%
-ECHO 1: diff - only what moves affects the palette
-ECHO 2: single - one palette per frame
-ECHO 3: full - one palette for the whole animation
+ECHO  1: diff - only what moves affects the palette
+ECHO  2: single - one palette per frame
+ECHO  3: full - one palette for the whole animation
 ECHO:
 ECHO %GREEN%About Bayerscale%OFF%
 ECHO When bayer dithering is selected, the Bayer Scale option defines the
