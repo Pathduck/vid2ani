@@ -9,27 +9,12 @@
 :: Enable delayed variable expension
 SETLOCAL ENABLEDELAYEDEXPANSION
 
-:: Colors
+:: Define ANSI Colors
 SET OFF=[0m
 SET GREEN=[32m
 SET YELLOW=[33m
 SET RED=[91m
 SET CYAN=[96m
-
-:: Storing Paths
-SET input="%~1"
-SET vid="%~dpnx1"
-SET output=%~dpn1
-
-:: Setting the path to the Working Directory
-SET WD=%TEMP%\VID2ANI
-
-:: Checking for blank input or help commands
-IF %input% == "" GOTO :help_message
-IF %input% == "-?" GOTO :help_message
-IF %input% == "/?" GOTO :help_message
-IF %input% == "help" GOTO :help_message
-IF %input% == "--help" GOTO :help_message
 
 :: Clearing all variables
 SET "scale="
@@ -45,6 +30,21 @@ SET "colormax="
 SET "version="
 SET "build="
 SET "loglevel="
+
+:: Check input
+SET input="%~1"
+SET vid="%~dpnx1"
+SET output=%~dpn1
+
+:: Setting the path to the Working Directory
+SET WD=%TEMP%\VID2ANI
+
+:: Checking for blank input or help commands
+IF %input% == "" GOTO :help_message
+IF %input% == "-?" GOTO :help_message
+IF %input% == "/?" GOTO :help_message
+IF %input% == "help" GOTO :help_message
+IF %input% == "--help" GOTO :help_message
 
 GOTO :varin
 
@@ -89,12 +89,12 @@ IF %errorlevel% NEQ 0 (
 	ECHO %RED%Not a valid file type: %filetype%%OFF%
 	GOTO :EOF
 )
+IF "%filetype%"=="gif" SET output=%output%.gif
 IF "%filetype%"=="png" SET filetype=apng
 IF "%filetype%"=="apng" SET output=%output%.png
 IF "%filetype%"=="webp" SET output=%output%.webp
-IF "%filetype%"=="gif" SET output=%output%.gif
 
-:: Palettegen
+:: Validate Palettegen
 IF %mode% GTR 3 (
 	ECHO %RED%Not a valid palettegen ^(-m^) mode%OFF%
 	GOTO :EOF
@@ -103,7 +103,7 @@ IF %mode% GTR 3 (
 	GOTO :EOF
 )
 
-:: Dithering
+:: Validate Dithering
 IF %dither% GTR 8 (
 	ECHO %RED%Not a valid dither ^(-d^) algorithm %OFF%
 	GOTO :EOF
@@ -112,7 +112,7 @@ IF %dither% GTR 8 (
 	GOTO :EOF
 )
 
-:: Bayerscale
+:: Validate Bayerscale
 IF DEFINED bayerscale (
 	IF !bayerscale! GTR 5 (
 		ECHO %RED%Not a valid bayerscale ^(-b^) value %OFF%
@@ -129,7 +129,7 @@ IF DEFINED bayerscale (
 	)
 )
 
-:: Lossy WEBP
+:: Validate Lossy WEBP
 IF DEFINED webp_lossy (
 	IF NOT "%filetype%" == "webp" (
 		ECHO %RED%Lossy ^(-l^) is only valid for filetype webp%OFF%
@@ -143,7 +143,7 @@ IF DEFINED webp_lossy (
 	)
 )
 
-:: Noob Proofing clipping
+:: Validate Clipping
 IF DEFINED start_time (
 	IF DEFINED end_time SET "trim=-ss !start_time! -to !end_time!"
 	IF NOT DEFINED end_time (
@@ -151,7 +151,6 @@ IF DEFINED start_time (
 		GOTO :EOF
 	)
 )
-
 IF NOT DEFINED start_time (
 	IF DEFINED end_time (
 		ECHO %RED%Please input the start time ^(-s^)%OFF%
@@ -183,7 +182,7 @@ SET palette=%WD%\palette
 SET frames=%palette%_%%05d
 SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 
-:: Palettegen mode
+:: Palettegen encode mode
 IF %mode% EQU 1 SET encode=palettegen=stats_mode=diff
 IF %mode% EQU 2 SET encode="palettegen=stats_mode=single"
 IF %mode% EQU 3 SET encode=palettegen
@@ -207,7 +206,8 @@ IF NOT EXIST "%palette%_00001.png" (
 )
 
 :: Setting variables to put the encode command together
-:: Checking for Error Diffusion if using Bayer Scale and adjusting the command accordingly
+
+:: Palettegen decode mode
 IF %mode% EQU 1 SET decode=paletteuse
 IF %mode% EQU 2 SET "decode=paletteuse=new=1"
 IF %mode% EQU 3 SET decode=paletteuse
@@ -219,7 +219,7 @@ IF DEFINED errorswitch (
 	IF %mode% EQU 3 SET "errordiff==diff_mode=rectangle"
 )
 
-:: Dither algorithm
+:: Prepare dithering and encoding options
 IF %dither% EQU 0 SET ditheralg=none
 IF %dither% EQU 1 SET ditheralg=bayer
 IF %dither% EQU 2 SET ditheralg=heckbert
@@ -230,6 +230,7 @@ IF %dither% EQU 6 SET ditheralg=sierra3
 IF %dither% EQU 7 SET ditheralg=burkes
 IF %dither% EQU 8 SET ditheralg=atkinson
 
+:: Paletteuse error diffusion
 IF NOT %mode% EQU 2 (
 	IF DEFINED errorswitch SET ditherenc=:dither=!ditheralg!
 	IF NOT DEFINED errorswitch SET ditherenc==dither=!ditheralg!
