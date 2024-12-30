@@ -42,9 +42,6 @@ if [ $# -eq 0 ]; then print_help; exit; fi
 input="$1"
 output="${input%.*}"
 
-echo "Input file: $input"
-echo "Output file: $output"
-
 # Parse Arguments
 shift
 while [[ $# -gt 0 ]]; do
@@ -83,9 +80,6 @@ else
 	# Use POSIX-compatible directories
 	WD=$(mktemp -d -t vid2ani-XXXXXX)
 fi
-
-echo "Input file: $input"
-echo "Output file: $output"
 
 # Cleanup on exit, interrupt, termination
 trap 'rm -rf "$WD"' EXIT INT TERM
@@ -128,23 +122,6 @@ if [[ -n "$webp_lossy" ]]; then
 		echo ${RED}"Not a valid lossy (-l) quality value"${OFF}; exit 1;
 	fi
 fi
-
-if [[ -n "$start_time" ]]; then
-	echo start er satt
-fi
-
-if [[ -z "$start_time" ]]; then
-	echo start er null
-fi
-
-if [[ -n "$end_time" ]]; then
-	echo end er satt
-fi
-
-if [[ -z "$end_time" ]]; then
-	echo end er null
-fi
-
 
 # Validate Clipping
 if [[ -n "$start_time" && -z "$end_time" ]]; then
@@ -200,7 +177,6 @@ fi
 
 # Executing command to generate palette
 echo ${GREEN}"Generating palette..."${OFF}
-echo "Palette file: $palette"
 ffmpeg -v "${loglevel}" ${trim:-} -i "${input}" -vf "${filters},${encode}${mcol}" -y "${palette}"
 
 # Checking if the palette file is in the Working Directory, if not cleaning up
