@@ -153,10 +153,11 @@ if [[ -n "$webp_lossy" ]]; then
 fi
 
 # Validate Clipping
-if [[ -n "$start_time" ]]; then
-	if [[ -n "$end_time" ]]; then
-		echo ${RED}"End time (-e) is required when start time (-s) is specified."${OFF}; exit 1;
-	fi
+if [[ -n "$start_time" && -z "$end_time" ]]; then
+	echo ${RED}"End time (-e) is required when Start time (-e) is specified."${OFF}; exit 1;
+elif [[ -n "$end_time" && -z "$start_time" ]]; then
+	echo ${RED}"Start time (-s) is required when End time (-e) is specified."${OFF}; exit 1;
+elif [[ -n "$end_time" && -n "$start_time" ]]; then
 	trim="-ss $start_time -to $end_time"
 fi
 
