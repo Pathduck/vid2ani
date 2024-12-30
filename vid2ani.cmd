@@ -303,16 +303,7 @@ GOTO :EOF
 ECHO:
 ECHO %GREEN%Video to GIF/APNG/WEBP converter v6.0%OFF%
 ECHO %CYAN%By MDHEXT, Nabi KaramAliZadeh, Pathduck%OFF%
-ECHO:
-ECHO You can download this fork from here:
-ECHO %CYAN%https://github.com/Pathduck/vid2ani/%OFF%
-ECHO You can download the original release here:
-ECHO %CYAN%https://github.com/NabiKAZ/video2gif%OFF%
-ECHO This tool uses ffmpeg, you can download that here:
-ECHO %CYAN%https://www.ffmpeg.org/download.html%OFF%
-ECHO This tool wouldn't be possible without the research listed here:
-ECHO %CYAN%https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html%OFF%
-ECHO:
+
 ECHO %GREEN%Usage:%OFF%
 ECHO vid2ani [input_file] [Arguments]
 ECHO:
@@ -359,7 +350,6 @@ ECHO		%YELLOW%The default log level is 'error'%OFF%
 ECHO:
 ECHO	-p	Opens the resulting animation in your default Photo Viewer.
 ECHO:
-
 ECHO %GREEN%Dithering Mode%OFF%
 ECHO 0: None
 ECHO 1: Bayer
