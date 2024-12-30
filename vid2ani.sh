@@ -10,31 +10,8 @@
 # Enable error handling
 set -euo pipefail
 
-# Function to print the help message
-print_help() {
-cat << EOF
-${GREEN}Video to GIF/APNG/WEBP converter v6.0${OFF}
-${BLUE}By MDHEXT, Nabi KaramAliZadeh, Pathduck${OFF}
-
-${YELLOW}Usage: $0 [input] [Arguments]${OFF}
-
-${YELLOW}Arguments:${OFF}
-	-t  Output file type. Valid: 'gif' (default), 'png', 'webp'.
-	-o  Output file. The default is the same name as the input video.
-	-r  Scale or size. Width of the animation in pixels.
-	-s  Start time of the animation (HH:MM:SS.MS).
-	-e  End time of the animation (HH:MM:SS.MS).
-	-f  Framerate in frames per second (default: 15).
-	-d  Dithering algorithm to be used (default: 0).
-	-b  Bayer Scale setting. Range 0 - 5, default is 2.
-	-m  Palettegen mode: 1 (diff), 2 (single), 3 (full) (default: 1).
-	-c  Maximum colors usable per palette. Range 3 - 256 (default).
-	-k  Enables paletteuse error diffusion.
-	-l  Enable lossy WebP compression and quality. Range 0 - 100.
-	-v  Set FFmpeg log level (default: 'error').
-	-p  Opens the resulting animation in the default viewer.
-EOF
-}
+### Start Main ###
+main() {
 
 # Define ANSI Colors
 OFF=$(tput sgr0)
@@ -151,6 +128,23 @@ if [[ -n "$webp_lossy" ]]; then
 		echo ${RED}"Not a valid lossy (-l) quality value"${OFF}; exit 1;
 	fi
 fi
+
+if [[ -n "$start_time" ]]; then
+	echo start er satt
+fi
+
+if [[ -z "$start_time" ]]; then
+	echo start er null
+fi
+
+if [[ -n "$end_time" ]]; then
+	echo end er satt
+fi
+
+if [[ -z "$end_time" ]]; then
+	echo end er null
+fi
+
 
 # Validate Clipping
 if [[ -n "$start_time" && -z "$end_time" ]]; then
@@ -284,3 +278,65 @@ if [[ -n "$picswitch" ]]; then
 fi
 
 echo ${YELLOW}"Done."${OFF}
+
+} 
+### End Main ###
+
+### Function to print the help message ###
+print_help() {
+cat << EOF
+${GREEN}Video to GIF/APNG/WEBP converter v6.0${OFF}
+${BLUE}By MDHEXT, Nabi KaramAliZadeh, Pathduck${OFF}
+
+${YELLOW}Usage:${OFF}
+$(basename $0) [input] [Arguments]
+
+${GREEN}Arguments:${OFF}
+  -t	Output file type. Valid: 'gif' (default), 'png', 'webp'.
+  -o	Output file. The default is the same name as the input video.
+  -r	Scale or size. Width of the animation in pixels.
+  -s	Start time of the animation (HH:MM:SS.MS).
+  -e	End time of the animation (HH:MM:SS.MS).
+  -f	Framerate in frames per second (default: 15).
+  -d	Dithering algorithm to be used (default: 0).
+  -b	Bayer Scale setting. Range 0 - 5 (default: 2).
+  -m	Palettegen mode: 1 (diff), 2 (single), 3 (full) (default: 1).
+  -c	Maximum colors usable per palette. Range 3 - 256 (default).
+  -k	Enables paletteuse error diffusion.
+  -l	Enable lossy WebP compression and quality. Range 0 - 100.
+  -v	Set FFmpeg log level (default: error).
+  -p	Opens the resulting animation in the default viewer.
+
+${GREEN}Dithering Mode${OFF}
+  0: None
+  1: Bayer
+  2: Heckbert
+  3: Floyd Steinberg
+  4: Sierra2
+  5: Sierra2_4a
+  6: Sierra3
+  7: Burkes
+  8: Atkinson
+
+${GREEN}Palettegen Modes${OFF}
+  1: diff - only what moves affects the palette
+  2: single - one palette per frame
+  3: full - one palette for the whole animation
+
+${GREEN}About Bayerscale${OFF}
+When bayer dithering is selected, the Bayer Scale option defines the
+scale of the pattern (how much the crosshatch pattern is visible).
+A low value means more visible pattern for less banding, a higher value
+means less visible pattern at the cost of more banding.
+
+${GREEN}People who made this project come to fruition${OFF}
+ubitux, Nabi KaramAliZadeh, and the very kind and patient people in the
+Batch Discord Server. Without these people's contributions, this script
+would not be possible. Thank you all for your contributions and
+assistance^^!
+EOF
+}
+### End print_help ###
+
+# Call Main function
+main "$@"; exit;
