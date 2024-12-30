@@ -178,8 +178,7 @@ MD "%WD%"
 
 :palettegen
 :: Putting together command to generate palette
-SET palette=%WD%\palette
-SET frames=%palette%_%%05d
+SET palette=%WD%\palette_%%05d.png
 SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 
 :: Palettegen encode mode
@@ -195,14 +194,12 @@ IF DEFINED colormax (
 
 :: Executing command to generate palette
 ECHO %GREEN%Generating palette...%OFF%
-ffmpeg -v %loglevel% %trim% -i %vid% -vf "%filters%,%encode%%mcol%" -y "%frames%.png"
+ffmpeg -v %loglevel% %trim% -i %vid% -vf "%filters%,%encode%%mcol%" -y "%palette%"
 
 :: Checking if the palette file is in the Working Directory, if not cleaning up
-IF NOT EXIST "%palette%_00001.png" (
-	IF NOT EXIST "%palette%.png" (
-		ECHO %RED%Failed to generate palette file%OFF%
-		GOTO :cleanup
-	)
+IF NOT EXIST "%WD%\palette_00001.png" (
+	ECHO %RED%Failed to generate palette file%OFF%
+	GOTO :cleanup
 )
 
 :: Setting variables to put the encode command together
@@ -253,7 +250,7 @@ IF "%filetype%" == "webp" (
 
 :: Executing the encoding command
 ECHO %GREEN%Encoding animation...%OFF%
-ffmpeg -v %loglevel% %trim% -i %vid% -thread_queue_size 512 -i "%frames%.png" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% %webp_lossy% -loop 0 -plays 0 -y "%output%"
+ffmpeg -v %loglevel% %trim% -i %vid% -thread_queue_size 512 -i "%palette%" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% %webp_lossy% -loop 0 -plays 0 -y "%output%"
 
 :: Checking if file was created and cleaning up if not
 IF NOT EXIST "%output%" (
