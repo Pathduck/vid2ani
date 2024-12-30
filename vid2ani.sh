@@ -179,7 +179,7 @@ echo ${GREEN}Output file:${OFF} $output
 filters="fps=$fps,scale=$scale:-1:flags=lanczos"
 palette="$WD/palette_%05d.png"
 
-# Palettegen mode
+# Palettegen encode mode
 encode=""
 if [[ -n "$mode" ]]; then
 	case "$mode" in
