@@ -180,6 +180,12 @@ echo ${GREEN}Output file:${OFF} $output
 filters="fps=$fps,scale=$scale:-1:flags=lanczos"
 palette="$WD/palette_%05d.png"
 
+# APNG muxer does not support multiple palettes so fallback to using palettegen diff mode
+if [[ "$filetype" == "apng" && "$mode" -eq 2 ]]; then
+	echo ${YELLOW}"APNG does not support multiple palettes - falling back to Palettegen mode 1 (diff)"${OFF}
+	mode=1
+fi
+
 # Palettegen encode mode
 encode=""
 if [[ -n "$mode" ]]; then
