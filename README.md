@@ -4,16 +4,15 @@
 
 ![sample gif file generated](sample.gif)
 
-A batch script for converting video files to GIF/APNG/WEBP using FFmpeg on Windows.<br>
+A batch script for converting video files to GIF/APNG/WEBP using FFmpeg.<br>
 
 By MDHEXT, Nabi KaramAliZadeh, Pathduck
 
 ## Installation
-* Clone the repo
-* Install [FFmpeg](https://www.ffmpeg.org/download.html#build-windows) for Windows.
-* Make sure that the path to `ffmpeg.exe` is
-  [configured in your system environment variables control panel](https://www.wikihow.com/Install-FFmpeg-on-Windows)
-  or that you run the `vid2ani.cmd` file in the same folder as `ffmpeg.exe`.
+* Clone the repo.
+* Install [FFmpeg](https://www.ffmpeg.org/).
+* For Windows make sure that the path to `ffmpeg.exe` is
+  [configured in your system environment variables control panel](https://www.wikihow.com/Install-FFmpeg-on-Windows).
 
 ## Usage
 ```
@@ -96,7 +95,7 @@ means less visible pattern at the cost of more banding.
 ```
 
 ## Tips
-This tool uses ffmpeg, you can download that here: [FFmpeg Windows builds](https://www.ffmpeg.org/download.html#build-windows)<br>
+This tool uses ffmpeg, you can download that here: [FFmpeg](https://www.ffmpeg.org/)<br>
 You can download this fork from here: [Pathduck/vid2ani](https://github.com/Pathduck/vid2ani)<br>
 You can download the original release here: [MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)<br>
 This tool wouldn't be possible without the research listed here: [High quality GIF with FFmpeg](https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html)<br>
