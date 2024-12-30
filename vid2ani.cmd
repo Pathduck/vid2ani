@@ -157,6 +157,27 @@ IF NOT DEFINED start_time (
 		GOTO :EOF
 	)
 )
+
+:: Validate Framerate
+IF DEFINED fps (
+	IF !fps! LSS 0 (
+		ECHO  %RED%Framerate ^(-f^) must be greater than 0.%OFF%
+		GOTO :EOF
+	)
+)
+
+:: Validate Max Colors
+IF DEFINED colormax (
+	IF !colormax! LSS 3 (
+		ECHO  %RED%Max colors ^(-c^) must be between 3 and 256.%OFF%
+		GOTO :EOF
+	)
+	IF !colormax! GTR 256 (
+		ECHO  %RED%Max colors ^(-c^) must be between 3 and 256.%OFF%
+		GOTO :EOF
+	)
+)
+
 GOTO :script_start
 
 :script_start
