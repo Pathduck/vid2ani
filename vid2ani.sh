@@ -124,31 +124,31 @@ esac
 
 # Validate Palettegen
 if [[ "$mode" -lt 1 || "$mode" -gt 3 ]]; then
-	echo ${RED}"Not a valid palettegen mode"${OFF}; exit 1;
+	echo ${RED}"Not a valid palettegen (-m) mode"${OFF}; exit 1;
 fi
 
 # Validate Dithering
 if [[ "$dither" -gt 8 || "$dither" -lt 0 ]]; then
-	echo ${RED}"Not a valid dither algorithm"${OFF}; exit 1;
+	echo ${RED}"Not a valid dither (-d) algorithm"${OFF}; exit 1;
 fi
 
 # Validate Bayerscale
 if [[ -n "$bayerscale" ]]; then
 	if [[ "$bayerscale" -gt 5 || "$bayerscale" -lt 0 ]]; then
-		echo ${RED}"Not a valid bayerscale value"${OFF}; exit 1;
+		echo ${RED}"Not a valid bayerscale (-b) value"${OFF}; exit 1;
 	fi
 	if [[ "$dither" -ne 1 ]]; then
-		echo ${RED}"This setting only works with bayer dithering"${OFF}; exit 1;
+		echo ${RED}"Bayerscale (-b) only works with Bayer dithering"${OFF}; exit 1;
 	fi
 fi
 
 # Validate Lossy WEBP
 if [[ -n "$webp_lossy" ]]; then
 	if [[ "$filetype" != "webp" ]]; then
-		echo ${RED}"Lossy is only valid for filetype webp"${OFF}; exit 1;
+		echo ${RED}"Lossy (-l) is only valid for filetype webp"${OFF}; exit 1;
 	fi
 	if [[ "$webp_lossy" -gt 100 || "$webp_lossy" -lt 0 ]]; then
-		echo ${RED}"Not a valid lossy quality value"${OFF}; exit 1;
+		echo ${RED}"Not a valid lossy (-l) quality value"${OFF}; exit 1;
 	fi
 fi
 
@@ -186,7 +186,7 @@ if [[ -n "$mode" ]]; then
 		1) encode="palettegen=stats_mode=diff";;
 		2) encode="palettegen=stats_mode=single";;
 		3) encode="palettegen";;
-		*) echo ${RED}"Invalid palettegen mode"${OFF}; exit 1;;
+		*) echo ${RED}"Invalid palettegen (-m) mode"${OFF}; exit 1;;
 	esac
 fi
 
@@ -209,13 +209,13 @@ fi
 
 ## Setting variables to put the encode command together ##
 
-# Checking for Error Diffusion if using Bayer Scale and adjusting the command accordingly
+# Palettegen decode mode
 if [[ -n "$mode" ]]; then
 	case "$mode" in
 		1) decode="paletteuse";;
 		2) decode="paletteuse=new=1";;
 		3) decode="paletteuse";;
-		*) echo ${RED}"Invalid palettegen mode"${OFF}; exit 1;;
+		*) echo ${RED}"Invalid palettegen (-m) mode"${OFF}; exit 1;;
 	esac
 fi
 
@@ -225,7 +225,7 @@ if [[ -n "$errorswitch" ]]; then
 		1) errordiff="=diff_mode=rectangle";;
 		2) errordiff=":diff_mode=rectangle";;
 		3) errordiff="=diff_mode=rectangle";;
-		*) echo ${RED}"Invalid palettegen mode"${OFF}; exit 1;;
+		*) echo ${RED}"Invalid palettegen (-m) mode"${OFF}; exit 1;;
 	esac
 fi
 
@@ -241,7 +241,7 @@ case "$dither" in
 	6) ditheralg="sierra3";;
 	7) ditheralg="burkes";;
 	8) ditheralg="atkinson";;
-	*) echo ${RED}"Invalid dither mode: $dither"${OFF}; exit 1;;
+	*) echo ${RED}"Invalid dither (-d )mode"${OFF}; exit 1;;
 esac
 
 # Paletteuse error diffusion
@@ -262,10 +262,11 @@ if [[ "$filetype" == "webp" && -n "$webp_lossy" ]]; then
 	webp_lossy="-lossless 0 -pix_fmt yuva420p -quality $webp_lossy"
 fi
 
-# Encode animation
+# Executing the encoding command
 echo ${GREEN}"Encoding animation..."${OFF}
 ffmpeg -v "${loglevel}" ${trim:-} -i "${input}" -thread_queue_size 512 -i "${palette}" -lavfi "${filters} [x]; [x][1:v] ${decode}${errordiff}${ditherenc}${bayer}" -f "${filetype}" ${webp_lossy:-} -loop 0 -plays 0 -y "${output}"
 
+# Checking if output file was created
 if [[ ! -f "$output" ]]; then
 	echo ${RED}"Failed to generate animation."${OFF}; exit 1
 fi
