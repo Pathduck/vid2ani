@@ -10,11 +10,11 @@
 SETLOCAL ENABLEDELAYEDEXPANSION
 
 :: Define ANSI Colors
-SET OFF=[0m
-SET GREEN=[32m
-SET YELLOW=[33m
-SET RED=[91m
-SET CYAN=[96m
+SET "OFF=[0m"
+SET "GREEN=[32m"
+SET "YELLOW=[33m"
+SET "RED=[91m"
+SET "CYAN=[96m"
 
 :: Clearing all variables
 SET "scale="
@@ -72,9 +72,9 @@ GOTO :help_check_2
 :help_check_2
 :: Noob proofing the script to prevent it from breaking should critical settings not be defined
 IF NOT DEFINED scale SET "scale=-1"
-IF NOT DEFINED fps SET fps=15
-IF NOT DEFINED mode SET mode=1
-IF NOT DEFINED dither SET dither=0
+IF NOT DEFINED fps SET "fps=15"
+IF NOT DEFINED mode SET "mode=1"
+IF NOT DEFINED dither SET "dither=0"
 IF NOT DEFINED filetype SET "filetype=gif"
 IF NOT DEFINED loglevel SET "loglevel=error"
 
@@ -89,10 +89,10 @@ IF %errorlevel% NEQ 0 (
 	ECHO %RED%Not a valid file type: %filetype%%OFF%
 	GOTO :EOF
 )
-IF "%filetype%"=="gif" SET output=%output%.gif
-IF "%filetype%"=="png" SET filetype=apng
-IF "%filetype%"=="apng" SET output=%output%.png
-IF "%filetype%"=="webp" SET output=%output%.webp
+IF "%filetype%"=="gif" SET "output=%output%.gif"
+IF "%filetype%"=="png" SET "filetype=apng"
+IF "%filetype%"=="apng" SET "output=%output%.png"
+IF "%filetype%"=="webp" SET "output=%output%.webp"
 
 :: Validate Palettegen
 IF %mode% GTR 3 (
@@ -183,9 +183,9 @@ SET frames=%palette%_%%05d
 SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 
 :: Palettegen encode mode
-IF %mode% EQU 1 SET encode=palettegen=stats_mode=diff
-IF %mode% EQU 2 SET encode="palettegen=stats_mode=single"
-IF %mode% EQU 3 SET encode=palettegen
+IF %mode% EQU 1 SET "encode=palettegen=stats_mode=diff"
+IF %mode% EQU 2 SET "encode=palettegen=stats_mode=single"
+IF %mode% EQU 3 SET "encode=palettegen"
 
 :: Max colors
 IF DEFINED colormax (
@@ -208,9 +208,11 @@ IF NOT EXIST "%palette%_00001.png" (
 :: Setting variables to put the encode command together
 
 :: Palettegen decode mode
-IF %mode% EQU 1 SET decode=paletteuse
+IF %mode% EQU 1 SET "decode=paletteuse"
 IF %mode% EQU 2 SET "decode=paletteuse=new=1"
-IF %mode% EQU 3 SET decode=paletteuse
+IF %mode% EQU 3 SET "decode=paletteuse"
+
+echo Decode: %decode%
 
 :: Error diffusion
 IF DEFINED errorswitch (
@@ -220,25 +222,27 @@ IF DEFINED errorswitch (
 )
 
 :: Prepare dithering and encoding options
-IF %dither% EQU 0 SET ditheralg=none
-IF %dither% EQU 1 SET ditheralg=bayer
-IF %dither% EQU 2 SET ditheralg=heckbert
-IF %dither% EQU 3 SET ditheralg=floyd_steinberg
-IF %dither% EQU 4 SET ditheralg=sierra2
-IF %dither% EQU 5 SET ditheralg=sierra2_4a
-IF %dither% EQU 6 SET ditheralg=sierra3
-IF %dither% EQU 7 SET ditheralg=burkes
-IF %dither% EQU 8 SET ditheralg=atkinson
+IF %dither% EQU 0 SET "ditheralg=none"
+IF %dither% EQU 1 SET "ditheralg=bayer"
+IF %dither% EQU 2 SET "ditheralg=heckbert"
+IF %dither% EQU 3 SET "ditheralg=floyd_steinberg"
+IF %dither% EQU 4 SET "ditheralg=sierra2"
+IF %dither% EQU 5 SET "ditheralg=sierra2_4a"
+IF %dither% EQU 6 SET "ditheralg=sierra3"
+IF %dither% EQU 7 SET "ditheralg=burkes"
+IF %dither% EQU 8 SET "ditheralg=atkinson"
 
 :: Paletteuse error diffusion
 IF NOT %mode% EQU 2 (
-	IF DEFINED errorswitch SET ditherenc=:dither=!ditheralg!
-	IF NOT DEFINED errorswitch SET ditherenc==dither=!ditheralg!
-) ELSE SET ditherenc=:dither=!ditheralg!
+	IF DEFINED errorswitch SET "ditherenc=:dither=!ditheralg!"
+	IF NOT DEFINED errorswitch SET "ditherenc==dither=!ditheralg!"
+) ELSE SET "ditherenc=:dither=!ditheralg!"
+
+echo Ditherenc: %ditherenc%
 
 :: Checking for Bayer Scale and adjusting command
 IF NOT DEFINED bayerscale SET "bayer="
-IF DEFINED bayerscale SET bayer=:bayer_scale=%bayerscale%
+IF DEFINED bayerscale SET "bayer=:bayer_scale=%bayerscale%"
 
 :: WEBP pixel format and lossy quality
 IF "%filetype%" == "webp" (
