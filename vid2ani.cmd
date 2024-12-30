@@ -181,6 +181,14 @@ MD "%WD%"
 SET palette=%WD%\palette_%%05d.png
 SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 
+:: APNG muxer does not support multiple palettes so fallback to using palettegen diff mode
+IF "%filetype%"=="apng" (
+	IF %mode% EQU 2 (
+		ECHO %YELLOW%APNG does not support multiple palettes - falling back to Palettegen mode 1 ^(diff^)%OFF%
+		SET mode=1
+	)
+)
+
 :: Palettegen encode mode
 IF %mode% EQU 1 SET "encode=palettegen=stats_mode=diff"
 IF %mode% EQU 2 SET "encode=palettegen=stats_mode=single"
