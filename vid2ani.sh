@@ -15,8 +15,8 @@ main() {
 # Define ANSI Colors
 OFF=$(tput sgr0)
 RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-YELLOW=$(tput setaf 3)
+GREEN=$(tput setaf 10)
+YELLOW=$(tput setaf 11)
 BLUE=$(tput setaf 12)
 CYAN=$(tput setaf 14)
 
