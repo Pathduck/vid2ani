@@ -95,51 +95,51 @@ esac
 
 # Validate Palettegen
 if [[ "$mode" -lt 1 || "$mode" -gt 3 ]]; then
-	echo ${RED}"Not a valid palettegen (-m) mode"${OFF}; exit 1;
+	echo ${RED}"Not a valid palettegen (-m) mode"${OFF}; exit 1
 fi
 
 # Validate Dithering
 if [[ "$dither" -gt 8 || "$dither" -lt 0 ]]; then
-	echo ${RED}"Not a valid dither (-d) algorithm"${OFF}; exit 1;
+	echo ${RED}"Not a valid dither (-d) algorithm"${OFF}; exit 1
 fi
 
 # Validate Bayerscale
 if [[ -n "$bayerscale" ]]; then
 	if [[ "$bayerscale" -gt 5 || "$bayerscale" -lt 0 ]]; then
-		echo ${RED}"Not a valid bayerscale (-b) value"${OFF}; exit 1;
+		echo ${RED}"Not a valid bayerscale (-b) value"${OFF}; exit 1
 	fi
 	if [[ "$dither" -ne 1 ]]; then
-		echo ${RED}"Bayerscale (-b) only works with Bayer dithering"${OFF}; exit 1;
+		echo ${RED}"Bayerscale (-b) only works with Bayer dithering"${OFF}; exit 1
 	fi
 fi
 
 # Validate Lossy WEBP
 if [[ -n "$webp_lossy" ]]; then
 	if [[ "$filetype" != "webp" ]]; then
-		echo ${RED}"Lossy (-l) is only valid for filetype webp"${OFF}; exit 1;
+		echo ${RED}"Lossy (-l) is only valid for filetype webp"${OFF}; exit 1
 	fi
 	if [[ "$webp_lossy" -gt 100 || "$webp_lossy" -lt 0 ]]; then
-		echo ${RED}"Not a valid lossy (-l) quality value"${OFF}; exit 1;
+		echo ${RED}"Not a valid lossy (-l) quality value"${OFF}; exit 1
 	fi
 fi
 
 # Validate Clipping
 if [[ -n "$start_time" && -z "$end_time" ]]; then
-	echo ${RED}"End time (-e) is required when Start time (-e) is specified."${OFF}; exit 1;
+	echo ${RED}"End time (-e) is required when Start time (-e) is specified."${OFF}; exit 1
 elif [[ -n "$end_time" && -z "$start_time" ]]; then
-	echo ${RED}"Start time (-s) is required when End time (-e) is specified."${OFF}; exit 1;
+	echo ${RED}"Start time (-s) is required when End time (-e) is specified."${OFF}; exit 1
 elif [[ -n "$end_time" && -n "$start_time" ]]; then
 	trim="-ss $start_time -to $end_time"
 fi
 
 # Validate Framerate
 if [[ "$fps" -le 0 ]]; then
-	echo ${RED}"Framerate (-f) must be greater than 0."${OFF}; exit 1;
+	echo ${RED}"Framerate (-f) must be greater than 0."${OFF}; exit 1
 fi
 
 # Validate Max Colors
 if [[ "$colormax" -lt 3 || "$colormax" -gt 256 ]]; then
-	echo ${RED}"Max colors (-c) must be between 3 and 256."${OFF}; exit 1;
+	echo ${RED}"Max colors (-c) must be between 3 and 256."${OFF}; exit 1
 fi
 
 # Displaying FFmpeg version string
@@ -268,20 +268,20 @@ ${GREEN}Usage:${OFF}
 $(basename $0) [input_file] [arguments]
 
 ${GREEN}Arguments:${OFF}
-  -t	Output file type. Valid: 'gif' (default), 'png', 'webp'.
-  -o	Output file. The default is the same name as the input video.
-  -r	Scale or size. Width of the animation in pixels.
-  -s	Start time of the animation (HH:MM:SS.MS).
-  -e	End time of the animation (HH:MM:SS.MS).
-  -f	Framerate in frames per second (default: 15).
-  -d	Dithering algorithm to be used (default: 0).
-  -b	Bayer Scale setting. Range 0 - 5 (default: 2).
-  -m	Palettegen mode: 1 (diff), 2 (single), 3 (full) (default: 1).
-  -c	Maximum colors usable per palette. Range 3 - 256 (default).
-  -k	Enables paletteuse error diffusion.
-  -l	Enable lossy WebP compression and quality. Range 0 - 100.
-  -v	Set FFmpeg log level (default: error).
-  -p	Opens the resulting animation in the default viewer.
+  -t  Output file type. Valid: 'gif' (default), 'apng', 'png', 'webp'.
+  -o  Output file. The default is the same name as the input video.
+  -r  Scale or size. Width of the animation in pixels.
+  -s  Start time of the animation (HH:MM:SS.MS).
+  -e  End time of the animation (HH:MM:SS.MS).
+  -f  Framerate in frames per second (default: 15).
+  -d  Dithering algorithm to be used (default: 0).
+  -b  Bayer Scale setting. Range 0 - 5 (default: 2).
+  -m  Palettegen mode: 1 (diff), 2 (single), 3 (full) (default: 1).
+  -c  Maximum colors usable per palette. Range 3 - 256 (default).
+  -k  Enables paletteuse error diffusion.
+  -l  Enable lossy WebP compression and quality. Range 0 - 100.
+  -v  Set FFmpeg log level (default: error).
+  -p  Opens the resulting animation in the default viewer.
 
 ${GREEN}Dithering Mode${OFF}
   0: None
