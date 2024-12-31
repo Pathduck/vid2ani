@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Description: Video to GIF/APNG/WEBP converter
 # By: MDHEXT, Nabi KaramAliZadeh, Pathduck
 # Version: 6.0
@@ -16,9 +15,10 @@ main() {
 # Define ANSI Colors
 OFF=$(tput sgr0)
 RED=$(tput setaf 1)
-GREEN=$(tput setaf 10)
-YELLOW=$(tput setaf 11)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
 BLUE=$(tput setaf 12)
+CYAN=$(tput setaf 14)
 
 # Default values
 fps=15
@@ -253,7 +253,7 @@ if [[ -n "$picswitch" ]]; then
 	xdg-open "$output"
 fi
 
-echo ${YELLOW}"Done."${OFF}
+echo ${GREEN}"Done."${OFF}
 
 } 
 ### End Main ###
@@ -264,7 +264,7 @@ cat << EOF
 ${GREEN}Video to GIF/APNG/WEBP converter v6.0${OFF}
 ${BLUE}By MDHEXT, Nabi KaramAliZadeh, Pathduck${OFF}
 
-${YELLOW}Usage:${OFF}
+${GREEN}Usage:${OFF}
 $(basename $0) [input_file] [arguments]
 
 ${GREEN}Arguments:${OFF}
