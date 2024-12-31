@@ -34,8 +34,7 @@ SET "loglevel="
 
 :: Check input
 SET input="%~1"
-:: SET vid="%~dpnx1"
-SET output=%~dpn1
+SET output="%~dpn1"
 
 :: Setting the path to the Working Directory
 SET WD=%TEMP%\VID2ANI
@@ -240,8 +239,6 @@ IF %mode% EQU 1 SET "decode=paletteuse"
 IF %mode% EQU 2 SET "decode=paletteuse=new=1"
 IF %mode% EQU 3 SET "decode=paletteuse"
 
-echo Decode: %decode%
-
 :: Error diffusion
 IF DEFINED errorswitch (
 	IF %mode% EQU 1 SET "errordiff==diff_mode=rectangle"
@@ -265,8 +262,6 @@ IF NOT %mode% EQU 2 (
 	IF DEFINED errorswitch SET "ditherenc=:dither=!ditheralg!"
 	IF NOT DEFINED errorswitch SET "ditherenc==dither=!ditheralg!"
 ) ELSE SET "ditherenc=:dither=!ditheralg!"
-
-echo Ditherenc: %ditherenc%
 
 :: Checking for Bayer Scale and adjusting command
 IF NOT DEFINED bayerscale SET "bayer="
