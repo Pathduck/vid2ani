@@ -11,9 +11,10 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 
 :: Define ANSI Colors
 SET "OFF=[0m"
+SET "RED=[91m"
 SET "GREEN=[32m"
 SET "YELLOW=[33m"
-SET "RED=[91m"
+SET "BLUE=[94m"
 SET "CYAN=[96m"
 
 :: Clearing all variables
@@ -294,7 +295,7 @@ IF DEFINED picswitch START "" "%output%"
 :: Cleaning up
 ECHO %GREEN%Deleting temporary files...%OFF%
 RMDIR /S /Q "%WD%"
-ECHO %YELLOW%Done.%OFF%
+ECHO %GREEN%Done.%OFF%
 ENDLOCAL
 GOTO :EOF
 
@@ -302,53 +303,26 @@ GOTO :EOF
 :: Print usage message
 ECHO:
 ECHO %GREEN%Video to GIF/APNG/WEBP converter v6.0%OFF%
-ECHO %CYAN%By MDHEXT, Nabi KaramAliZadeh, Pathduck%OFF%
+ECHO %BLUE%By MDHEXT, Nabi KaramAliZadeh, Pathduck%OFF%
 ECHO:
 ECHO %GREEN%Usage:%OFF%
 ECHO %~nx0 [input_file] [arguments]
 ECHO:
 ECHO %GREEN%Arguments:%OFF%
-ECHO:
-ECHO  -t	Output file type.
-ECHO		%YELLOW%Valid: 'gif' (default), 'png', 'webp'.%OFF%
-ECHO:
-ECHO  -o	Output file.
-ECHO		%YELLOW%The default is the same name as the input video.%OFF%
-ECHO:
-ECHO  -r	Scale or size.
-ECHO		%CYAN%Width of the animation in pixels.%OFF%
-ECHO		%YELLOW%The default is the same scale as the original video.%OFF%
-ECHO:
-ECHO  -s	Start time of the animation %CYAN%(HH:MM:SS.MS)%OFF%
-ECHO:
-ECHO  -e	End time of the animation %CYAN%(HH:MM:SS.MS)%OFF%
-ECHO:
-ECHO  -f	Framerate in frames per second.
-ECHO		%YELLOW%The default is 15.%OFF%
-ECHO:
-ECHO  -d	Dithering algorithm to be used.
-ECHO		%YELLOW%The default is 0 (None).%OFF%
-ECHO:
-ECHO  -b	Bayer Scale setting.
-ECHO		%CYAN%This can only be used when Bayer dithering is applied.
-ECHO		%YELLOW%Range 0 - 5, default is 2.%OFF%
-ECHO:
-ECHO  -m	Palettegen mode - one of 3 modes listed below.
-ECHO		%YELLOW%The default is 1 (diff).%OFF%
-ECHO:
-ECHO  -c	The maximum amount of colors useable per palette.
-ECHO		%YELLOW%Range 3 - 256 (default)%OFF%
-ECHO:
+ECHO  -t	Output file type. Valid: 'gif' (default), 'png', 'webp'.
+ECHO  -o	Output file. The default is the same name as the input video.
+ECHO  -r	Scale or size. Width of the animation in pixels.
+ECHO  -s	Start time of the animation (HH:MM:SS.MS).
+ECHO  -e	End time of the animation (HH:MM:SS.MS).
+ECHO  -f	Framerate in frames per second (default: 15).
+ECHO  -d	Dithering algorithm to be used (default: 0).
+ECHO  -b	Bayer Scale setting. Range 0 - 5 (default: 2).
+ECHO  -m	Palettegen mode: 1 (diff), 2 (single), 3 (full) (default: 1).
+ECHO  -c	Maximum colors usable per palette. Range 3 - 256 (default).
 ECHO  -k	Enables paletteuse error diffusion.
-ECHO:
-ECHO  -l	Enable lossy WebP compression and quality.
-ECHO		%CYAN%The default for WebP is lossless.%OFF%
-ECHO		%YELLOW%Range 0 - 100, default 75.%OFF%
-ECHO:
-ECHO  -v	Set FFmpeg log level, for troubleshooting.
-ECHO		%YELLOW%The default log level is 'error'%OFF%
-ECHO:
-ECHO  -p	Opens the resulting animation in your default Photo Viewer.
+ECHO  -l	Enable lossy WebP compression and quality. Range 0 - 100.
+ECHO  -v	Set FFmpeg log level (default: error).
+ECHO  -p	Opens the resulting animation in the default viewer.
 ECHO:
 ECHO %GREEN%Dithering Mode%OFF%
 ECHO  0: None
