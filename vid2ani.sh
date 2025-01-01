@@ -37,10 +37,29 @@ errorswitch=""
 errordiff=""
 picswitch=""
 
-# Check input
+# Assign input and output
 if [ $# -eq 0 ]; then print_help; exit; fi
 input="$1"
 output="${input%.*}"
+
+# Input file validation
+if [[ ! -f "$input" ]]; then
+	echo ${RED}"Input file not found: $input"${OFF}; exit 1
+fi
+
+# Fix paths for Cygwin and create working dir
+if [[ "$(uname -o)" == "Cygwin" ]]; then
+	# Use Windows-compatible directories for Cygwin
+	input=$(cygpath -w "$input")
+	output=$(cygpath -w "$output")
+	WD=$(cygpath -w "$(mktemp -d -t vid2ani-XXXXXX)")
+else
+	# Use POSIX-compatible directories
+	WD=$(mktemp -d -t vid2ani-XXXXXX)
+fi
+
+# Cleanup on exit, interrupt, termination
+trap 'rm -rf "$WD"' EXIT INT TERM
 
 # Parse Arguments
 shift
@@ -64,25 +83,6 @@ while [[ $# -gt 0 ]]; do
 		*) echo ${RED}"Unknown option $1"${OFF}; exit 1;;
 	esac
 done
-
-# Input validation
-if [[ ! -f "$input" ]]; then
-	echo ${RED}"Input file not found."${OFF}; exit 1
-fi
-
-# Fix paths for Cygwin and create working dir
-if [[ "$(uname -o)" == "Cygwin" ]]; then
-	# Use Windows-compatible directories for Cygwin
-	input=$(cygpath -w "$input")
-	output=$(cygpath -w "$output")
-	WD=$(cygpath -w "$(mktemp -d -t vid2ani-XXXXXX)")
-else
-	# Use POSIX-compatible directories
-	WD=$(mktemp -d -t vid2ani-XXXXXX)
-fi
-
-# Cleanup on exit, interrupt, termination
-trap 'rm -rf "$WD"' EXIT INT TERM
 
 # Validate output file extension
 case "$filetype" in
@@ -237,7 +237,7 @@ if [[ -z "$bayerscale" ]]; then bayer=""; fi
 # WEBP pixel format and lossy quality
 if [[ "$filetype" == "webp" && -n "$webp_lossy" ]]; then
 	webp_lossy="-lossless 0 -quality $webp_lossy -pix_fmt yuva420p"
-else 
+elif [[ "$filetype" == "webp" && -z "$webp_lossy" ]]; then 
 	webp_lossy="-lossless 1"
 fi
 
