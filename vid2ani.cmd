@@ -11,7 +11,7 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 
 :: Define ANSI Colors
 SET "OFF=[0m"
-SET "RED=[91m"
+SET "RED=[31m"
 SET "GREEN=[32m"
 SET "YELLOW=[33m"
 SET "BLUE=[94m"
@@ -32,9 +32,15 @@ SET "version="
 SET "build="
 SET "loglevel="
 
-:: Check input
+:: Assign input and output
 SET input="%~1"
 SET output=%~dpn1
+
+:: Input file validation
+IF NOT EXIST %input% (
+	ECHO %RED%Input file not found: %input%%OFF%
+	GOTO :EOF
+)
 
 :: Setting the path to the Working Directory
 SET WD=%TEMP%\VID2ANI
