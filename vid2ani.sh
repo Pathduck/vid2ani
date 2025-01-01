@@ -67,7 +67,7 @@ done
 
 # Input validation
 if [[ -z "$input" ]]; then
-	echo "Input file is required."; print_help; exit 1
+	echo "Input file is required."; exit 1
 fi
 
 # Fix paths for Cygwin and create working dir
