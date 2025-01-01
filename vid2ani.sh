@@ -60,14 +60,14 @@ while [[ $# -gt 0 ]]; do
 		-v) loglevel="$2"; shift 2;;
 		-k) errorswitch=1; shift;;
 		-p) picswitch=1; shift;;
-		-h|--help) print_help; exit;;
+		-h|-?) print_help; exit;;
 		*) echo ${RED}"Unknown option $1"${OFF}; exit 1;;
 	esac
 done
 
 # Input validation
-if [[ -z "$input" ]]; then
-	echo "Input file is required."; exit 1
+if [[ ! -f "$input" ]]; then
+	echo ${RED}"Input file not found."${OFF}; exit 1
 fi
 
 # Fix paths for Cygwin and create working dir
@@ -247,7 +247,7 @@ ffmpeg -v "${loglevel}" ${trim:-} -i "${input}" -thread_queue_size 512 -i "${pal
 
 # Checking if output file was created
 if [[ ! -f "$output" ]]; then
-	echo ${RED}"Failed to generate animation."${OFF}; exit 1
+	echo ${RED}"Failed to generate animation: $output not found"${OFF}; exit 1
 fi
 
 # Open output if picswitch is enabled
