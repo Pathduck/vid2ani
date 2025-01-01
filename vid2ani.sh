@@ -236,7 +236,9 @@ if [[ -z "$bayerscale" ]]; then bayer=""; fi
 
 # WEBP pixel format and lossy quality
 if [[ "$filetype" == "webp" && -n "$webp_lossy" ]]; then
-	webp_lossy="-lossless 0 -pix_fmt yuva420p -quality $webp_lossy"
+	webp_lossy="-lossless 0 -quality $webp_lossy -pix_fmt yuva420p"
+else 
+	webp_lossy="-lossless 1"
 fi
 
 # Executing the encoding command
