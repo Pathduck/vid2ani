@@ -227,7 +227,7 @@ ffmpeg -v %loglevel% %trim% -i %input% -vf "%filters%,%encode%%mcol%" -y "%palet
 
 :: Checking if the palette file is in the Working Directory, if not cleaning up
 IF NOT EXIST "%WD%\palette_00001.png" (
-	ECHO %RED%Failed to generate palette file%OFF%
+	ECHO %RED%Palette generation failed: %palette% not found.%OFF%
 	GOTO :cleanup
 )
 
@@ -279,7 +279,7 @@ ffmpeg -v %loglevel% %trim% -i %input% -thread_queue_size 512 -i "%palette%" -la
 
 :: Checking if file was created and cleaning up if not
 IF NOT EXIST "%output%" (
-	ECHO %RED%Failed to generate animation%OFF%
+	ECHO %RED%Failed to generate animation: %output% not found.%OFF%
 	GOTO :cleanup
 )
 
