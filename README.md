@@ -96,14 +96,11 @@ means less visible pattern at the cost of more banding.
 
 ## Notes
 
-* As APNG does not support multiple input palettes, palettegen (-m) will\
+* As APNG does not support multiple input palettes, palettegen (-m) will
 fall back to using diff mode if single mode is selected.
 * For WEBP lossy (-l) encoding, the quality parameter is mandatory.
 * This tool uses ffmpeg, you can download that here:<br>
 [FFmpeg](https://www.ffmpeg.org/)
-* You can download this fork from here:<br>
-[Pathduck/vid2ani](https://github.com/Pathduck/vid2ani)
-* You can download the original release here:<br>
-[MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)<br>
-* This tool wouldn't be possible without the research listed here:<br>
-[High quality GIF with FFmpeg](https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html)<br>
+* You can download this fork from here: [Pathduck/vid2ani](https://github.com/Pathduck/vid2ani)
+* You can download the original release here: [MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)<br>
+* This tool wouldn't be possible without the research listed here: [High quality GIF with FFmpeg](https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html)<br>
