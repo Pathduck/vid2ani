@@ -26,14 +26,14 @@ mode=1
 dither=0
 scale="-1"
 filetype="gif"
+webp_lossy=""
+webp_lossy_def=75
 loglevel="error"
 bayerscale=""
 colormax=""
 start_time=""
 end_time=""
 trim=""
-webp_lossy=""
-webp_lossy_def=75
 errorswitch=""
 errordiff=""
 picswitch=""
@@ -151,8 +151,8 @@ echo ${YELLOW}"$ffmpeg_version"${OFF}
 echo ${GREEN}Output file:${OFF} $output
 
 ## Putting together command to generate palette ##
-filters="fps=$fps,scale=$scale:-1:flags=lanczos"
 palette="$WD/palette_%05d.png"
+filters="fps=$fps,scale=$scale:-1:flags=lanczos"
 
 # APNG muxer does not support multiple palettes so fallback to using palettegen diff mode
 if [[ "$filetype" == "apng" && "$mode" -eq 2 ]]; then
@@ -253,7 +253,7 @@ if [[ ! -f "$output" ]]; then
 	echo ${RED}"Failed to generate animation: $output not found"${OFF}; exit 1
 fi
 
-# Open output if picswitch is enabled
+# Open output file if picswitch is enabled
 if [[ -n "$picswitch" ]]; then
 	xdg-open "$output"
 fi
