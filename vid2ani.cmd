@@ -23,6 +23,8 @@ SET "mode=1"
 SET "dither=0"
 SET "scale=-1"
 SET "filetype=gif"
+SET "webp_lossy="
+SET "webp_lossy_def=75"
 SET "loglevel=error"
 SET "bayerscale="
 SET "colormax="
@@ -30,8 +32,6 @@ SET "start_time="
 SET "end_time="
 SET "version="
 SET "build="
-SET "webp_lossy="
-SET "webp_lossy_def=75"
 SET "errorswitch="
 SET "picswitch="
 
@@ -71,7 +71,7 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-e" SET "end_time=%~2" & SHIFT
 	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
 ::	IF "%~1" =="-l" SET "webp_lossy=%~2" & SHIFT
-	IF "%~1" =="-l" (IF "%2" == "" (SET "webp_lossy=%webp_lossy_def%"
+	IF "%~1" =="-l" (IF "%2" == "" ( SET "webp_lossy=%webp_lossy_def%"
 		) ELSE IF 1%2 NEQ +1%~2 ( SET "webp_lossy=%webp_lossy_def%"
 		) ELSE ( SET "webp_lossy=%~2" & SHIFT )
 	)
@@ -85,7 +85,7 @@ GOTO :safchek
 :safchek
 :: Setting a clear range of acceptable setting values and noob proofing bayerscale
 
-:: Output file type
+:: Validate output file extension
 echo %filetype% | findstr /r "\<gif\> \<png\> \<apng\> \<webp\>" >nul
 IF %errorlevel% NEQ 0 (
 	ECHO %RED%Not a valid file type: %filetype%%OFF%
@@ -285,7 +285,7 @@ IF NOT EXIST "%output%" (
 	GOTO :cleanup
 )
 
-:: Starting default Photo Viewer
+:: Open output file if picswitch is set
 IF DEFINED picswitch START "" "%output%"
 
 :cleanup
