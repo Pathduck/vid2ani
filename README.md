@@ -99,6 +99,8 @@ means less visible pattern at the cost of more banding.
 * As APNG does not support multiple input palettes, palettegen (-m) will
 fall back to using diff mode if single mode is selected.
 * For WEBP lossy (-l) encoding, the quality parameter is mandatory.
+* Since FFmpeg can convert between any format, it's also possible to
+convert between for instance GIF to WEBP, although frame rates might be off.
 * This tool uses ffmpeg, you can download that here: [FFmpeg](https://www.ffmpeg.org/)
 * You can download this fork from here: [Pathduck/vid2ani](https://github.com/Pathduck/vid2ani)
 * You can download the original release here: [MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)<br>

@@ -20,15 +20,15 @@ YELLOW=$(tput setaf 11)
 BLUE=$(tput setaf 12)
 CYAN=$(tput setaf 14)
 
-# Default values
+# Clearing vars and setting defaults
 fps=15
 mode=1
 dither=0
-colormax=256
 scale="-1"
 filetype="gif"
 loglevel="error"
 bayerscale=""
+colormax=""
 start_time=""
 end_time=""
 trim=""
@@ -138,7 +138,7 @@ if [[ "$fps" -le 0 ]]; then
 fi
 
 # Validate Max Colors
-if [[ "$colormax" -lt 3 || "$colormax" -gt 256 ]]; then
+if [[ -n "$colormax" && "$colormax" -lt 3 || "$colormax" -gt 256 ]]; then
 	echo ${RED}"Max colors (-c) must be between 3 and 256."${OFF}; exit 1
 fi
 
