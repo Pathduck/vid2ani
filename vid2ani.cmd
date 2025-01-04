@@ -31,6 +31,7 @@ SET "end_time="
 SET "version="
 SET "build="
 SET "webp_lossy="
+SET "webp_lossy_def=75"
 SET "errorswitch="
 SET "picswitch="
 
@@ -69,7 +70,11 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
 	IF "%~1" =="-e" SET "end_time=%~2" & SHIFT
 	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
-	IF "%~1" =="-l" SET "webp_lossy=%~2" & SHIFT
+::	IF "%~1" =="-l" SET "webp_lossy=%~2" & SHIFT
+	IF "%~1" =="-l" (IF "%2" == "" (SET "webp_lossy=%webp_lossy_def%"
+		) ELSE IF 1%2 NEQ +1%~2 ( SET "webp_lossy=%webp_lossy_def%"
+		) ELSE ( SET "webp_lossy=%~2" & SHIFT )
+	)
 	IF "%~1" =="-v" SET "loglevel=%~2" & SHIFT
 	IF "%~1" =="-k" SET "errorswitch=1"
 	IF "%~1" =="-p" SET "picswitch=1"

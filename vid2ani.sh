@@ -7,7 +7,7 @@
 # License: GNU General Public License v3.0 (GPLv3)
 
 # Enable error handling
-set -euo pipefail
+# set -euo pipefail
 
 ### Start Main ###
 main() {
@@ -33,6 +33,7 @@ start_time=""
 end_time=""
 trim=""
 webp_lossy=""
+webp_lossy_def=75
 errorswitch=""
 errordiff=""
 picswitch=""
@@ -75,7 +76,9 @@ while [[ $# -gt 0 ]]; do
 		-s) start_time="$2"; shift 2;;
 		-e) end_time="$2"; shift 2;;
 		-c) colormax="$2"; shift 2;;
-		-l) webp_lossy="$2"; shift 2;;
+#		-l) webp_lossy="$2"; shift 2;;
+		-l) if [[ ! "$2" =~ ^[0-9]+$ ]]; then webp_lossy=$webp_lossy_def; shift
+			else webp_lossy="$2"; shift 2; fi ;;
 		-v) loglevel="$2"; shift 2;;
 		-k) errorswitch=1; shift;;
 		-p) picswitch=1; shift;;
