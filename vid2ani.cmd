@@ -17,20 +17,22 @@ SET "YELLOW=[33m"
 SET "BLUE=[94m"
 SET "CYAN=[96m"
 
-:: Clearing all variables
-SET "scale="
-SET "fps="
-SET "mode="
-SET "dither="
+:: Clearing vars and setting defaults
+SET "fps=15"
+SET "mode=1"
+SET "dither=0"
+SET "scale=-1"
+SET "filetype=gif"
+SET "loglevel=error"
 SET "bayerscale="
-SET "filetype="
+SET "colormax="
 SET "start_time="
 SET "end_time="
-SET "webp_lossy="
-SET "colormax="
 SET "version="
 SET "build="
-SET "loglevel="
+SET "webp_lossy="
+SET "errorswitch="
+SET "picswitch="
 
 :: Assign input and output
 SET input="%~1"
@@ -73,17 +75,6 @@ IF NOT "%~1" =="" (
 	IF "%~1" =="-p" SET "picswitch=1"
 	SHIFT & GOTO :varin
 )
-GOTO :help_check_2
-
-:help_check_2
-:: Noob proofing the script to prevent it from breaking should critical settings not be defined
-IF NOT DEFINED scale SET "scale=-1"
-IF NOT DEFINED fps SET "fps=15"
-IF NOT DEFINED mode SET "mode=1"
-IF NOT DEFINED dither SET "dither=0"
-IF NOT DEFINED filetype SET "filetype=gif"
-IF NOT DEFINED loglevel SET "loglevel=error"
-
 GOTO :safchek
 
 :safchek
