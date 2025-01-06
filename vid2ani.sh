@@ -20,7 +20,7 @@ YELLOW=$(tput setaf 11)
 BLUE=$(tput setaf 12)
 CYAN=$(tput setaf 14)
 
-# Clearing vars and setting defaults
+# Clearing input vars and setting defaults
 fps=15
 mode=1
 dither=0
@@ -33,9 +33,7 @@ bayerscale=""
 colormax=""
 start_time=""
 end_time=""
-trim=""
 errorswitch=""
-errordiff=""
 picswitch=""
 
 # Assign input and output
@@ -66,25 +64,25 @@ trap 'rm -rf "$WD"' EXIT INT TERM
 shift
 while [[ $# -gt 0 ]]; do
 	case "$1" in
-		-r) scale="$2"; shift 2;;
-		-f) fps="$2"; shift 2;;
-		-m) mode="$2"; shift 2;;
-		-d) dither="$2"; shift 2;;
-		-b) bayerscale="$2"; shift 2;;
-		-t) filetype="$2"; shift 2;;
-		-o) output="${2%.*}"; shift 2;;
-		-s) start_time="$2"; shift 2;;
-		-e) end_time="$2"; shift 2;;
-		-c) colormax="$2"; shift 2;;
-#		-l) webp_lossy="$2"; shift 2;;
-		-l) if [[ ! "$2" =~ ^[0-9]+$ ]]; then webp_lossy=$webp_lossy_def; shift
-			else webp_lossy="$2"; shift 2; fi ;;
-		-v) loglevel="$2"; shift 2;;
-		-k) errorswitch=1; shift;;
-		-p) picswitch=1; shift;;
+		-o) output="${2%.*}"; shift;;
+		-t) filetype="$2"; shift;;
+		-r) scale="$2"; shift;;
+		-l) if [[ "$2" =~ ^[0-9]+$ ]]; then webp_lossy="$2"; shift
+			else webp_lossy=$webp_lossy_def; fi ;;
+		-f) fps="$2"; shift;;
+		-s) start_time="$2"; shift;;
+		-e) end_time="$2"; shift;;
+		-d) dither="$2"; shift;;
+		-b) bayerscale="$2"; shift;;
+		-m) mode="$2"; shift;;
+		-c) colormax="$2"; shift;;
+		-v) loglevel="$2"; shift;;
+		-k) errorswitch=1;;
+		-p) picswitch=1;;
 		-h|-?) print_help; exit;;
 		*) echo ${RED}"Unknown option $1"${OFF}; exit 1;;
 	esac
+	shift
 done
 
 # Validate output file extension
@@ -161,7 +159,6 @@ if [[ "$filetype" == "apng" && "$mode" -eq 2 ]]; then
 fi
 
 # Palettegen encode mode
-encode=""
 if [[ -n "$mode" ]]; then
 	case "$mode" in
 		1) encode="palettegen=stats_mode=diff";;
@@ -172,7 +169,6 @@ if [[ -n "$mode" ]]; then
 fi
 
 # Max colors
-mcol=""
 if [[ -n "$colormax" ]]; then
 	if [[ "$mode" -le 2 ]]; then mcol=":max_colors=${colormax}"; fi
 	if [[ "$mode" -eq 3 ]]; then mcol="=max_colors=${colormax}"; fi
@@ -210,7 +206,6 @@ if [[ -n "$errorswitch" ]]; then
 fi
 
 # Prepare dithering and encoding options
-ditheralg="none"
 case "$dither" in
 	0) ditheralg="none";;
 	1) ditheralg="bayer";;
@@ -221,11 +216,10 @@ case "$dither" in
 	6) ditheralg="sierra3";;
 	7) ditheralg="burkes";;
 	8) ditheralg="atkinson";;
-	*) echo ${RED}"Invalid dither (-d )mode"${OFF}; exit 1;;
+	*) echo ${RED}"Invalid dither (-d ) mode"${OFF}; exit 1;;
 esac
 
 # Paletteuse error diffusion
-ditherenc=""
 if [[ "$mode" -ne 2 ]]; then
 	if [[ -n "$errorswitch" ]]; then ditherenc=":dither=$ditheralg"; fi
 	if [[ -z "$errorswitch" ]]; then ditherenc="=dither=$ditheralg"; fi
