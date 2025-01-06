@@ -2,8 +2,7 @@
 :: Description: Video to GIF/APNG/WEBP converter
 :: By: MDHEXT, Nabi KaramAliZadeh, Pathduck
 :: Version: 6.0
-:: Url: https://github.com/Pathduck/vid2ani/ forked from https://github.com/MDHEXT/video2gif
-:: What this script is based on: http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
+:: Url: https://github.com/Pathduck/vid2ani/
 :: License: GNU General Public License v3.0 (GPLv3)
 
 :: Enable delayed variable expension
