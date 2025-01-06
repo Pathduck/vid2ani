@@ -23,6 +23,19 @@ IF "%~1" == "-?" GOTO :help_message
 IF "%~1" == "/?" GOTO :help_message
 IF "%~1" == "--help" GOTO :help_message
 
+:: Assign input and output
+SET input="%~1"
+SET output=%~dpn1
+
+:: Validate input file
+IF NOT EXIST %input% (
+	ECHO %RED%Input file not found: %input%%OFF%
+	GOTO :EOF
+)
+
+:: Setting the path to the working directory
+SET WD=%TEMP%\VID2ANI
+
 :: Clearing input vars and setting defaults
 SET "fps=15"
 SET "mode=1"
@@ -38,19 +51,6 @@ SET "start_time="
 SET "end_time="
 SET "errorswitch="
 SET "picswitch="
-
-:: Assign input and output
-SET input="%~1"
-SET output=%~dpn1
-
-:: Validate input file
-IF NOT EXIST %input% (
-	ECHO %RED%Input file not found: %input%%OFF%
-	GOTO :EOF
-)
-
-:: Setting the path to the working directory
-SET WD=%TEMP%\VID2ANI
 
 GOTO :varin
 

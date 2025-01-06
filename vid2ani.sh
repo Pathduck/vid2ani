@@ -28,22 +28,6 @@ case "$1" in
 	--help) print_help; exit;;
 esac
 
-# Clearing input vars and setting defaults
-fps=15
-mode=1
-dither=0
-scale="-1"
-filetype="gif"
-webp_lossy=""
-webp_lossy_def=75
-loglevel="error"
-bayerscale=""
-colormax=""
-start_time=""
-end_time=""
-errorswitch=""
-picswitch=""
-
 # Assign input and output
 input="$1"
 output="${input%.*}"
@@ -66,6 +50,22 @@ fi
 
 # Cleanup on exit, interrupt, termination
 trap 'rm -rf "$WD"' EXIT INT TERM
+
+# Clearing input vars and setting defaults
+fps=15
+mode=1
+dither=0
+scale="-1"
+filetype="gif"
+webp_lossy=""
+webp_lossy_def=75
+loglevel="error"
+bayerscale=""
+colormax=""
+start_time=""
+end_time=""
+errorswitch=""
+picswitch=""
 
 # Parse Arguments
 shift
