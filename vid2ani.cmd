@@ -17,6 +17,12 @@ SET "YELLOW=[33m"
 SET "BLUE=[94m"
 SET "CYAN=[96m"
 
+:: Checking for blank input or help commands
+IF "%~1" == "" GOTO :help_message
+IF "%~1" == "-?" GOTO :help_message
+IF "%~1" == "/?" GOTO :help_message
+IF "%~1" == "--help" GOTO :help_message
+
 :: Clearing input vars and setting defaults
 SET "fps=15"
 SET "mode=1"
@@ -37,21 +43,14 @@ SET "picswitch="
 SET input="%~1"
 SET output=%~dpn1
 
-:: Input file validation
+:: Validate input file
 IF NOT EXIST %input% (
 	ECHO %RED%Input file not found: %input%%OFF%
 	GOTO :EOF
 )
 
-:: Setting the path to the Working Directory
+:: Setting the path to the working directory
 SET WD=%TEMP%\VID2ANI
-
-:: Checking for blank input or help commands
-IF %input% == "" GOTO :help_message
-IF %input% == "-?" GOTO :help_message
-IF %input% == "/?" GOTO :help_message
-IF %input% == "help" GOTO :help_message
-IF %input% == "--help" GOTO :help_message
 
 GOTO :varin
 
