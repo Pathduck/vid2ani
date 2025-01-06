@@ -2,13 +2,13 @@
 
 *Video to GIF/APNG/WEBP converter*
 
-![sample gif file generated](sample.gif)
+![sample gif file](sample.gif)
 
 A batch script for converting video files to GIF/APNG/WEBP using FFmpeg.
 
-By MDHEXT, Nabi KaramAliZadeh, Pathduck
+By *MDHEXT*, *Nabi KaramAliZadeh*, *Pathduck*
 
-Based on the research listed here: 
+Based on the research listed here:
 [High quality GIF with FFmpeg](https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html)
 
 
@@ -24,62 +24,37 @@ vid2ani [input_file] [arguments]
 ```
 ## Arguments
 ```
--t      Output file type.
-        Valid: 'gif' (default), 'png', 'webp'.
+  -o  Output file. Default is the same as input file, sans extension.
+  -t  Output file type. Valid: 'gif' (default), 'apng', 'png', 'webp'.
+  -r  Scale or size. Width of the animation in pixels.
+  -l  Enable lossy WebP compression and quality. Range 0-100, default 75.
+  -f  Framerate in frames per seconds, default 15.
+  -s  Start time of the animation (HH:MM:SS.MS).
+  -e  End time of the animation (HH:MM:SS.MS).
+  -d  Dithering algorithm to be used, default 0.
+  -b  Bayer Scale setting. Range 0-5, default 2.
+  -m  Palettegen mode: 1 (diff), 2 (single), 3 (full), default 1.
+  -c  Maximum colors usable per palette. Range 3-256 (default).
+  -k  Enables paletteuse error diffusion.
+  -p  Opens the resulting animation in the default image viewer.
+  -v  Set FFmpeg log level (default: error).
 
--o      Output file.
-        The default is the same name as the input video.
+Dithering Algorithms:
+  0: None
+  1: Bayer
+  2: Heckbert
+  3: Floyd Steinberg
+  4: Sierra2
+  5: Sierra2_4a
+  6: Sierra3
+  7: Burkes
+  8: Atkinson
 
--r      Scale or size.
-        Width of the animation in pixels.
-        The default is the same scale as the original video.
-
--s      Start time of the animation (HH:MM:SS.MS)
-
--e      End time of the animation (HH:MM:SS.MS)
-
--f      Framerate in frames per second.
-        The default is 15.
-
--d      Dithering algorithm to be used.
-        The default is 0 (None).
-
--b      Bayer Scale setting.
-        This can only be used when Bayer dithering is applied.
-        Range 0 - 5, default is 2.
-
--m      Palettegen mode - one of 3 modes listed below.
-        The default is 1 (diff).
-
--c      The maximum amount of colors useable per palette.
-        Range 3 - 256 (default)
-
--k      Enables paletteuse error diffusion.
-
--l      Enable lossy WebP compression and quality.
-        The default for WebP is lossless.
-        Range 0 - 100, default 75.
-
--v      Set FFmpeg log level, for troubleshooting.
-        The default log level is 'error'
-
--p      Opens the resulting animation in your default Photo Viewer.
-
-Dithering Modes:
-0: None
-1: Bayer
-2: Heckbert
-3: Floyd Steinberg
-4: Sierra2
-5: Sierra2_4a
-6: sierra3
-7: burkes
-8: atkinson
 
 Palettegen Modes:
-1: diff - only what moves affects the palette
-2: single - one palette per frame
-3: full - one palette for the whole animation
+  1: diff - only what moves affects the palette
+  2: single - one palette per frame
+  3: full - one palette for the whole animation
 
 About Bayerscale:
 When bayer dithering is selected, the Bayer Scale option defines the
