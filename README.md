@@ -4,9 +4,13 @@
 
 ![sample gif file generated](sample.gif)
 
-A batch script for converting video files to GIF/APNG/WEBP using FFmpeg.<br>
+A batch script for converting video files to GIF/APNG/WEBP using FFmpeg.
 
 By MDHEXT, Nabi KaramAliZadeh, Pathduck
+
+Based on the research listed here: 
+[High quality GIF with FFmpeg](https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html)
+
 
 ## Installation
 * Clone the repo.
@@ -95,13 +99,10 @@ means less visible pattern at the cost of more banding.
 ```
 
 ## Notes
-
-* As APNG does not support multiple input palettes, palettegen (-m) will
-fall back to using diff mode if single mode is selected.
-* For WEBP lossy (-l) encoding, the quality parameter is mandatory.
-* Since FFmpeg can convert between any format, it's also possible to
-convert between for instance GIF to WEBP, although frame rates might be off.
+* The APNG muxer does not support multiple input palettes, palettegen (-m) will fall
+back to using diff mode if single mode is selected.
+* Since FFmpeg can convert between any format, it's also possible to convert
+between for instance GIF to WEBP, although frame rates might be off.
 * This tool uses ffmpeg, you can download that here: [FFmpeg](https://www.ffmpeg.org/)
 * You can download this fork from here: [Pathduck/vid2ani](https://github.com/Pathduck/vid2ani)
-* You can download the original release here: [MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)<br>
-* This tool wouldn't be possible without the research listed here: [High quality GIF with FFmpeg](https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html)<br>
+* You can download the original release here: [MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)
