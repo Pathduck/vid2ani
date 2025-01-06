@@ -20,6 +20,14 @@ YELLOW=$(tput setaf 11)
 BLUE=$(tput setaf 12)
 CYAN=$(tput setaf 14)
 
+# Checking for blank input or help commands
+if [ $# -eq 0 ]; then print_help; exit; fi
+case "$1" in
+	-h) print_help; exit;;
+	-?) print_help; exit;;
+	--help) print_help; exit;;
+esac
+
 # Clearing input vars and setting defaults
 fps=15
 mode=1
@@ -37,16 +45,15 @@ errorswitch=""
 picswitch=""
 
 # Assign input and output
-if [ $# -eq 0 ]; then print_help; exit; fi
 input="$1"
 output="${input%.*}"
 
-# Input file validation
+# Validate input file
 if [[ ! -f "$input" ]]; then
 	echo ${RED}"Input file not found: $input"${OFF}; exit 1
 fi
 
-# Fix paths for Cygwin and create working dir
+# Fix paths for Cygwin and create working directory
 if [[ "$(uname -o)" == "Cygwin" ]]; then
 	# Use Windows-compatible directories for Cygwin
 	input=$(cygpath -w "$input")
@@ -79,7 +86,6 @@ while [[ $# -gt 0 ]]; do
 		-v) loglevel="$2"; shift;;
 		-k) errorswitch=1;;
 		-p) picswitch=1;;
-		-h|-?) print_help; exit;;
 		*) echo ${RED}"Unknown option $1"${OFF}; exit 1;;
 	esac
 	shift
