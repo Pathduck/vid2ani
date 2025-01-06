@@ -11,13 +11,13 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 
 :: Define ANSI Colors
 SET "OFF=[0m"
-SET "RED=[31m"
+SET "RED=[91m"
 SET "GREEN=[32m"
 SET "YELLOW=[33m"
 SET "BLUE=[94m"
 SET "CYAN=[96m"
 
-:: Clearing vars and setting defaults
+:: Clearing input vars and setting defaults
 SET "fps=15"
 SET "mode=1"
 SET "dither=0"
@@ -30,8 +30,6 @@ SET "bayerscale="
 SET "colormax="
 SET "start_time="
 SET "end_time="
-SET "version="
-SET "build="
 SET "errorswitch="
 SET "picswitch="
 
@@ -60,21 +58,20 @@ GOTO :varin
 :varin
 :: Using SHIFT command to go through the input and storing each setting into its own variable
 IF NOT "%~1" =="" (
-	IF "%~1" =="-r" SET "scale=%~2" & SHIFT
-	IF "%~1" =="-f" SET "fps=%~2" & SHIFT
-	IF "%~1" =="-m" SET "mode=%~2" & SHIFT
-	IF "%~1" =="-d" SET "dither=%~2" & SHIFT
-	IF "%~1" =="-b" SET "bayerscale=%~2" & SHIFT
-	IF "%~1" =="-t" SET "filetype=%~2" & SHIFT
 	IF "%~1" =="-o" SET "output=%~dpn2" & SHIFT
-	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
-	IF "%~1" =="-e" SET "end_time=%~2" & SHIFT
-	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
-::	IF "%~1" =="-l" SET "webp_lossy=%~2" & SHIFT
-	IF "%~1" =="-l" (IF "%2" == "" ( SET "webp_lossy=%webp_lossy_def%"
-		) ELSE IF 1%2 NEQ +1%~2 ( SET "webp_lossy=%webp_lossy_def%"
+	IF "%~1" =="-t" SET "filetype=%~2" & SHIFT
+	IF "%~1" =="-r" SET "scale=%~2" & SHIFT
+	IF "%~1" =="-l" ( IF 1%2 NEQ +1%~2 ( SET "webp_lossy=%webp_lossy_def%"
+		) ELSE IF "%~2" == "" ( SET "webp_lossy=%webp_lossy_def%"
 		) ELSE ( SET "webp_lossy=%~2" & SHIFT )
 	)
+	IF "%~1" =="-f" SET "fps=%~2" & SHIFT
+	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
+	IF "%~1" =="-e" SET "end_time=%~2" & SHIFT
+	IF "%~1" =="-d" SET "dither=%~2" & SHIFT
+	IF "%~1" =="-b" SET "bayerscale=%~2" & SHIFT
+	IF "%~1" =="-m" SET "mode=%~2" & SHIFT
+	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
 	IF "%~1" =="-v" SET "loglevel=%~2" & SHIFT
 	IF "%~1" =="-k" SET "errorswitch=1"
 	IF "%~1" =="-p" SET "picswitch=1"
@@ -83,8 +80,6 @@ IF NOT "%~1" =="" (
 GOTO :safchek
 
 :safchek
-:: Setting a clear range of acceptable setting values and noob proofing bayerscale
-
 :: Validate output file extension
 echo %filetype% | findstr /r "\<gif\> \<png\> \<apng\> \<webp\>" >nul
 IF %errorlevel% NEQ 0 (
@@ -97,19 +92,19 @@ IF "%filetype%"=="apng" SET "output=%output%.png"
 IF "%filetype%"=="webp" SET "output=%output%.webp"
 
 :: Validate Palettegen
-IF %mode% GTR 3 (
+IF !mode! GTR 3 (
 	ECHO %RED%Not a valid palettegen ^(-m^) mode%OFF%
 	GOTO :EOF
-) ELSE IF %mode% LSS 1 (
+) ELSE IF !%mode! LSS 1 (
 	ECHO %RED%Not a valid palettegen ^(-m^) mode%OFF%
 	GOTO :EOF
 )
 
 :: Validate Dithering
-IF %dither% GTR 8 (
+IF !dither! GTR 8 (
 	ECHO %RED%Not a valid dither ^(-d^) algorithm %OFF%
 	GOTO :EOF
-) ELSE IF %dither% LSS 0 (
+) ELSE IF !dither! LSS 0 (
 	ECHO %RED%Not a valid dither ^(-d^) algorithm%OFF%
 	GOTO :EOF
 )
@@ -123,7 +118,7 @@ IF DEFINED bayerscale (
 		ECHO %RED%Not a valid bayerscale ^(-b^) value%OFF%
 		GOTO :EOF
 	)
-	IF %dither% NEQ 1 (
+	IF !dither! NEQ 1 (
 		IF !bayerscale! LEQ 5 (
 			ECHO %RED%Bayerscale ^(-b^) only works with Bayer dithering%OFF%
 			GOTO :EOF
@@ -206,21 +201,21 @@ SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
 
 :: APNG muxer does not support multiple palettes so fallback to using palettegen diff mode
 IF "%filetype%"=="apng" (
-	IF %mode% EQU 2 (
+	IF !mode! EQU 2 (
 		ECHO %YELLOW%APNG does not support multiple palettes - falling back to Palettegen mode 1 ^(diff^)%OFF%
 		SET mode=1
 	)
 )
 
 :: Palettegen encode mode
-IF %mode% EQU 1 SET "encode=palettegen=stats_mode=diff"
-IF %mode% EQU 2 SET "encode=palettegen=stats_mode=single"
-IF %mode% EQU 3 SET "encode=palettegen"
+IF !mode! EQU 1 SET "encode=palettegen=stats_mode=diff"
+IF !mode! EQU 2 SET "encode=palettegen=stats_mode=single"
+IF !mode! EQU 3 SET "encode=palettegen"
 
 :: Max colors
 IF DEFINED colormax (
-	IF %mode% LEQ 2 SET "mcol=:max_colors=%colormax%"
-	IF %mode% EQU 3 SET "mcol==max_colors=%colormax%"
+	IF !mode! LEQ 2 SET "mcol=:max_colors=%colormax%"
+	IF !mode! EQU 3 SET "mcol==max_colors=%colormax%"
 )
 
 :: Executing command to generate palette
@@ -236,30 +231,30 @@ IF NOT EXIST "%WD%\palette_00001.png" (
 :: Setting variables to put the encode command together
 
 :: Palettegen decode mode
-IF %mode% EQU 1 SET "decode=paletteuse"
-IF %mode% EQU 2 SET "decode=paletteuse=new=1"
-IF %mode% EQU 3 SET "decode=paletteuse"
+IF !mode! EQU 1 SET "decode=paletteuse"
+IF !mode! EQU 2 SET "decode=paletteuse=new=1"
+IF !mode! EQU 3 SET "decode=paletteuse"
 
 :: Error diffusion
 IF DEFINED errorswitch (
-	IF %mode% EQU 1 SET "errordiff==diff_mode=rectangle"
-	IF %mode% EQU 2 SET "errordiff=:diff_mode=rectangle"
-	IF %mode% EQU 3 SET "errordiff==diff_mode=rectangle"
+	IF !mode! EQU 1 SET "errordiff==diff_mode=rectangle"
+	IF !mode! EQU 2 SET "errordiff=:diff_mode=rectangle"
+	IF !mode! EQU 3 SET "errordiff==diff_mode=rectangle"
 )
 
 :: Prepare dithering and encoding options
-IF %dither% EQU 0 SET "ditheralg=none"
-IF %dither% EQU 1 SET "ditheralg=bayer"
-IF %dither% EQU 2 SET "ditheralg=heckbert"
-IF %dither% EQU 3 SET "ditheralg=floyd_steinberg"
-IF %dither% EQU 4 SET "ditheralg=sierra2"
-IF %dither% EQU 5 SET "ditheralg=sierra2_4a"
-IF %dither% EQU 6 SET "ditheralg=sierra3"
-IF %dither% EQU 7 SET "ditheralg=burkes"
-IF %dither% EQU 8 SET "ditheralg=atkinson"
+IF !dither! EQU 0 SET "ditheralg=none"
+IF !dither! EQU 1 SET "ditheralg=bayer"
+IF !dither! EQU 2 SET "ditheralg=heckbert"
+IF !dither! EQU 3 SET "ditheralg=floyd_steinberg"
+IF !dither! EQU 4 SET "ditheralg=sierra2"
+IF !dither! EQU 5 SET "ditheralg=sierra2_4a"
+IF !dither! EQU 6 SET "ditheralg=sierra3"
+IF !dither! EQU 7 SET "ditheralg=burkes"
+IF !dither! EQU 8 SET "ditheralg=atkinson"
 
 :: Paletteuse error diffusion
-IF NOT %mode% EQU 2 (
+IF NOT !mode! EQU 2 (
 	IF DEFINED errorswitch SET "ditherenc=:dither=!ditheralg!"
 	IF NOT DEFINED errorswitch SET "ditherenc==dither=!ditheralg!"
 ) ELSE SET "ditherenc=:dither=!ditheralg!"
