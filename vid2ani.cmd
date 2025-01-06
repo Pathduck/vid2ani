@@ -312,7 +312,7 @@ ECHO  -b  Bayer Scale setting. Range 0-5, default 2.
 ECHO  -m  Palettegen mode: 1 (diff), 2 (single), 3 (full), default 1.
 ECHO  -c  Maximum colors usable per palette. Range 3-256 (default).
 ECHO  -k  Enables paletteuse error diffusion.
-ECHO  -p  Opens the resulting animation in the sysem image viewer.
+ECHO  -p  Opens the resulting animation in the system image viewer.
 ECHO  -v  Set FFmpeg log level (default: error).
 ECHO:
 ECHO %GREEN%Dithering Algorithms%OFF%
