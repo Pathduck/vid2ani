@@ -285,7 +285,7 @@ ${GREEN}Arguments:${OFF}
   -m  Palettegen mode: 1 (diff), 2 (single), 3 (full), default 1.
   -c  Maximum colors usable per palette. Range 3-256 (default).
   -k  Enables paletteuse error diffusion.
-  -p  Opens the resulting animation in the sysem image viewer.
+  -p  Opens the resulting animation in the system image viewer.
   -v  Set FFmpeg log level (default: error).
 
 ${GREEN}Dithering Algorithms${OFF}
