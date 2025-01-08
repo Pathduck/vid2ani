@@ -70,10 +70,11 @@ means less visible pattern at the cost of more banding.
   vid2ani sample.mp4 -t webp -l 50
   vid2ani sample.mp4 -f 20 -r 450
   vid2ani sample.mp4 -s 5:40 -e 5:45
-  vid2ani sample.mp4 -o babydance -m 2 -k -b 3
+  vid2ani sample.mp4 -o babydance -m 2 -k -d 1 -b 3
 ```
 
 ## Notes
+* The script will attempt to check for valid inputs, but will fall back to FFmpeg's error messages.
 * The APNG muxer does not support multiple input palettes, palettegen (-m) will fall
 back to using diff mode if single mode is selected.
 * Since FFmpeg can convert between any format, it's also possible to convert
