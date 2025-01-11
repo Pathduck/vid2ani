@@ -79,6 +79,5 @@ means less visible pattern at the cost of more banding.
 back to using diff mode if single mode is selected.
 * Since FFmpeg can convert between any format, it's also possible to convert
 between for instance GIF to WEBP, although frame rates might be off.
-* This tool uses ffmpeg, you can download that here: [FFmpeg](https://www.ffmpeg.org/)
-* You can download this fork from here: [Pathduck/vid2ani](https://github.com/Pathduck/vid2ani)
-* You can download the original release here: [MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)
+* The script uses ffmpeg, you can download that here: [FFmpeg](https://www.ffmpeg.org/)
+* The script was forked from: [MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)
