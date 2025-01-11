@@ -2,7 +2,7 @@
 
 *Video to GIF/APNG/WEBP converter*
 
-![sample gif file](sample.gif)
+![sample webp file](sample.webp)
 
 A batch script for converting video files to GIF/APNG/WEBP using FFmpeg.
 
