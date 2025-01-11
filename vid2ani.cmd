@@ -146,8 +146,8 @@ IF DEFINED start_time (
 		GOTO :EOF
 	)
 )
-IF NOT DEFINED start_time (
-	IF DEFINED end_time (
+IF DEFINED end_time (
+	IF NOT DEFINED start_time (
 		ECHO %RED%Please input the start time ^(-s^)%OFF%
 		GOTO :EOF
 	)
@@ -163,11 +163,11 @@ IF DEFINED fps (
 
 :: Validate Max Colors
 IF DEFINED colormax (
-	IF !colormax! LSS 3 (
+	IF !colormax! GTR 256 (
 		ECHO  %RED%Max colors ^(-c^) must be between 3 and 256.%OFF%
 		GOTO :EOF
 	)
-	IF !colormax! GTR 256 (
+	IF !colormax! LSS 3 (
 		ECHO  %RED%Max colors ^(-c^) must be between 3 and 256.%OFF%
 		GOTO :EOF
 	)
