@@ -37,7 +37,7 @@ if [[ ! -f "$input" ]]; then
 fi
 
 # Fix paths for Cygwin and create working directory
-if [[ "$(uname -o)" == "Cygwin" ]]; then
+if [[ "$(uname)" == *"CYGWIN"* ]]; then
 	# Use Windows-compatible directories for Cygwin
 	input=$(cygpath -w "$input")
 	output=$(cygpath -w "$output")
