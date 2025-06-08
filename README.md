@@ -11,10 +11,12 @@ By *MDHEXT*, *Nabi KaramAliZadeh*, *Pathduck*
 Based on the research listed here:
 [High quality GIF with FFmpeg](https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html)
 
-
 ## Installation
+
 * Clone the repo.
+
 * Install [FFmpeg](https://www.ffmpeg.org/).
+
 * For Windows make sure that the path to `ffmpeg.exe` is
   [configured in your system environment variables control panel](https://www.wikihow.com/Install-FFmpeg-on-Windows).
 
@@ -22,6 +24,7 @@ Based on the research listed here:
 ```
 vid2ani [input_file] [arguments]
 ```
+
 ## Arguments
 ```
   -o  Output file. Default is the same as input file, sans extension.
@@ -50,7 +53,6 @@ Dithering Algorithms:
   7: Burkes
   8: Atkinson
 
-
 Palettegen Modes:
   1: diff - only what moves affects the palette
   2: single - one palette per frame
@@ -74,10 +76,15 @@ means less visible pattern at the cost of more banding.
 ```
 
 ## Notes
+
 * The script will attempt to check for valid inputs, but will fall back to FFmpeg's error messages.
+
 * The APNG muxer does not support multiple input palettes, palettegen (-m) will fall
-back to using diff mode if single mode is selected.
+  back to using diff mode if single mode is selected.
+
 * Since FFmpeg can convert between any format, it's also possible to convert
-between for instance GIF to WEBP, although frame rates might be off.
+  between for instance GIF to WEBP, although frame rates might be off.
+
 * The script uses ffmpeg, you can download that here: [FFmpeg](https://www.ffmpeg.org/)
+
 * The script was forked from: [MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)
