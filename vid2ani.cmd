@@ -24,7 +24,7 @@ IF "%~1" == "--help" GOTO :help_message
 
 :: Assign input and output
 SET input="%~1"
-SET output=%~dpn1
+SET output=%~n1
 
 :: Validate input file
 IF NOT EXIST %input% (
@@ -79,7 +79,7 @@ GOTO :safchek
 
 :safchek
 :: Validate output file extension
-echo %filetype% | findstr /r "\<gif\> \<png\> \<apng\> \<webp\>" >nul
+ECHO %filetype% | FINDSTR /R "\<gif\> \<png\> \<apng\> \<webp\>" >nul
 IF %errorlevel% NEQ 0 (
 	ECHO %RED%Not a valid file type: %filetype%%OFF%
 	GOTO :EOF
