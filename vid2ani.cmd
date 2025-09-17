@@ -334,7 +334,7 @@ ECHO A low value means more visible pattern for less banding, a higher value
 ECHO means less visible pattern at the cost of more banding.
 ECHO:
 ECHO %GREEN%People who made this project come to fruition%OFF%
-ECHO ubitux, Nabi KaramAliZadeh, and the very kind and patient people in the
+ECHO ubitux, Nabi KaramAliZadeh, MDHEXT, Pathduck and the very kind and patient people in the
 ECHO Batch Discord Server. Without these people's contributions, this script
 ECHO would not be possible. Thank you all for your contributions and
 ECHO assistance^^!
