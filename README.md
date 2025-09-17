@@ -27,22 +27,22 @@ vid2ani [input_file] [arguments]
 
 ## Arguments
 ```
-  -o  Output file. Default is the same as input file, sans extension.
-  -t  Output file type. Valid: 'gif' (default), 'apng', 'png', 'webp'.
-  -r  Scale or size. Width of the animation in pixels.
-  -l  Enable lossy WebP compression and quality. Range 0-100, default 75.
-  -f  Framerate in frames per seconds, default 15.
-  -s  Start time of the animation (HH:MM:SS.MS).
-  -e  End time of the animation (HH:MM:SS.MS).
-  -d  Dithering algorithm to be used, default 0.
-  -b  Bayer Scale setting. Range 0-5, default 2.
-  -m  Palettegen mode: 1 (diff), 2 (single), 3 (full), default 1.
-  -c  Maximum colors usable per palette. Range 3-256 (default).
-  -k  Enables paletteuse error diffusion.
-  -p  Opens the resulting animation in the default image viewer.
-  -v  Set FFmpeg log level (default: error).
+  -o  Output file. Default is the same as input file, sans extension
+  -t  Output file type: 'gif' (default), 'apng', 'png', 'webp'
+  -r  Scale or size. Width of the animation in pixels
+  -l  Enable lossy WebP compression and quality, range 0-100 (default 75)
+  -f  Framerate in frames per seconds (default 15)
+  -c  Maximum colors usable per palette, range 3-256 (default 256)
+  -s  Start time of the animation (HH:MM:SS.MS)
+  -e  End time of the animation (HH:MM:SS.MS)
+  -d  Dithering algorithm to be used (default 0)
+  -b  Bayer Scale setting, range 0-5 (default 2)
+  -m  Palettegen mode: 1 (diff, default), 2 (single), 3 (full)
+  -k  Enables paletteuse error diffusion
+  -p  Opens the resulting animation in the default image viewer
+  -v  Set FFmpeg log level (default: error)
 
-Dithering Algorithms:
+Dithering Algorithms
   0: None
   1: Bayer
   2: Heckbert
@@ -53,26 +53,16 @@ Dithering Algorithms:
   7: Burkes
   8: Atkinson
 
-Palettegen Modes:
+Palettegen Modes
   1: diff - only what moves affects the palette
   2: single - one palette per frame
   3: full - one palette for the whole animation
 
-About Bayerscale:
+About Bayerscale
 When bayer dithering is selected, the Bayer Scale option defines the
 scale of the pattern (how much the crosshatch pattern is visible).
 A low value means more visible pattern for less banding, a higher value
 means less visible pattern at the cost of more banding.
-```
-
-## Examples
-```
-  vid2ani sample.mp4
-  vid2ani sample.mp4 -t png
-  vid2ani sample.mp4 -t webp -l 50
-  vid2ani sample.mp4 -f 20 -r 450
-  vid2ani sample.mp4 -s 5:40 -e 5:45
-  vid2ani sample.mp4 -o babydance -m 2 -k -d 1 -b 3
 ```
 
 ## Notes
