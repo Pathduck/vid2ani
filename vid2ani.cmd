@@ -288,7 +288,6 @@ GOTO :EOF
 
 :help_message
 :: Print usage message
-ECHO:
 ECHO %GREEN%Video to GIF/APNG/WEBP converter v6.0%OFF%
 ECHO %BLUE%By MDHEXT, Nabi KaramAliZadeh, Pathduck%OFF%
 ECHO:
@@ -311,7 +310,7 @@ ECHO  -k  Enables paletteuse error diffusion
 ECHO  -p  Opens the resulting animation in the default image viewer
 ECHO  -v  Set FFmpeg log level (default: error)
 ECHO:
-ECHO %GREEN%Dithering Algorithms%OFF%
+ECHO %GREEN%Dithering Algorithms:%OFF%
 ECHO  0: None
 ECHO  1: Bayer
 ECHO  2: Heckbert
@@ -322,20 +321,20 @@ ECHO  6: Sierra3
 ECHO  7: Burkes
 ECHO  8: Atkinson
 ECHO:
-ECHO %GREEN%Palettegen Modes%OFF%
+ECHO %GREEN%Palettegen Modes:%OFF%
 ECHO  1: diff - only what moves affects the palette
 ECHO  2: single - one palette per frame
 ECHO  3: full - one palette for the whole animation
 ECHO:
-ECHO %GREEN%About Bayerscale%OFF%
+ECHO %GREEN%About Bayerscale:%OFF%
 ECHO When bayer dithering is selected, the Bayer Scale option defines the
 ECHO scale of the pattern (how much the crosshatch pattern is visible).
 ECHO A low value means more visible pattern for less banding, a higher value
 ECHO means less visible pattern at the cost of more banding.
 ECHO:
-ECHO %GREEN%People who made this project come to fruition%OFF%
-ECHO ubitux, Nabi KaramAliZadeh, MDHEXT, Pathduck and the very kind and patient people in the
-ECHO Batch Discord Server. Without these people's contributions, this script
-ECHO would not be possible. Thank you all for your contributions and
-ECHO assistance^^!
+ECHO %GREEN%People who made this project come to fruition:%OFF%
+ECHO ubitux, Nabi KaramAliZadeh, MDHEXT, Pathduck
+ECHO Along with the very kind and patient people in the Batch Discord Server.
+ECHO Without these people's contributions, this script would not be possible.
+ECHO Thank you all for your contributions and assistance!
 GOTO :EOF
