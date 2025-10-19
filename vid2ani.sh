@@ -287,7 +287,7 @@ ${GREEN}Arguments:${OFF}
   -p  Opens the resulting animation in the default image viewer
   -v  Set FFmpeg log level (default: error)
 
-${GREEN}Dithering Algorithms${OFF}
+${GREEN}Dithering Algorithms:${OFF}
   0: None
   1: Bayer
   2: Heckbert
@@ -298,22 +298,22 @@ ${GREEN}Dithering Algorithms${OFF}
   7: Burkes
   8: Atkinson
 
-${GREEN}Palettegen Modes${OFF}
+${GREEN}Palettegen Modes:${OFF}
   1: diff - only what moves affects the palette
   2: single - one palette per frame
   3: full - one palette for the whole animation
 
-${GREEN}About Bayerscale${OFF}
+${GREEN}About Bayerscale:${OFF}
 When bayer dithering is selected, the Bayer Scale option defines the
 scale of the pattern (how much the crosshatch pattern is visible).
 A low value means more visible pattern for less banding, a higher value
 means less visible pattern at the cost of more banding.
 
-${GREEN}People who made this project come to fruition${OFF}
-ubitux, Nabi KaramAliZadeh, MDHEXT, Pathduck and the very kind and patient people in the
-Batch Discord Server. Without these people's contributions, this script
-would not be possible. Thank you all for your contributions and
-assistance^^!
+${GREEN}People who made this project come to fruition:${OFF}
+ubitux, Nabi KaramAliZadeh, MDHEXT, Pathduck
+Along with the very kind and patient people in the Batch Discord Server.
+Without these people's contributions, this script would not be possible.
+Thank you all for your contributions and assistance!
 EOF
 }
 ### End print_help ###
