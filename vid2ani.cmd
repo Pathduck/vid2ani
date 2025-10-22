@@ -336,5 +336,5 @@ ECHO %GREEN%People who made this project come to fruition:%OFF%
 ECHO ubitux, Nabi KaramAliZadeh, MDHEXT, Pathduck
 ECHO Along with the very kind and patient people in the Batch Discord Server.
 ECHO Without these people's contributions, this script would not be possible.
-ECHO Thank you all for your contributions and assistance!
+ECHO Thank you all for your contributions and assistance^^!
 GOTO :EOF
