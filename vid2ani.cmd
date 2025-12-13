@@ -292,7 +292,7 @@ ECHO %GREEN%Video to GIF/APNG/WEBP converter v6.0%OFF%
 ECHO %BLUE%By MDHEXT, Nabi KaramAliZadeh, Pathduck%OFF%
 ECHO:
 ECHO %GREEN%Usage:%OFF%
-ECHO %~nx0 [input_file] [arguments]
+ECHO %~n0 [input_file] [arguments]
 ECHO:
 ECHO %GREEN%Arguments:%OFF%
 ECHO  -o  Output file. Default is the same as input file, sans extension
