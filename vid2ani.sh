@@ -245,7 +245,9 @@ fi
 
 # Executing the encoding command
 echo ${GREEN}"Encoding animation..."${OFF}
-ffmpeg -v "${loglevel}" ${trim:-} -i "${input}" -thread_queue_size 512 -i "${palette}" -lavfi "${filters} [x]; [x][1:v] ${decode}${errordiff}${ditherenc}${bayer}" -f "${filetype}" ${webp_lossy:-} -loop 0 -plays 0 -y "${output}"
+ffmpeg -v "${loglevel}" ${trim:-} -i "${input}" -thread_queue_size 512 -i "${palette}" \
+-lavfi "${filters} [x]; [x][1:v] ${decode}${errordiff}${ditherenc}${bayer}" \
+-f "${filetype}" ${webp_lossy:-} -loop 0 -plays 0 -y "${output}"
 
 # Checking if output file was created
 if [[ ! -f "$output" ]]; then

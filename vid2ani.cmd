@@ -270,7 +270,9 @@ IF "%filetype%" == "webp" (
 
 :: Executing the encoding command
 ECHO %GREEN%Encoding animation...%OFF%
-ffmpeg -v %loglevel% %trim% -i %input% -thread_queue_size 512 -i "%palette%" -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" -f %filetype% %webp_lossy% -loop 0 -plays 0 -y "%output%"
+ffmpeg -v %loglevel% %trim% -i %input% -thread_queue_size 512 -i "%palette%" ^
+-lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" ^
+-f %filetype% %webp_lossy% -loop 0 -plays 0 -y "%output%"
 
 :: Checking if file was created and cleaning up if not
 IF NOT EXIST "%output%" ECHO %RED%Failed to generate animation: %output% not found.%OFF% && GOTO :cleanup
