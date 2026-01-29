@@ -8,8 +8,8 @@ A batch script for converting video files to GIF/APNG/WEBP using FFmpeg.
 
 By *MDHEXT*, *Nabi KaramAliZadeh*, *Pathduck*
 
-Based on the research listed here: [High quality GIF with FFmpeg]
-(https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html)
+Based on the research listed here:
+[High quality GIF with FFmpeg](https://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html)
 
 ## Installation
 
@@ -18,8 +18,7 @@ Based on the research listed here: [High quality GIF with FFmpeg]
 * Install [FFmpeg](https://www.ffmpeg.org/).
 
 * For Windows make sure that the path to `ffmpeg.exe` is
-  [configured in your system environment variables control panel]
-  (https://www.wikihow.com/Install-FFmpeg-on-Windows).
+[configured in your system environment variables control panel](https://www.wikihow.com/Install-FFmpeg-on-Windows).
 
 ## Usage
 ```
@@ -77,8 +76,6 @@ means less visible pattern at the cost of more banding.
 * Since FFmpeg can convert between any format, it's also possible to convert
   between for instance GIF to WEBP, although frame rates might be off.
 
-* The script uses ffmpeg, you can download that here: [FFmpeg]
-  (https://www.ffmpeg.org/)
+* The script uses ffmpeg, you can download that here: [FFmpeg](https://www.ffmpeg.org/)
 
-* The script was forked from: [MDHEXT/video2gif]
-  (https://github.com/MDHEXT/video2gif)
+* The script was forked from: [MDHEXT/video2gif](https://github.com/MDHEXT/video2gif)
