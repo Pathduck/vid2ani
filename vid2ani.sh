@@ -239,7 +239,7 @@ if [[ -z "$bayerscale" ]]; then bayer=""; fi
 # WEBP pixel format and lossy quality
 if [[ "$filetype" == "webp" && -n "$webp_lossy" ]]; then
 	webp_lossy="-lossless 0 -quality $webp_lossy -pix_fmt yuva420p"
-elif [[ "$filetype" == "webp" && -z "$webp_lossy" ]]; then 
+elif [[ "$filetype" == "webp" && -z "$webp_lossy" ]]; then
 	webp_lossy="-lossless 1"
 fi
 
@@ -259,7 +259,7 @@ fi
 
 echo ${GREEN}"Done."${OFF}
 
-} 
+}
 ### End Main ###
 
 ### Function to print the help message ###
