@@ -18,7 +18,7 @@ Based on the research listed here:
 * Install [FFmpeg](https://www.ffmpeg.org/).
 
 * For Windows make sure that the path to `ffmpeg.exe` is
-[configured in your system environment variables control panel](https://www.wikihow.com/Install-FFmpeg-on-Windows).
+  [configured in your system environment variables control panel](https://www.wikihow.com/Install-FFmpeg-on-Windows).
 
 ## Usage
 ```
