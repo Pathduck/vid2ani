@@ -5,6 +5,7 @@
 ![sample webp file](sample.webp)
 
 A batch script for converting video files to GIF/APNG/WEBP using FFmpeg.
+Supports scaling, trimming and cropping, preview using 'ffplay' and several options to control palette and dithering.
 
 By *MDHEXT*, *Nabi KaramAliZadeh*, *Pathduck*
 
@@ -27,38 +28,42 @@ vid2ani [input_file] [arguments]
 
 ## Arguments
 ```
-  -o  Output file. Default is the same as input file, sans extension
-  -t  Output file type: 'gif' (default), 'apng', 'png', 'webp'
-  -r  Scale or size. Width of the animation in pixels
-  -l  Enable lossy WebP compression and quality, range 0-100 (default 75)
-  -f  Framerate in frames per seconds (default 15)
-  -c  Maximum colors usable per palette, range 3-256 (default 256)
-  -s  Start time of the animation (HH:MM:SS.MS)
-  -e  End time of the animation (HH:MM:SS.MS)
-  -d  Dithering algorithm to be used (default 0)
-  -b  Bayer Scale setting, range 0-5 (default 2)
-  -m  Palettegen mode: 1 (diff, default), 2 (single), 3 (full)
-  -k  Enables paletteuse error diffusion
-  -p  Opens the resulting animation in the default image viewer
-  -v  Set FFmpeg log level (default: error)
+ -o  Output file. Default is the same as input file, sans extension
+ -t  Output file type: 'gif' (default), 'apng', 'png', 'webp'
+ -r  Resize (scale) output width in pixels. Default is original input size
+ -l  Enable lossy WebP compression and quality, range 0-100 (default 75)
+ -f  Framerate in frames per seconds (default 15)
+ -c  Maximum colors usable per palette, range 3-256 (default 256)
+ -s  Start time of the animation (HH:MM:SS.MS)
+ -e  End time of the animation (HH:MM:SS.MS)
+ -x  Crop the input video (out_w:out_h:x:y)
+     Note that cropping occurs before output is scaled
+ -d  Dithering algorithm to be used (default 0)
+ -b  Bayer Scale setting, range 0-5 (default 2)
+ -m  Palettegen mode: 1 (diff, default), 2 (single), 3 (full)
+ -k  Enables paletteuse error diffusion
+ -y  Preview animation using 'FFplay' (part of FFmpeg)
+     Useful for testing cropping, but will not use exact start/end times
+ -p  Opens the resulting animation in the default image viewer
+ -v  Set FFmpeg log level (default: error)
 
-Dithering Algorithms
-  0: None
-  1: Bayer
-  2: Heckbert
-  3: Floyd Steinberg
-  4: Sierra2
-  5: Sierra2_4a
-  6: Sierra3
-  7: Burkes
-  8: Atkinson
+Dithering Algorithms:
+ 0: None
+ 1: Bayer
+ 2: Heckbert
+ 3: Floyd Steinberg
+ 4: Sierra2
+ 5: Sierra2_4a
+ 6: Sierra3
+ 7: Burkes
+ 8: Atkinson
 
-Palettegen Modes
-  1: diff - only what moves affects the palette
-  2: single - one palette per frame
-  3: full - one palette for the whole animation
+Palettegen Modes:
+ 1: diff - only what moves affects the palette
+ 2: single - one palette per frame
+ 3: full - one palette for the whole animation
 
-About Bayerscale
+About Bayerscale:
 When bayer dithering is selected, the Bayer Scale option defines the
 scale of the pattern (how much the crosshatch pattern is visible).
 A low value means more visible pattern for less banding, a higher value
@@ -66,6 +71,13 @@ means less visible pattern at the cost of more banding.
 ```
 
 ## Notes
+
+* Cropping works on the input video before scaling is performed, and passes the parameters
+  directly to the [FFmpeg crop filter](https://ffmpeg.org/ffmpeg-filters.html#crop).
+
+* Preview uses FFplay and the script will check for its existence on the PATH.
+  FFplay is usually installed along with FFmpeg. The preview is not time-accurate
+  and is mostly useful for testing cropping.
 
 * The script will attempt to check for valid inputs, but will fall back to
   FFmpeg's error messages.

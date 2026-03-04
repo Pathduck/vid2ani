@@ -335,7 +335,7 @@ ECHO:
 ECHO %GREEN%Arguments:%OFF%
 ECHO  -o  Output file. Default is the same as input file, sans extension
 ECHO  -t  Output file type: 'gif' (default), 'apng', 'png', 'webp'
-ECHO  -r  Resize output width in pixels. Default is original input size
+ECHO  -r  Resize (scale) output width in pixels. Default is original input size
 ECHO  -l  Enable lossy WebP compression and quality, range 0-100 (default 75)
 ECHO  -f  Framerate in frames per seconds (default 15)
 ECHO  -c  Maximum colors usable per palette, range 3-256 (default 256)
@@ -347,8 +347,8 @@ ECHO  -d  Dithering algorithm to be used (default 0)
 ECHO  -b  Bayer Scale setting, range 0-5 (default 2)
 ECHO  -m  Palettegen mode: 1 (diff, default), 2 (single), 3 (full)
 ECHO  -k  Enables paletteuse error diffusion
-ECHO  -y  Preview animation using 'FFplay' (part of FFmpeg)
-ECHO      Useful for testing cropping, but will not use exact start/end time
+ECHO  -y  Preview animation using FFplay (part of FFmpeg)
+ECHO      Useful for testing cropping, but will not use exact start/end times
 ECHO  -p  Opens the resulting animation in the default image viewer
 ECHO  -v  Set FFmpeg log level (default: error)
 ECHO:
