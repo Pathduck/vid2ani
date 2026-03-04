@@ -1,7 +1,7 @@
 @ECHO OFF
 :: Description: Video to GIF/APNG/WEBP converter
 :: By: MDHEXT, Nabi KaramAliZadeh, Pathduck
-:: Version: 6.0
+:: Version: 6.1
 :: Url: https://github.com/Pathduck/vid2ani/
 :: License: GNU General Public License v3.0 (GPLv3)
 
@@ -16,24 +16,24 @@ SET "YELLOW=[33m"
 SET "BLUE=[94m"
 SET "CYAN=[96m"
 
-:: Checking for blank input or help commands
-IF "%~1" == "" GOTO :help_message
-IF "%~1" == "-?" GOTO :help_message
-IF "%~1" == "/?" GOTO :help_message
-IF "%~1" == "--help" GOTO :help_message
+:: Check for blank input or help commands
+IF "%~1"=="" GOTO :help_message
+IF "%~1"=="-?" GOTO :help_message
+IF "%~1"=="/?" GOTO :help_message
+IF "%~1"=="--help" GOTO :help_message
+
+:: Check if FFmpeg exists on PATH, if not exit
+WHERE /q ffmpeg.exe || ( ECHO %RED%FFmpeg not found in PATH, please install it first%OFF% & GOTO :EOF )
 
 :: Assign input and output
-SET input="%~1"
-SET output=%~n1
+SET "input=%~1"
+SET "output=%~n1"
 
 :: Validate input file
-IF NOT EXIST %input% (
-	ECHO %RED%Input file not found: %input%%OFF%
+IF NOT EXIST "%input%" (
+	ECHO %RED%Input file not found: "%input%"%OFF%
 	GOTO :EOF
 )
-
-:: Setting the path to the working directory
-SET WD=%TEMP%\VID2ANI
 
 :: Clearing input vars and setting defaults
 SET "fps=15"
@@ -42,83 +42,100 @@ SET "dither=0"
 SET "scale=-1"
 SET "filetype=gif"
 SET "webp_lossy="
-SET "webp_lossy_def=75"
+SET "webp_lossy_q=75"
 SET "loglevel=error"
 SET "bayerscale="
 SET "colormax="
 SET "start_time="
 SET "end_time="
+SET "crop="
 SET "errorswitch="
 SET "picswitch="
-
-GOTO :varin
+SET "playswitch="
 
 :varin
-:: Using SHIFT command to go through the input and storing each setting into its own variable
-IF NOT "%~1" =="" (
-	IF "%~1" =="-o" SET "output=%~dpn2" & SHIFT
-	IF "%~1" =="-t" SET "filetype=%~2" & SHIFT
-	IF "%~1" =="-r" SET "scale=%~2" & SHIFT
-	IF "%~1" =="-l" ( IF 1%2 NEQ +1%~2 ( SET "webp_lossy=%webp_lossy_def%"
-		) ELSE IF "%~2" == "" ( SET "webp_lossy=%webp_lossy_def%"
-		) ELSE ( SET "webp_lossy=%~2" & SHIFT )
+:: Parse Arguments, first shift input one left
+SHIFT
+:parse_loop
+IF NOT "%~1"=="" (
+	IF "%~1"=="-o" SET "output=%~dpn2" & SHIFT
+	IF "%~1"=="-t" SET "filetype=%~2" & SHIFT
+	IF "%~1"=="-r" SET "scale=%~2" & SHIFT
+	IF "%~1"=="-l" ( IF 1%2 NEQ +1%2 ( SET "webp_lossy=1"
+		) ELSE IF "%~2"=="" ( SET "webp_lossy=1"
+		) ELSE ( SET "webp_lossy=1" & SET "webp_lossy_q=%~2" & SHIFT )
 	)
-	IF "%~1" =="-f" SET "fps=%~2" & SHIFT
-	IF "%~1" =="-s" SET "start_time=%~2" & SHIFT
-	IF "%~1" =="-e" SET "end_time=%~2" & SHIFT
-	IF "%~1" =="-d" SET "dither=%~2" & SHIFT
-	IF "%~1" =="-b" SET "bayerscale=%~2" & SHIFT
-	IF "%~1" =="-m" SET "mode=%~2" & SHIFT
-	IF "%~1" =="-c" SET "colormax=%~2" & SHIFT
-	IF "%~1" =="-v" SET "loglevel=%~2" & SHIFT
-	IF "%~1" =="-k" SET "errorswitch=1"
-	IF "%~1" =="-p" SET "picswitch=1"
-	SHIFT & GOTO :varin
+	IF "%~1"=="-f" SET "fps=%~2" & SHIFT
+	IF "%~1"=="-s" SET "start_time=%~2" & SHIFT
+	IF "%~1"=="-e" SET "end_time=%~2" & SHIFT
+	IF "%~1"=="-d" SET "dither=%~2" & SHIFT
+	IF "%~1"=="-b" SET "bayerscale=%~2" & SHIFT
+	IF "%~1"=="-m" SET "mode=%~2" & SHIFT
+	IF "%~1"=="-c" SET "colormax=%~2" & SHIFT
+	IF "%~1"=="-v" SET "loglevel=%~2" & SHIFT
+	IF "%~1"=="-x" SET "crop=%~2" & SHIFT
+	IF "%~1"=="-k" SET "errorswitch=1"
+	IF "%~1"=="-p" SET "picswitch=1"
+	IF "%~1"=="-y" SET "playswitch=1"
+	SHIFT & GOTO :parse_loop
 )
-GOTO :safchek
 
 :safchek
+:: Validate if output file is set
+FOR %%f IN ("%output%") DO SET "out_base=%%~nf"
+IF "%output%"=="" ( ECHO %RED%Missing value for -o%OFF% & GOTO :EOF )
+IF DEFINED out_base (
+	IF "!out_base:~0,1!"=="-" ( ECHO %RED%Missing value for -o%OFF% & GOTO :EOF )
+)
+
+:: Validate if output is a directory; strip trailing slash and use input filename
+IF EXIST "%output%\*" (
+	IF "%output:~-1%"=="\" SET "output=%output:~0,-1%"
+	FOR %%f IN ("!input!") DO SET "filename=%%~nf"
+	SET "output=!output!\!filename!"
+)
+
 :: Validate output file extension
 ECHO %filetype% | FINDSTR /R "\<gif\> \<png\> \<apng\> \<webp\>" >nul
-IF %errorlevel% NEQ 0 (
-	ECHO %RED%Not a valid file type: %filetype%%OFF%
+IF ERRORLEVEL 1 (
+	ECHO %RED%Not a valid file type: !filetype!%OFF%
 	GOTO :EOF
 )
 IF "%filetype%"=="gif" SET "output=%output%.gif"
+IF "%filetype%"=="webp" SET "output=%output%.webp"
 IF "%filetype%"=="png" SET "filetype=apng"
 IF "%filetype%"=="apng" SET "output=%output%.png"
-IF "%filetype%"=="webp" SET "output=%output%.webp"
 
 :: Validate Palettegen
 IF !mode! GTR 3 (
-	ECHO %RED%Not a valid palettegen ^(-m^) mode%OFF%
+	ECHO %RED%Not a valid palettegen ^(-m^) mode.%OFF%
 	GOTO :EOF
-) ELSE IF !%mode! LSS 1 (
-	ECHO %RED%Not a valid palettegen ^(-m^) mode%OFF%
+) ELSE IF !mode! LSS 1 (
+	ECHO %RED%Not a valid palettegen ^(-m^) mode.%OFF%
 	GOTO :EOF
 )
 
 :: Validate Dithering
 IF !dither! GTR 8 (
-	ECHO %RED%Not a valid dither ^(-d^) algorithm %OFF%
+	ECHO %RED%Not a valid dither ^(-d^) algorithm.%OFF%
 	GOTO :EOF
 ) ELSE IF !dither! LSS 0 (
-	ECHO %RED%Not a valid dither ^(-d^) algorithm%OFF%
+	ECHO %RED%Not a valid dither ^(-d^) algorithm.%OFF%
 	GOTO :EOF
 )
 
 :: Validate Bayerscale
 IF DEFINED bayerscale (
 	IF !bayerscale! GTR 5 (
-		ECHO %RED%Not a valid bayerscale ^(-b^) value %OFF%
+		ECHO %RED%Not a valid bayerscale ^(-b^) value.%OFF%
 		GOTO :EOF
 	) ELSE IF !bayerscale! LSS 0 (
-		ECHO %RED%Not a valid bayerscale ^(-b^) value%OFF%
+		ECHO %RED%Not a valid bayerscale ^(-b^) value.%OFF%
 		GOTO :EOF
 	)
 	IF !dither! NEQ 1 (
 		IF !bayerscale! LEQ 5 (
-			ECHO %RED%Bayerscale ^(-b^) only works with Bayer dithering%OFF%
+			ECHO %RED%Bayerscale ^(-b^) only works with Bayer dithering.%OFF%
 			GOTO :EOF
 		)
 	)
@@ -126,14 +143,14 @@ IF DEFINED bayerscale (
 
 :: Validate Lossy WEBP
 IF DEFINED webp_lossy (
-	IF NOT "%filetype%" == "webp" (
-		ECHO %RED%Lossy ^(-l^) is only valid for filetype webp%OFF%
+	IF NOT "!filetype!"=="webp" (
+		ECHO %RED%Lossy ^(-l^) is only valid for filetype webp.%OFF%
 		GOTO :EOF
-	) ELSE IF !webp_lossy! GTR 100 (
-		ECHO %RED%Not a valid lossy ^(-l^) quality value%OFF%
+	) ELSE IF !webp_lossy_q! GTR 100 (
+		ECHO %RED%Not a valid lossy ^(-l^) quality value.%OFF%
 		GOTO :EOF
-	) ELSE IF !webp_lossy! LSS 0 (
-		ECHO %RED%Not a valid lossy ^(-l^) quality value%OFF%
+	) ELSE IF !webp_lossy_q! LSS 0 (
+		ECHO %RED%Not a valid lossy ^(-l^) quality value.%OFF%
 		GOTO :EOF
 	)
 )
@@ -142,13 +159,13 @@ IF DEFINED webp_lossy (
 IF DEFINED start_time (
 	IF DEFINED end_time SET "trim=-ss !start_time! -to !end_time!"
 	IF NOT DEFINED end_time (
-		ECHO %RED%Please input the end time ^(-e^)%OFF%
+		ECHO %RED%End time ^(-e^) is required when Start time ^(-s^) is specified.%OFF%
 		GOTO :EOF
 	)
 )
 IF DEFINED end_time (
 	IF NOT DEFINED start_time (
-		ECHO %RED%Please input the start time ^(-s^)%OFF%
+		ECHO %RED%Start time ^(-s^) is required when End time ^(-e^) is specified.%OFF%
 		GOTO :EOF
 	)
 )
@@ -173,34 +190,40 @@ IF DEFINED colormax (
 	)
 )
 
-GOTO :script_start
-
 :script_start
-:: Storing FFmpeg version string
-FOR /F "delims=" %%a in ('ffmpeg -version') DO (
-	IF NOT DEFINED version (
-		SET "version=%%a"
-	) ELSE IF NOT DEFINED build (
-		SET "build=%%a"
-	)
-)
-
-:: Displaying FFmpeg version string and creating the working directory
-ECHO %YELLOW%%version%%OFF%
-ECHO %YELLOW%%build%%OFF%
-ECHO %GREEN%Output file:%OFF% %output%
-ECHO %GREEN%Creating working directory...%OFF%
+:: Setting the path to working directory and creating it
+SET WD=%TEMP%\vid2ani-%random%
 MD "%WD%"
 
 :palettegen
 :: Putting together command to generate palette
 SET palette=%WD%\palette_%%05d.png
-SET filters=fps=%fps%,scale=%scale%:-1:flags=lanczos
+SET "filters=fps=%fps%"
+IF DEFINED crop (SET "filters=%filters%,crop=%crop%")
+SET "filters=%filters%,scale=%scale%:-1:flags=lanczos"
 
-:: APNG muxer does not support multiple palettes so fallback to using palettegen diff mode
+:: FFplay preview
+IF DEFINED playswitch (
+:: Check if ffplay exists on PATH, if not exit
+	WHERE /q ffplay.exe || ( ECHO %RED%FFplay not found in PATH, please install it first%OFF% & GOTO :EOF )
+
+	FOR /F "delims=" %%a in ('ffplay -version') DO (
+		IF NOT DEFINED ffplay_version ( SET "ffplay_version=%%a" 
+		 ) ELSE IF NOT DEFINED ffplay_build ( SET "ffplay_build=%%a" )
+	)
+	ECHO %YELLOW%!ffplay_version!%OFF%
+	ECHO %YELLOW%!ffplay_build!%OFF%
+
+	IF NOT DEFINED start_time SET "start_time=0"
+	IF NOT DEFINED end_time SET "end_time=3"
+	ffplay -v %loglevel% -i "%input%" -vf "%filters%" -an -loop 0 -ss !start_time! -t !end_time!
+	GOTO :EOF
+)
+
+:: APNG muxer does not support multiple palettes, fallback to palettegen diff mode
 IF "%filetype%"=="apng" (
 	IF !mode! EQU 2 (
-		ECHO %YELLOW%APNG does not support multiple palettes - falling back to Palettegen mode 1 ^(diff^)%OFF%
+		ECHO %YELLOW%APNG does not support multiple palettes, falling back to Palettegen mode 1 ^(diff^).%OFF%
 		SET mode=1
 	)
 )
@@ -216,9 +239,20 @@ IF DEFINED colormax (
 	IF !mode! EQU 3 SET "mcol==max_colors=%colormax%"
 )
 
+:: Storing FFmpeg version string
+FOR /F "delims=" %%a in ('ffmpeg -version') DO (
+	IF NOT DEFINED ffmpeg_version ( SET "ffmpeg_version=%%a"
+	) ELSE IF NOT DEFINED ffmpeg_build ( SET "ffmpeg_build=%%a" )
+)
+
+:: Displaying FFmpeg version string and output file
+ECHO %YELLOW%!ffmpeg_version!%OFF%
+ECHO %YELLOW%!ffmpeg_build!%OFF%
+ECHO %GREEN%Output file:%OFF% !output!
+
 :: Executing command to generate palette
 ECHO %GREEN%Generating palette...%OFF%
-ffmpeg -v %loglevel% %trim% -i %input% -vf "%filters%,%encode%%mcol%" -y "%palette%"
+ffmpeg -v %loglevel% %trim% -i "%input%" -vf "%filters%,%encode%%mcol%" -y "%palette%"
 
 :: Checking if the palette file is in the Working Directory, if not cleaning up
 IF NOT EXIST "%WD%\palette_00001.png" (
@@ -262,27 +296,29 @@ IF NOT DEFINED bayerscale SET "bayer="
 IF DEFINED bayerscale SET "bayer=:bayer_scale=%bayerscale%"
 
 :: WEBP pixel format and lossy quality
-IF "%filetype%" == "webp" (
+IF "%filetype%"=="webp" (
 	IF DEFINED webp_lossy (
-		SET "webp_lossy=-lossless 0 -pix_fmt yuva420p -quality %webp_lossy%"
-	) ELSE SET "webp_lossy=-lossless 1"
+		SET "type_opts=-lossless 0 -pix_fmt yuva420p -quality %webp_lossy_q%"
+	) ELSE SET "type_opts=-lossless 1"
 )
 
 :: Executing the encoding command
 ECHO %GREEN%Encoding animation...%OFF%
-ffmpeg -v %loglevel% %trim% -i %input% -thread_queue_size 512 -i "%palette%" ^
+ffmpeg -v %loglevel% %trim% -i "%input%" -thread_queue_size 512 -i "%palette%" ^
 -lavfi "%filters% [x]; [x][1:v] %decode%%errordiff%%ditherenc%%bayer%" ^
--f %filetype% %webp_lossy% -loop 0 -plays 0 -y "%output%"
+-f %filetype% %type_opts% -loop 0 -plays 0 -y "%output%"
 
 :: Checking if file was created and cleaning up if not
-IF NOT EXIST "%output%" ECHO %RED%Failed to generate animation: %output% not found.%OFF% && GOTO :cleanup
+IF NOT EXIST "%output%" (
+	ECHO ECHO %RED%Failed to generate animation: %output% not found.%OFF%
+	GOTO :cleanup
+)
 
 :: Open output file if picswitch is set
 IF DEFINED picswitch START "" "%output%"
 
 :cleanup
 :: Cleaning up
-ECHO %GREEN%Deleting temporary files...%OFF%
 RMDIR /S /Q "%WD%"
 ECHO %GREEN%Done.%OFF%
 ENDLOCAL
@@ -290,7 +326,7 @@ GOTO :EOF
 
 :help_message
 :: Print usage message
-ECHO %GREEN%Video to GIF/APNG/WEBP converter v6.0%OFF%
+ECHO %GREEN%Video to GIF/APNG/WEBP converter v6.1%OFF%
 ECHO %BLUE%By MDHEXT, Nabi KaramAliZadeh, Pathduck%OFF%
 ECHO:
 ECHO %GREEN%Usage:%OFF%
@@ -299,16 +335,20 @@ ECHO:
 ECHO %GREEN%Arguments:%OFF%
 ECHO  -o  Output file. Default is the same as input file, sans extension
 ECHO  -t  Output file type: 'gif' (default), 'apng', 'png', 'webp'
-ECHO  -r  Scale or size. Width of the animation in pixels
+ECHO  -r  Resize output width in pixels. Default is original input size
 ECHO  -l  Enable lossy WebP compression and quality, range 0-100 (default 75)
 ECHO  -f  Framerate in frames per seconds (default 15)
 ECHO  -c  Maximum colors usable per palette, range 3-256 (default 256)
 ECHO  -s  Start time of the animation (HH:MM:SS.MS)
 ECHO  -e  End time of the animation (HH:MM:SS.MS)
+ECHO  -x  Crop the input video (out_w:out_h:x:y)
+ECHO      Note that cropping occurs before output is scaled
 ECHO  -d  Dithering algorithm to be used (default 0)
 ECHO  -b  Bayer Scale setting, range 0-5 (default 2)
 ECHO  -m  Palettegen mode: 1 (diff, default), 2 (single), 3 (full)
 ECHO  -k  Enables paletteuse error diffusion
+ECHO  -y  Preview animation using 'FFplay' (part of FFmpeg)
+ECHO      Useful for testing cropping, but will not use exact start/end time
 ECHO  -p  Opens the resulting animation in the default image viewer
 ECHO  -v  Set FFmpeg log level (default: error)
 ECHO:
