@@ -199,7 +199,7 @@ MD "%WD%"
 :: Putting together command to generate palette
 SET palette=%WD%\palette_%%05d.png
 SET "filters=fps=%fps%"
-IF DEFINED crop (SET "filters=%filters%,crop=%crop%")
+IF DEFINED crop ( SET "filters=%filters%,crop=%crop%" )
 SET "filters=%filters%,scale=%scale%:-1:flags=lanczos"
 
 :: FFplay preview
@@ -235,8 +235,8 @@ IF !mode! EQU 3 SET "encode=palettegen"
 
 :: Max colors
 IF DEFINED colormax (
-	IF !mode! LEQ 2 SET "mcol=:max_colors=%colormax%"
-	IF !mode! EQU 3 SET "mcol==max_colors=%colormax%"
+	IF !mode! LEQ 2 SET "mcol=:max_colors=!colormax!"
+	IF !mode! EQU 3 SET "mcol==max_colors=!colormax!"
 )
 
 :: Storing FFmpeg version string
@@ -298,7 +298,7 @@ IF DEFINED bayerscale SET "bayer=:bayer_scale=%bayerscale%"
 :: WEBP pixel format and lossy quality
 IF "%filetype%"=="webp" (
 	IF DEFINED webp_lossy (
-		SET "type_opts=-lossless 0 -pix_fmt yuva420p -quality %webp_lossy_q%"
+		SET "type_opts=-lossless 0 -pix_fmt yuva420p -quality !webp_lossy_q!"
 	) ELSE SET "type_opts=-lossless 1"
 )
 
