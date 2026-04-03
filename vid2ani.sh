@@ -323,7 +323,7 @@ ${GREEN}Arguments:${OFF}
   -b  Bayer Scale setting, range 0-5 (default 2)
   -m  Palettegen mode: 1 (diff, default), 2 (single), 3 (full)
   -k  Enables paletteuse error diffusion
-  -y  Preview animation using 'FFplay' (part of FFmpeg)
+  -y  Preview animation using FFplay (part of FFmpeg)
       Useful for testing cropping, but will not use exact start/end time
   -p  Opens the resulting animation in the default image viewer
   -v  Set FFmpeg log level (default: error)
