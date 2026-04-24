@@ -157,8 +157,12 @@ elif [[ -n "$end_time" && -n "$start_time" ]]; then
 fi
 
 # Validate Framerate
-if [[ $fps -le 0 ]]; then
-	echo ${RED}"Framerate (-f) must be greater than 0."${OFF}; exit 1
+if [[ -n $fps ]]; then
+	if [[ "$fps" == "-" ]]; then
+		fps="source_fps"
+	elif [[ $fps -le 1 ]]; then
+		echo ${RED}"Framerate (-f) must be greater than 0."${OFF}; exit 1
+	fi
 fi
 
 # Validate Max Colors
@@ -313,7 +317,7 @@ ${GREEN}Arguments:${OFF}
   -t  Output file type: 'gif' (default), 'apng', 'png', 'webp'
   -r  Resize output width in pixels. Default is original input size
   -l  Enable lossy WebP compression and quality, range 0-100 (default 75)
-  -f  Framerate in frames per seconds (default 15)
+  -f  Framerate of output, or '-' to use input framerate (default 15)
   -c  Maximum colors usable per palette, range 3-256 (default 256)
   -s  Start time of the animation (HH:MM:SS.MS)
   -e  End time of the animation (HH:MM:SS.MS)
