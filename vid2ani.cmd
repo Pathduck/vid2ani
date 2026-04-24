@@ -172,7 +172,9 @@ IF DEFINED end_time (
 
 :: Validate Framerate
 IF DEFINED fps (
-	IF !fps! LSS 0 (
+	IF "!fps!"=="-" (
+		SET "fps=source_fps"
+	) ELSE IF !fps! LSS 1 (
 		ECHO  %RED%Framerate ^(-f^) must be greater than 0.%OFF%
 		GOTO :EOF
 	)
@@ -337,7 +339,7 @@ ECHO  -o  Output file. Default is the same as input file, sans extension
 ECHO  -t  Output file type: 'gif' (default), 'apng', 'png', 'webp'
 ECHO  -r  Resize output width in pixels. Default is original input size
 ECHO  -l  Enable lossy WebP compression and quality, range 0-100 (default 75)
-ECHO  -f  Framerate in frames per seconds (default 15)
+ECHO  -f  Framerate of output, or '-' to use input framerate (default 15)
 ECHO  -c  Maximum colors usable per palette, range 3-256 (default 256)
 ECHO  -s  Start time of the animation (HH:MM:SS.MS)
 ECHO  -e  End time of the animation (HH:MM:SS.MS)
