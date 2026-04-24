@@ -41,9 +41,9 @@ SET "mode=1"
 SET "dither=0"
 SET "scale=-1"
 SET "filetype=gif"
-SET "webp_lossy="
-SET "webp_lossy_q=75"
 SET "loglevel=error"
+SET "webp_lossy_q=75"
+SET "webp_lossy="
 SET "bayerscale="
 SET "colormax="
 SET "start_time="
@@ -170,16 +170,6 @@ IF DEFINED end_time (
 	)
 )
 
-:: Validate Framerate
-IF DEFINED fps (
-	IF "!fps!"=="-" (
-		SET "fps=source_fps"
-	) ELSE IF !fps! LSS 1 (
-		ECHO  %RED%Framerate ^(-f^) must be greater than 0.%OFF%
-		GOTO :EOF
-	)
-)
-
 :: Validate Max Colors
 IF DEFINED colormax (
 	IF !colormax! GTR 256 (
@@ -190,6 +180,14 @@ IF DEFINED colormax (
 		ECHO  %RED%Max colors ^(-c^) must be between 3 and 256.%OFF%
 		GOTO :EOF
 	)
+)
+
+:: Validate Framerate
+IF "!fps!"=="-" (
+	SET "fps=source_fps"
+) ELSE IF !fps! LSS 1 (
+	ECHO  %RED%Framerate ^(-f^) must be greater than 0.%OFF%
+	GOTO :EOF
 )
 
 :script_start
