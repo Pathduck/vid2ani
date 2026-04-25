@@ -30,9 +30,9 @@ vid2ani [input_file] [arguments]
 ```
  -o  Output file. Default is the same as input file, sans extension
  -t  Output file type: 'gif' (default), 'apng', 'png', 'webp'
- -r  Resize (scale) output width in pixels. Default is original input size
+ -r  Resize output width in pixels. Default is original input size
  -l  Enable lossy WebP compression and quality, range 0-100 (default 75)
- -f  Framerate in frames per seconds (default 15)
+ -f  Framerate of output, or '-' to use input framerate (default 15)
  -c  Maximum colors usable per palette, range 3-256 (default 256)
  -s  Start time of the animation (HH:MM:SS.MS)
  -e  End time of the animation (HH:MM:SS.MS)
@@ -42,8 +42,8 @@ vid2ani [input_file] [arguments]
  -b  Bayer Scale setting, range 0-5 (default 2)
  -m  Palettegen mode: 1 (diff, default), 2 (single), 3 (full)
  -k  Enables paletteuse error diffusion
- -y  Preview animation using 'FFplay' (part of FFmpeg)
-     Useful for testing cropping, but will not use exact start/end times
+ -y  Preview animation using FFplay (part of FFmpeg)
+     Useful for testing cropping, but will not use exact start/end time
  -p  Opens the resulting animation in the default image viewer
  -v  Set FFmpeg log level (default: error)
 
