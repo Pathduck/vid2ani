@@ -268,8 +268,11 @@ else
 fi
 
 # Checking for Bayer Scale and adjusting command
-if [[ -z $bayerscale ]]; then bayer=""; fi
-if [[ -n $bayerscale ]]; then bayer=":bayer_scale=$bayerscale"; fi
+if [[ -n $bayerscale ]]; then
+	bayer=":bayer_scale=$bayerscale"
+else 
+	bayer=""
+fi
 
 # WEBP pixel format and lossy quality
 if [[ $filetype == "webp" && -n $webp_lossy ]]; then
