@@ -292,8 +292,9 @@ IF NOT !mode! EQU 2 (
 ) ELSE SET "ditherenc=:dither=!ditheralg!"
 
 :: Checking for Bayer Scale and adjusting command
-IF NOT DEFINED bayerscale SET "bayer="
-IF DEFINED bayerscale SET "bayer=:bayer_scale=%bayerscale%"
+IF DEFINED bayerscale (
+	SET "bayer=:bayer_scale=!bayerscale!"
+) ELSE SET "bayer="
 
 :: WEBP pixel format and lossy quality
 IF "%filetype%"=="webp" (
