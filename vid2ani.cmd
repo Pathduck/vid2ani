@@ -191,13 +191,7 @@ IF "!fps!"=="-" (
 )
 
 :script_start
-:: Setting the path to working directory and creating it
-SET WD=%TEMP%\vid2ani-%random%
-MD "%WD%"
-
-:palettegen
-:: Putting together command to generate palette
-SET palette=%WD%\palette_%%05d.png
+:: Putting together filters
 SET "filters=fps=%fps%"
 IF DEFINED crop ( SET "filters=%filters%,crop=%crop%" )
 SET "filters=%filters%,scale=%scale%:-1:flags=lanczos"
@@ -220,6 +214,7 @@ IF DEFINED playswitch (
 	GOTO :EOF
 )
 
+:palettegen
 :: APNG muxer does not support multiple palettes, fallback to palettegen diff mode
 IF "%filetype%"=="apng" (
 	IF !mode! EQU 2 (
@@ -249,6 +244,11 @@ FOR /F "delims=" %%a in ('ffmpeg -version') DO (
 ECHO %YELLOW%!ffmpeg_version!%OFF%
 ECHO %YELLOW%!ffmpeg_build!%OFF%
 ECHO %GREEN%Output file:%OFF% !output!
+
+:: Creating working dir
+SET WD=%TEMP%\vid2ani-%random%
+SET palette=%WD%\palette_%%05d.png
+MD "%WD%"
 
 :: Executing command to generate palette
 ECHO %GREEN%Generating palette...%OFF%
