@@ -202,7 +202,7 @@ IF DEFINED playswitch (
 	WHERE /q ffplay.exe || ( ECHO %RED%FFplay not found in PATH, please install it first%OFF% & GOTO :EOF )
 
 	FOR /F "delims=" %%a in ('ffplay -version') DO (
-		IF NOT DEFINED ffplay_version ( SET "ffplay_version=%%a" 
+		IF NOT DEFINED ffplay_version ( SET "ffplay_version=%%a"
 		 ) ELSE IF NOT DEFINED ffplay_build ( SET "ffplay_build=%%a" )
 	)
 	ECHO %YELLOW%!ffplay_version!%OFF%

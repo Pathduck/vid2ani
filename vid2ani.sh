@@ -79,7 +79,7 @@ while [[ $# -gt 0 ]]; do
 		-o) [[ ${2##*/} == *.* ]] && output="${2%.*}" || output="$2"; shift;;
 		-t) filetype="$2"; shift;;
 		-r) scale="$2"; shift;;
-		-l) if [[ "$2" =~ ^[0-9]+$ ]]; then 
+		-l) if [[ "$2" =~ ^[0-9]+$ ]]; then
 			webp_lossy=1; webp_lossy_q="$2"; shift
 			else webp_lossy=1; fi ;;
 		-f) fps="$2"; shift;;
@@ -270,7 +270,7 @@ fi
 # Checking for Bayer Scale and adjusting command
 if [[ -n $bayerscale ]]; then
 	bayer=":bayer_scale=$bayerscale"
-else 
+else
 	bayer=""
 fi
 
