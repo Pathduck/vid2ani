@@ -81,7 +81,7 @@ IF NOT "%~1"=="" (
 )
 
 :safchek
-:: Validate if output file is set
+:: Validate if output file is set and not starts with a -
 IF "%output%"=="" ( ECHO %RED%Missing value for -o%OFF% & GOTO :EOF )
 FOR %%f IN ("%output%") DO SET "out_base=%%~nf"
 IF DEFINED out_base (
