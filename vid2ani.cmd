@@ -1,9 +1,9 @@
-@ECHO OFF
 :: Description: Video to GIF/APNG/WEBP converter
 :: By: MDHEXT, Nabi KaramAliZadeh, Pathduck
 :: Version: 6.1
 :: Url: https://github.com/Pathduck/vid2ani/
 :: License: GNU General Public License v3.0 (GPLv3)
+@ECHO OFF
 
 :: Enable delayed variable expension
 SETLOCAL ENABLEDELAYEDEXPANSION
