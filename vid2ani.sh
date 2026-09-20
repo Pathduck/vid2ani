@@ -105,7 +105,6 @@ done
 # Validate if output is a directory; strip trailing slash and use input filename
 if [[ -d "$output" ]]; then
 	output="${output%/}/"$(basename "${input%.*}")
-	echo $output
 fi
 
 # Validate output file extension
@@ -148,11 +147,11 @@ if [[ -n $webp_lossy ]]; then
 fi
 
 # Validate Clipping
-if [[ -n "$start_time" && -z "$end_time" ]]; then
+if [[ -n $start_time && -z $end_time ]]; then
 	echo ${red}"End time (-e) is required when Start time (-s) is specified."${off}; exit 1
-elif [[ -n "$end_time" && -z "$start_time" ]]; then
+elif [[ -n $end_time && -z $start_time ]]; then
 	echo ${red}"Start time (-s) is required when End time (-e) is specified."${off}; exit 1
-elif [[ -n "$end_time" && -n "$start_time" ]]; then
+elif [[ -n $end_time && -n $start_time ]]; then
 	trim="-ss $start_time -to $end_time"
 fi
 
@@ -171,7 +170,7 @@ fi
 # Putting together command to generate palette
 palette="$WD/palette_%05d.png"
 filters="fps=$fps"
-[[ -n "$crop" ]] && filters+=",crop=$crop"
+[[ -n $crop ]] && filters+=",crop=$crop"
 filters+=",scale=$scale:-1:flags=lanczos"
 
 # Fix paths for Cygwin before running ffmpeg/ffplay
