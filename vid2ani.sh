@@ -11,13 +11,15 @@
 ### Start Main ###
 main() {
 
-# Define ANSI Colors
-off=$(tput sgr0)
-red=$(tput setaf 1)
-green=$(tput setaf 10)
-yellow=$(tput setaf 11)
-blue=$(tput setaf 12)
-cyan=$(tput setaf 14)
+# Define ANSI Colors if TTY output
+if [[ -t 1 ]]; then
+	off=$(tput sgr0)
+	red=$(tput setaf 1)
+	green=$(tput setaf 10)
+	yellow=$(tput setaf 11)
+	blue=$(tput setaf 12)
+	cyan=$(tput setaf 14)
+fi
 
 # Check for blank input or help commands
 if [[ $# -eq 0 ]]; then print_help; exit; fi
@@ -29,7 +31,7 @@ esac
 
 # Check if ffmpeg exists on PATH, if not exit
 if ! command -v 'ffmpeg' >/dev/null 2>&1; then
-	echo ${red}"FFmpeg not found in PATH, please install it first"${off}; exit 1
+	echo "${red:-}FFmpeg not found in PATH, please install it first${off:-}"; exit 1
 fi
 
 # Assign input and output
@@ -38,7 +40,7 @@ output=$(basename "${input%.*}")
 
 # Validate input file
 if [[ ! -f "$input" ]]; then
-	echo ${red}"Input file not found: $input"${off}; exit 1
+	echo "${red:-}Input file not found: $input${off:-}"; exit 1
 fi
 
 # Set uname for later use
@@ -94,13 +96,13 @@ while [[ $# -gt 0 ]]; do
 		-k) errorswitch=1;;
 		-p) picswitch=1;;
 		-y) playswitch=1;;
-		*) echo ${red}"Unknown option $1"${off}; exit 1;;
+		*) echo "${red:-}Unknown option $1${off:-}"; exit 1;;
 	esac
 	shift
 done
 
 # Validate if output file is set and not starts with a -
-[[ -z $output || $output == -* ]] && { echo ${red}"Missing value for -o"${off}; exit 1; }
+[[ -z $output || $output == -* ]] && { echo "${red:-}Missing value for -o${off:-}"; exit 1; }
 
 # Validate if output is a directory; strip trailing slash and use input filename
 if [[ -d "$output" ]]; then
@@ -113,58 +115,58 @@ case $filetype in
 	png) output="$output.png"; filetype="apng";;
 	apng) output="$output.png";;
 	webp) output="$output.webp";;
-	*) echo ${red}"Invalid file type: $filetype"${off}; exit 1;;
+	*) echo "${red:-}Invalid file type: $filetype${off:-}"; exit 1;;
 esac
 
 # Validate Palettegen
 if [[ $mode -lt 1 || $mode -gt 3 ]]; then
-	echo ${red}"Not a valid palettegen (-m) mode"${off}; exit 1
+	echo "${red:-}Not a valid palettegen (-m) mode${off:-}"; exit 1
 fi
 
 # Validate Dithering
 if [[ $dither -gt 8 || $dither -lt 0 ]]; then
-	echo ${red}"Not a valid dither (-d) algorithm"${off}; exit 1
+	echo "${red:-}Not a valid dither (-d) algorithm${off:-}"; exit 1
 fi
 
 # Validate Bayerscale
 if [[ -n $bayerscale ]]; then
 	if [[ $bayerscale -gt 5 || $bayerscale -lt 0 ]]; then
-		echo ${red}"Not a valid bayerscale (-b) value"${off}; exit 1
+		echo "${red:-}Not a valid bayerscale (-b) value${off:-}"; exit 1
 	fi
 	if [[ $dither -ne 1 ]]; then
-		echo ${red}"Bayerscale (-b) only works with Bayer dithering"${off}; exit 1
+		echo "${red:-}Bayerscale (-b) only works with Bayer dithering${off:-}"; exit 1
 	fi
 fi
 
 # Validate Lossy WEBP
 if [[ -n $webp_lossy ]]; then
 	if [[ "$filetype" != "webp" ]]; then
-		echo ${red}"Lossy (-l) is only valid for filetype webp"${off}; exit 1
+		echo "${red:-}Lossy (-l) is only valid for filetype webp${off:-}"; exit 1
 	fi
 	if [[ $webp_lossy_q -gt 100 || $webp_lossy_q -lt 0 ]]; then
-		echo ${red}"Not a valid lossy (-l) quality value"${off}; exit 1
+		echo "${red:-}Not a valid lossy (-l) quality value${off:-}"; exit 1
 	fi
 fi
 
 # Validate Clipping
 if [[ -n $start_time && -z $end_time ]]; then
-	echo ${red}"End time (-e) is required when Start time (-s) is specified."${off}; exit 1
+	echo "${red:-}End time (-e) is required when Start time (-s) is specified.${off:-}"; exit 1
 elif [[ -n $end_time && -z $start_time ]]; then
-	echo ${red}"Start time (-s) is required when End time (-e) is specified."${off}; exit 1
+	echo "${red:-}Start time (-s) is required when End time (-e) is specified.${off:-}"; exit 1
 elif [[ -n $end_time && -n $start_time ]]; then
 	trim="-ss $start_time -to $end_time"
 fi
 
 # Validate Max Colors
 if [[ -n $colormax && ( $colormax -lt 3 || $colormax -gt 256 ) ]]; then
-	echo ${red}"Max colors (-c) must be between 3 and 256."${off}; exit 1
+	echo "${red:-}Max colors (-c) must be between 3 and 256.${off:-}"; exit 1
 fi
 
 # Validate Framerate
 if [[ "$fps" == "-" ]]; then
 	fps="source_fps"
 elif [[ $fps -le 1 ]]; then
-	echo ${red}"Framerate (-f) must be greater than 0."${off}; exit 1
+	echo "${red:-}Framerate (-f) must be greater than 0.${off:-}"; exit 1
 fi
 
 # Putting together command to generate palette
@@ -184,16 +186,16 @@ fi
 if [[ -n $playswitch ]]; then
 	# Check if ffplay exists on PATH, if not exit
 	if ! command -v 'ffplay' >/dev/null 2>&1; then
-		echo ${red}"FFplay not found in PATH, please install it first"${off}; exit 1
+		echo "${red:-}FFplay not found in PATH, please install it first${off:-}"; exit 1
 	fi
-	echo ${yellow}"$(ffplay -version | head -n2)"${off}
+	echo "${yellow:-}$(ffplay -version | head -n2)${off:-}"
 	ffplay -v ${loglevel} -i "${input}" -vf "${filters}" -an -loop 0 -ss ${start_time:-0} -t ${end_time:-3}
 	exit 0
 fi
 
 # APNG muxer does not support multiple palettes, fallback to palettegen diff mode
 if [[ $filetype == "apng" && $mode -eq 2 ]]; then
-	echo ${yellow}"APNG does not support multiple palettes - falling back to Palettegen mode 1 (diff)"${off}
+	echo "${yellow:-}APNG does not support multiple palettes - falling back to Palettegen mode 1 (diff)${off:-}"
 	mode=1
 fi
 
@@ -202,7 +204,7 @@ case $mode in
 	1) encode="palettegen=stats_mode=diff";;
 	2) encode="palettegen=stats_mode=single";;
 	3) encode="palettegen";;
-	*) echo ${red}"Invalid palettegen (-m) mode"${off}; exit 1;;
+	*) echo "${red:-}Invalid palettegen (-m) mode${off:-}"; exit 1;;
 esac
 
 # Max colors
@@ -212,16 +214,16 @@ if [[ -n $colormax ]]; then
 fi
 
 # Displaying FFmpeg version string and output file
-echo ${yellow}"$(ffmpeg -version | head -n2)"${off}
-echo ${green}Output file:${off} $output
+echo "${yellow:-}$(ffmpeg -version | head -n2)${off:-}"
+echo "${green:-}Output file:${off:-} $output"
 
 # Executing command to generate palette
-echo ${green}"Generating palette..."${off}
+echo "${green:-}Generating palette...${off:-}"
 ffmpeg -v ${loglevel} ${trim:-} -i "${input}" -vf "${filters},${encode}${mcol:-}" -y "${palette}"
 
 # Checking if the palette file is in the Working Directory, if not cleaning up
 if [[ ! -f "$WD/palette_00001.png" ]]; then
-	echo ${red}"Palette generation failed: $palette not found."${off}; exit 1
+	echo "${red:-}Palette generation failed: $palette not found.${off:-}"; exit 1
 fi
 
 ## Setting variables to put the encode command together ##
@@ -231,7 +233,7 @@ case $mode in
 	1) decode="paletteuse";;
 	2) decode="paletteuse=new=1";;
 	3) decode="paletteuse";;
-	*) echo ${red}"Invalid palettegen (-m) mode"${off}; exit 1;;
+	*) echo "${red:-}Invalid palettegen (-m) mode${off:-}"; exit 1;;
 esac
 
 # Error diffusion
@@ -240,7 +242,7 @@ if [[ -n $errorswitch ]]; then
 		1) errordiff="=diff_mode=rectangle";;
 		2) errordiff=":diff_mode=rectangle";;
 		3) errordiff="=diff_mode=rectangle";;
-		*) echo ${red}"Invalid palettegen (-m) mode"${off}; exit 1;;
+		*) echo "${red:-}Invalid palettegen (-m) mode${off:-}"; exit 1;;
 	esac
 fi
 
@@ -255,7 +257,7 @@ case $dither in
 	6) ditheralg="sierra3";;
 	7) ditheralg="burkes";;
 	8) ditheralg="atkinson";;
-	*) echo ${red}"Invalid dither (-d ) mode"${off}; exit 1;;
+	*) echo "${red:-}Invalid dither (-d ) mode${off:-}"; exit 1;;
 esac
 
 # Paletteuse error diffusion
@@ -281,14 +283,14 @@ elif [[ $filetype == "webp" && -z $webp_lossy ]]; then
 fi
 
 # Executing the encoding command
-echo ${green}"Encoding animation..."${off}
+echo "${green:-}Encoding animation...${off:-}"
 ffmpeg -v ${loglevel} ${trim:-} -i "${input}" -thread_queue_size 512 -i "${palette}" \
 -lavfi "${filters} [x]; [x][1:v] ${decode}${errordiff:-}${ditherenc}${bayer}" \
 -f ${filetype} ${type_opts:-} -loop 0 -plays 0 -y "${output}"
 
 # Checking if output file was created
 if [[ ! -f "$output" ]]; then
-	echo ${red}"Failed to generate animation: $output not found"${off}; exit 1
+	echo "${red:-}Failed to generate animation: $output not found${off:-}"; exit 1
 fi
 
 # Open output file if picswitch is enabled
@@ -296,7 +298,7 @@ if [[ -n $picswitch ]]; then
 	xdg-open "$output"
 fi
 
-echo ${green}"Done."${off}
+echo "${green:-}Done.${off:-}"
 
 }
 ### End Main ###
@@ -304,13 +306,13 @@ echo ${green}"Done."${off}
 ### Function to print the help message ###
 print_help() {
 cat << EOF
-${green}Video to GIF/APNG/WEBP converter v6.1${off}
-${blue}By MDHEXT, Nabi KaramAliZadeh, Pathduck${off}
+${green:-}Video to GIF/APNG/WEBP converter v6.1${off:-}
+${blue:-}By MDHEXT, Nabi KaramAliZadeh, Pathduck${off:-}
 
-${green}Usage:${off}
+${green:-}Usage:${off:-}
 $(basename "$0") [input_file] [arguments]
 
-${green}Arguments:${off}
+${green:-}Arguments:${off:-}
   -o  Output file. Default is the same as input file, sans extension
   -t  Output file type: 'gif' (default), 'apng', 'png', 'webp'
   -r  Resize output width in pixels. Default is original input size
@@ -330,7 +332,7 @@ ${green}Arguments:${off}
   -p  Opens the resulting animation in the default image viewer
   -v  Set FFmpeg log level (default: error)
 
-${green}Dithering Algorithms:${off}
+${green:-}Dithering Algorithms:${off:-}
   0: None
   1: Bayer
   2: Heckbert
@@ -341,18 +343,18 @@ ${green}Dithering Algorithms:${off}
   7: Burkes
   8: Atkinson
 
-${green}Palettegen Modes:${off}
+${green:-}Palettegen Modes:${off:-}
   1: diff - only what moves affects the palette
   2: single - one palette per frame
   3: full - one palette for the whole animation
 
-${green}About Bayerscale:${off}
+${green:-}About Bayerscale:${off:-}
 When bayer dithering is selected, the Bayer Scale option defines the
 scale of the pattern (how much the crosshatch pattern is visible).
 A low value means more visible pattern for less banding, a higher value
 means less visible pattern at the cost of more banding.
 
-${green}People who made this project come to fruition:${off}
+${green:-}People who made this project come to fruition:${off:-}
 ubitux, Nabi KaramAliZadeh, MDHEXT, Pathduck
 Along with the very kind and patient people in the Batch Discord Server.
 Without these people's contributions, this script would not be possible.
