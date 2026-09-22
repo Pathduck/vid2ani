@@ -39,19 +39,19 @@ if not exist "%input%" (
 set "fps=15"
 set "mode=1"
 set "dither=0"
-set "scale=-1"
 set "filetype=gif"
 set "loglevel=error"
 set "webp_lossy_q=75"
 set "webp_lossy="
-set "bayerscale="
-set "colormax="
 set "start_time="
 set "end_time="
 set "crop="
+set "scale="
+set "colormax="
+set "bayerscale="
 set "errorswitch="
-set "picswitch="
 set "playswitch="
+set "picswitch="
 
 :varin
 :: Parse Arguments, first shift input one left
@@ -194,7 +194,7 @@ if "!fps!"=="-" (
 :: Putting together filters
 set "filters=fps=%fps%"
 if defined crop ( set "filters=%filters%,crop=%crop%" )
-set "filters=%filters%,scale=%scale%:-1:flags=lanczos"
+if defined scale ( set "filters=%filters%,scale=%scale%:-1:flags=lanczos" )
 
 :: FFplay preview
 if defined playswitch (
@@ -210,7 +210,7 @@ if defined playswitch (
 
 	if not defined start_time set "start_time=0"
 	if not defined end_time set "end_time=3"
-	ffplay -v %loglevel% -i "%input%" -vf "%filters%" -an -loop 0 -ss !start_time! -t !end_time!
+	ffplay -v %loglevel% -ss !start_time! -t !end_time! -i "%input%" -vf "%filters%" -an -loop 0
 	goto :EOF
 )
 

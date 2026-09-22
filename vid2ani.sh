@@ -60,19 +60,19 @@ trap 'rm -rf "$WD"' EXIT INT TERM
 fps=15
 mode=1
 dither=0
-scale="-1"
 filetype="gif"
 loglevel="error"
 webp_lossy_q=75
 webp_lossy=""
-bayerscale=""
-colormax=""
 start_time=""
 end_time=""
 crop=""
+scale=""
+colormax=""
+bayerscale=""
 errorswitch=""
-picswitch=""
 playswitch=""
+picswitch=""
 
 # Parse Arguments, first shift input one left
 shift
@@ -106,7 +106,7 @@ done
 
 # Validate if output is a directory; strip trailing slash and use input filename
 if [[ -d "$output" ]]; then
-	output="${output%/}/"$(basename "${input%.*}")
+	output="${output%/}/$(basename "${input%.*}")"
 fi
 
 # Validate output file extension
@@ -154,7 +154,7 @@ if [[ -n $start_time && -z $end_time ]]; then
 elif [[ -n $end_time && -z $start_time ]]; then
 	echo "${red:-}Start time (-s) is required when End time (-e) is specified.${off:-}"; exit 1
 elif [[ -n $end_time && -n $start_time ]]; then
-	trim="-ss $start_time -to $end_time"
+	trim=(-ss "$start_time" -to "$end_time")
 fi
 
 # Validate Max Colors
@@ -173,7 +173,7 @@ fi
 palette="$WD/palette_%05d.png"
 filters="fps=$fps"
 [[ -n $crop ]] && filters+=",crop=$crop"
-filters+=",scale=$scale:-1:flags=lanczos"
+[[ -n $scale ]] && filters+=",scale=$scale:-1:flags=lanczos"
 
 # Fix paths for Cygwin before running ffmpeg/ffplay
 if [[ $uname_os == *"CYGWIN"* ]]; then
@@ -189,7 +189,7 @@ if [[ -n $playswitch ]]; then
 		echo "${red:-}FFplay not found in PATH, please install it first${off:-}"; exit 1
 	fi
 	echo "${yellow:-}$(ffplay -version | head -n2)${off:-}"
-	ffplay -v ${loglevel} -i "${input}" -vf "${filters}" -an -loop 0 -ss ${start_time:-0} -t ${end_time:-3}
+	ffplay -v "${loglevel}" -ss "${start_time:-0}" -t "${end_time:-3}" -i "${input}" -vf "${filters}" -an -loop 0
 	exit 0
 fi
 
@@ -219,7 +219,7 @@ echo "${green:-}Output file:${off:-} $output"
 
 # Executing command to generate palette
 echo "${green:-}Generating palette...${off:-}"
-ffmpeg -v ${loglevel} ${trim:-} -i "${input}" -vf "${filters},${encode}${mcol:-}" -y "${palette}"
+ffmpeg -v "${loglevel}" "${trim[@]}" -i "${input}" -vf "${filters},${encode}${mcol:-}" -y "${palette}"
 
 # Checking if the palette file is in the Working Directory, if not cleaning up
 if [[ ! -f "$WD/palette_00001.png" ]]; then
@@ -277,16 +277,16 @@ fi
 
 # WEBP pixel format and lossy quality
 if [[ $filetype == "webp" && -n $webp_lossy ]]; then
-	type_opts="-lossless 0 -pix_fmt yuva420p -quality $webp_lossy_q"
+	type_opts=(-lossless 0 -pix_fmt yuva420p -quality "$webp_lossy_q")
 elif [[ $filetype == "webp" && -z $webp_lossy ]]; then
-	type_opts="-lossless 1"
+	type_opts=(-lossless 1)
 fi
 
 # Executing the encoding command
 echo "${green:-}Encoding animation...${off:-}"
-ffmpeg -v ${loglevel} ${trim:-} -i "${input}" -thread_queue_size 512 -i "${palette}" \
+ffmpeg -v "${loglevel}" "${trim[@]}" -i "${input}" -thread_queue_size 512 -i "${palette}" \
 -lavfi "${filters} [x]; [x][1:v] ${decode}${errordiff:-}${ditherenc}${bayer}" \
--f ${filetype} ${type_opts:-} -loop 0 -plays 0 -y "${output}"
+-f "${filetype}" "${type_opts[@]}" -loop 0 -plays 0 -y "${output}"
 
 # Checking if output file was created
 if [[ ! -f "$output" ]]; then
@@ -295,7 +295,9 @@ fi
 
 # Open output file if picswitch is enabled
 if [[ -n $picswitch ]]; then
-	xdg-open "$output"
+	viewer="xdg-open"
+	[[ $uname_os == *"CYGWIN"* ]] && viewer="cygstart"
+	"$viewer" "$output"
 fi
 
 echo "${green:-}Done.${off:-}"
